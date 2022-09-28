@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Used for the finder function
+FINDER_DIRS=(~/Sites ~/Sites/frimley ~/Sites/thales ~/Code ~/Code/costar ~/.dotfiles ~/Code/nvim-plugins)
+
+# Brewfile location
+HOMEBREW_BUNDLE_FILE="$HOME/Brewfile"
+
+# Tmuxinator projects
+export TMUXINATOR_CONFIG="$HOME/.config/tmuxinator"
+
+# rbenv config
+eval "$(rbenv init -)"
+
+# Aliases
+alias mx="tmuxinator mx"
+alias s="cd ~/Sites"
