@@ -1,0 +1,56 @@
+[user]
+	name = Chris Swann
+	email = chris@interludedesign.com
+
+[includeIf "gitdir:~/costar/**"]
+	path = .gitconfig-work
+
+[core]
+	excludesfile = ~/.globalgitignore
+
+[push]
+	default = current
+
+[pull]
+	rebase = true
+
+[alias]
+	undo = checkout -- .
+	br = branch
+	diffc = diff --cached
+	history = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+	cam = add -A && git commit -m
+	pulp = pull --rebase --prune
+	amend = commit --amend
+	recents = "!r() { git for-each-ref --sort=-committerdate refs/heads --format='%(refname:short)|%(HEAD)%(color:yellow)%(refname:short)|%(color:bold green)%(committerdate:relative)|%(color:blue)%(subject)|%(color:magenta)%(authorname)%(color:reset)' --color=always --count=${count:-20} | while read line; do branch=$(echo \"$line\" | awk 'BEGIN { FS = \"|\" }; { print $1 }' | tr -d '*'); colorline=$(echo \"$line\" | sed 's/^[^|]*|//'); echo \"$colorline\" | awk -F'|' -vOFS='|' '{$5=substr($5,1,70)}1' ; done | ( echo \"branch|lastcommit|message|author\\n\" && cat) | column -ts'|';}; r"
+
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+
+[init]
+	defaultBranch = main
+
+[core]
+	pager = delta
+
+[interactive]
+	diffFilter = delta --color-only --features=interactive
+
+[delta]
+	features = decorations
+	side-by-side = true
+
+[delta "interactive"]
+	keep-plus-minus-markers = false
+
+[delta "decorations"]
+	commit-decoration-style = blue ol
+	commit-style = raw
+	file-style = omit
+	hunk-header-decoration-style = blue box
+	hunk-header-file-style = red
+	hunk-header-line-number-style = "#067a00"
+	hunk-header-style = file line-number syntax

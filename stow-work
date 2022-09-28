@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+export STOW_FOLDERS="zsh,work,git,tmux,readline,bin,nvim,fzf"
+
+pushd $HOME/.dotfiles
+for folder in $(echo $STOW_FOLDERS | sed "s/,/ /g")
+do
+    stow --verbose --restow $folder
+done
+popd

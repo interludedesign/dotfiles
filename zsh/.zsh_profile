@@ -1,0 +1,146 @@
+#!/usr/bin/env bash
+export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
+
+# Set EDITOR
+export EDITOR="nvim"
+
+# Global aliases
+alias vim="nvim"
+alias rmf="rm -rf"
+alias cl=clear
+alias ll="ls -la"
+alias ..="cd .."
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="ipconfig getifaddr en0"
+alias be="bundle exec"
+alias bu="bundle update"
+alias bs="brew services list"
+alias kill_md="launchctl unload /Library/LaunchAgents/com.microsoft.wdav.tray.plist"
+
+# Git aliases
+alias gs="git status"
+alias gam="git add -A && git commit -m"
+alias co="git checkout"
+alias gp="git push"
+alias gpl="git pull"
+alias gl="git log"
+alias ch="checkout"
+alias gd="git diff"
+
+# Colorize RI
+alias ri='ri -f ansi'
+
+# Places
+alias dotfiles="cd ~/Code/dotfiles"
+
+# Personal Config
+test -f $HOME/.personal_config && source $HOME/.personal_config
+
+# Work Config
+test -f $HOME/.work_config && source $HOME/.work_config
+
+function load_nvm() {
+	export NVM_DIR="$HOME/.nvm"
+	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+	export PATH="/usr/local/sbin:$PATH"
+}
+
+# Enable VIM mode (starts in insert mode)
+bindkey -v
+
+# Enable ctrl+r command searching (replaced with ripgrep)
+# bindkey '^R' history-incremental-search-backward
+
+# Fuzzy-find and cd to a dir in an array of givven $FINDER_DIRS
+function finder() {
+	pushd $(find $FINDER_DIRS -type d -maxdepth 1 -mindepth 0 | fzf --reverse)
+	detect_gemfile_mode
+	zle reset-prompt
+}
+zle -N finder finder
+bindkey ^f finder
+
+function checkout() {
+	git checkout $(git branch | fzf --reverse)
+}
+
+function post() {
+	curl -X POST -d $1 $2 --header "Content-Type:application/json"
+}
+
+function gitls() {
+	echo "Starting..."
+	output="Directory|Current Branch|Uncommitted Changes?\n"
+	for dir in $(find . -type d -maxdepth 1 -mindepth 1); do
+
+		echo "Skipping if not git repo"
+		# Skip if not a git repo
+		if ! [[ -d $dir/.git ]]; then
+			output+="\033[0;31m$dir is not a git repo||\033[0m\n"
+			continue
+		fi
+
+				# Skip it no commits
+				echo "Skipping if no commits"
+				if ! [[ $(git -C $dir rev-list --all --count) -gt 0 ]]; then
+					output+="\033[0;31m$dir has no commits yet||\033[0m\n"
+					continue
+				fi
+
+				echo "Calculating changes"
+				changes_present_label=""
+				current_branch=$(git -C $dir rev-parse --abbrev-ref HEAD)
+				number_of_files_changed=$(git -C $dir status --porcelain | wc -l)
+
+				if [[ $number_of_files_changed -gt 0 ]]; then
+					changes_present_label="\033[0;36mChanges\033[0m"
+				fi
+
+				echo "Rendering output"
+				output+="$dir|$current_branch|$changes_present_label\n"
+			done
+			echo $output | column -t -s'|'
+		}
+
+		function devrails() {
+			$HOME/Code/rails/railties/exe/rails new $1 --dev --css=tailwind --database=postgresql
+		}
+
+# Function to kill PostgreSQL, as it seems to fall over a lot
+function kill-pg() {
+kill -9 $(head -n 1 /usr/local/var/postgres/postmaster.pid)
+}
+alias kill-postgres="kill-pg"
+
+function spec() {
+	bundle exec rspec "$1" --format documentation --require $HOME/.local/bin/quickfix_formatter.rb --format QuickfixFormatter --out /tmp/quickfix.out
+}
+
+# Lazy load pyenv - https://github.com/davidparsson/zsh-pyenv-lazy/blob/master/pyenv-lazy.plugin.zsh
+export PYENV_ROOT="${PYENV_ROOT:=${HOME}/.pyenv}"
+if ! type pyenv > /dev/null && [ -f "${PYENV_ROOT}/bin/pyenv" ]; then
+	export PATH="${PYENV_ROOT}/bin:${PATH}"
+fi
+
+# Lazy load pyenv
+if type pyenv > /dev/null; then
+	export PATH="${PYENV_ROOT}/bin:${PYENV_ROOT}/shims:${PATH}"
+	function pyenv() {
+		unset -f pyenv
+		eval "$(command pyenv init -)"
+		if [[ -n "${ZSH_PYENV_LAZY_VIRTUALENV}" ]]; then
+			eval "$(command pyenv virtualenv-init -)"
+		fi
+		pyenv $@
+	}
+fi
+
+# Colorize man pages
+export LESS_TERMCAP_mb=$'\e[1;32m'
+export LESS_TERMCAP_md=$'\e[1;32m'
+export LESS_TERMCAP_me=$'\e[0m'
+export LESS_TERMCAP_se=$'\e[0m'
+export LESS_TERMCAP_so=$'\e[01;33m'
+export LESS_TERMCAP_ue=$'\e[0m'
+export LESS_TERMCAP_us=$'\e[1;4;31m'

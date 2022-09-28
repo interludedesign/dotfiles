@@ -1,0 +1,12 @@
+require("chris.packer")
+require("chris.set")
+require("chris.utils")
+require("chris.luasnip")
+require("chris.cmp")
+require("chris.telescope")
+require("chris.lsp")
+require("chris.azureutils")
+
+vim.api.nvim_create_user_command("FoldSpecExamples", function()
+	require('chris.treesitter_rspec').create_folds()
+end, {})

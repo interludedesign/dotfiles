@@ -1,0 +1,3 @@
+-- nnoremap <leader>vd :lua vim.lsp.buf.definition()<CR>
+-- nnoremap <leader>vrr :lua vim.lsp.buf.references()<CR>
+-- nnoremap <leader>vh :lua vim.lsp.buf.hover()<CR>
