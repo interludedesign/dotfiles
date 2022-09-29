@@ -33,6 +33,8 @@ vim.opt.ignorecase = true
 
 vim.opt.list = true
 
+vim.opt.laststatus = 3
+
 vim.opt.spell = true
 
 vim.opt.splitright = true

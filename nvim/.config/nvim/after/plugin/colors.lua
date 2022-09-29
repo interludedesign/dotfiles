@@ -1,8 +1,7 @@
 require("tokyonight").setup({
 	style = "night",
-	transparent = true,
+	transparent = false,
 
-	-- # Hello there
 	on_colors = function(colors)
 		colors.comment = '#7a9fc4'
 		colors.fg_gutter = '#4a75a1'
