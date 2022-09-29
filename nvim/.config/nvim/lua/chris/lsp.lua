@@ -27,7 +27,8 @@ end
 
 -- Ruby Language Server
 require'lspconfig'.solargraph.setup{
-	on_attach = setup
+	on_attach = setup,
+	filetypes = { "ruby", "eruby" }
 }
 
 -- Javascript Language Server
