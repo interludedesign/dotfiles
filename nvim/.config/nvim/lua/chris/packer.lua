@@ -14,7 +14,6 @@ return require("packer").startup(function(use)
 	use('preservim/nerdtree')
 	use('thoughtbot/vim-rspec')
 	use('vim-airline/vim-airline')
-	use('nvim-treesitter/nvim-treesitter')
 	use('mattn/emmet-vim')
 	use('mustache/vim-mustache-handlebars')
 	use('airblade/vim-gitgutter')
@@ -22,12 +21,10 @@ return require("packer").startup(function(use)
 	use('RRethy/nvim-treesitter-endwise')
 
 	-- Treesitter
-	use("nvim-treesitter/nvim-treesitter", {
-		run = ":TSUpdate"
-	})
-
+	use("nvim-treesitter/nvim-treesitter", { run = ":TSUpdate" })
 	use("nvim-treesitter/playground")
 	-- use("romgrk/nvim-treesitter-context")
+	use("nvim-treesitter/nvim-treesitter-textobjects")
 
 	-- Snippets
 	use('L3MON4D3/LuaSnip')
