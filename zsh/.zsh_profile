@@ -109,9 +109,13 @@ function gitls() {
 
 # Function to kill PostgreSQL, as it seems to fall over a lot
 function kill-pg() {
-kill -9 $(head -n 1 /usr/local/var/postgres/postmaster.pid)
+kill -9 $(head -n 1 /opt/homebrew/var/postgres/postmaster.pid)
 }
 alias kill-postgres="kill-pg"
+alias restart-pg="brew services restart postgresql@14"
+alias tail-pg="tail -f /opt/homebrew/var/log/postgresql@14.log"
+
+
 
 function spec() {
 	bundle exec rspec "$1" --format documentation --require $HOME/.local/bin/quickfix_formatter.rb --format QuickfixFormatter --out /tmp/quickfix.out
