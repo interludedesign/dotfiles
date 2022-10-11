@@ -11,6 +11,8 @@ vim.opt.autoindent = true
 vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
 
+vim.opt.expandtab = true
+
 vim.opt.wrap = false
 
 vim.opt.smartcase = true
@@ -41,8 +43,6 @@ vim.opt.splitright = true
 
 vim.g.mapleader = " "
 
--- TODO: This lua opt does seem to work
--- vim.opt.mouse = a
 vim.cmd [[set mouse=a]]
 
 -- Netrw
@@ -57,18 +57,8 @@ vim.g.NERDTreeChDirMode = 2
 -- Enable line numbers
 vim.g.NERDTreeShowLineNumbers = 1
 
--- Make sure relative line numbers are used
--- TODO Figure out autocommands
--- autocmd FileType nerdtree setlocal relativenumber
-
 -- Rspec runner
 vim.g.rspec_command = "!bundle exec rspec {spec} --format progress --require $HOME/.local/bin/quickfix_formatter.rb --format QuickfixFormatter --out /tmp/quickfix.out"
-
--- Add command to call formatter
-vim.api.nvim_create_user_command('Format', ':Neoformat', {})
-
--- TODO 
--- command ClearReg call EmptyRegisters() " Clear the reg
 
 -- Emmet
 vim.g.user_emmet_leader_key='<C-,>'

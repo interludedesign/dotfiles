@@ -7,30 +7,29 @@
 
 require("telescope").load_extension('harpoon')
 
-local function search_dotfiles()
-	require("telescope.builtin").git_files({
-		prompt_title = "Dotfiles",
-		cwd = '~/.dotfiles'
-	})
+local M = {}
+
+M.search_dotfiles = function()
+  require("telescope.builtin").git_files({
+    prompt_title = "Dotfiles",
+    cwd = '~/.dotfiles'
+  })
 end
 
-local function search_docs(live)
-	live = live or false
+M.search_docs = function(live)
+  live = live or false
 
-	if live then
-		require("telescope.builtin").live_grep({
-			prompt_title = "Docs",
-			cwd = '~/Docs'
-		})
-	else
-		require("telescope.builtin").find_files({
-			prompt_title = "Docs",
-			cwd = '~/Docs'
-		})
-	end
+  if live then
+    require("telescope.builtin").live_grep({
+      prompt_title = "Docs",
+      cwd = '~/Docs'
+    })
+  else
+    require("telescope.builtin").find_files({
+      prompt_title = "Docs",
+      cwd = '~/Docs'
+    })
+  end
 end
 
-return {
-	search_dotfiles = search_dotfiles,
-	search_docs = search_docs
-}
+return M

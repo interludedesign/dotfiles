@@ -22,3 +22,7 @@ Sources for completion are also installed via plugins, of which there are severa
 `:help ins-completion` for vim completion keymaps
 
 ## LSP
+
+## TODO
+[] im and am for spec blocks
+[] custom luasnips
