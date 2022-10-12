@@ -18,6 +18,8 @@ local i = ls.insert_node
 local types = require("luasnip.util.types")
 -- local conds = require("luasnip.extras.expand_conditions")
 
+require("luasnip.loaders.from_vscode").load({ paths = { "./snippets" } })
+
 ls.add_snippets("all", {
   s("ternary", {
     -- equivalent to "${1:cond} ? ${2:then} : ${3:else}"
