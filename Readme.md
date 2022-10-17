@@ -28,3 +28,4 @@ Sources for completion are also installed via plugins, of which there are severa
 [] custom luasnips
 [] Better switching between vim and tmux
 [] Improved project finder
+[] Refresh bash line when changing dirs
