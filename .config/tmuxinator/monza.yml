@@ -1,0 +1,17 @@
+name: monza
+
+attach: true
+
+startup_window: vim
+
+windows:
+  - vim:
+      layout: even-horizontal
+      root: ~/Sites/monza
+      panes:
+        - zsh:
+          - zsh
+          - clear
+        - vim:
+          - zsh
+          - clear

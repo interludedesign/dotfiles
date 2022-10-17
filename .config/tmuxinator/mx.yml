@@ -3,6 +3,7 @@ name: mx
 attach: true
 
 startup_window: vim
+# startup_pane: 0
 
 windows:
   - vim:
@@ -15,6 +16,7 @@ windows:
         - vim:
           - zsh
           - clear
+          - vim .
   - zsh:
       layout: main-vertical
       root: ~/Sites/frimley/mx
