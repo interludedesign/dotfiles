@@ -26,3 +26,5 @@ Sources for completion are also installed via plugins, of which there are severa
 ## TODO
 [] im and am for spec blocks
 [] custom luasnips
+[] Better switching between vim and tmux
+[] Improved project finder
