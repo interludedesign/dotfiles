@@ -15,7 +15,6 @@ alias localip="ipconfig getifaddr en0"
 alias be="bundle exec"
 alias bu="bundle update"
 alias bs="brew services list"
-alias kill_md="launchctl unload /Library/LaunchAgents/com.microsoft.wdav.tray.plist"
 
 # Git aliases
 alias gs="git status"
