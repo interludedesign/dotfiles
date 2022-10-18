@@ -29,3 +29,6 @@ Sources for completion are also installed via plugins, of which there are severa
 [] Better switching between vim and tmux
 [] Improved project finder
 [] Refresh bash line when changing dirs
+[] Better launch control of postgres via launchd
+[] Turn off truncated branch names in zsh prompt
+[] Grep without specs or fixtures
