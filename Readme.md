@@ -32,3 +32,4 @@ Sources for completion are also installed via plugins, of which there are severa
 [] Better launch control of postgres via launchd
 [] Turn off truncated branch names in zsh prompt
 [] Grep without specs or fixtures
+[] Git aliases for dealing with submodules
