@@ -23,6 +23,7 @@
 	pulp = pull --rebase --prune
 	amend = commit --amend
 	recents = "!r() { git for-each-ref --sort=-committerdate refs/heads --format='%(refname:short)|%(HEAD)%(color:yellow)%(refname:short)|%(color:bold green)%(committerdate:relative)|%(color:blue)%(subject)|%(color:magenta)%(authorname)%(color:reset)' --color=always --count=${count:-20} | while read line; do branch=$(echo \"$line\" | awk 'BEGIN { FS = \"|\" }; { print $1 }' | tr -d '*'); colorline=$(echo \"$line\" | sed 's/^[^|]*|//'); echo \"$colorline\" | awk -F'|' -vOFS='|' '{$5=substr($5,1,70)}1' ; done | ( echo \"branch|lastcommit|message|author\\n\" && cat) | column -ts'|';}; r"
+  readme = commit -m 'Update readme' **/README.md
   sdiff = '!'"git diff && git submodule foreach 'git diff'"
   spush = 'push --recurse-submodules=on-demand'
   supdate = 'submodule update --remote --merge'
