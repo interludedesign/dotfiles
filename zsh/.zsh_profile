@@ -55,10 +55,18 @@ bindkey -v
 function finder() {
 	pushd $(find $FINDER_DIRS -type d -maxdepth 1 -mindepth 0 | fzf --reverse)
 	detect_gemfile_mode
-	zle reset-prompt
+  redraw-prompt
 }
 zle -N finder finder
 bindkey ^f finder
+
+redraw-prompt() {
+  local precmd
+  for precmd in $precmd_functions; do
+    $precmd
+  done
+  zle reset-prompt
+}
 
 function checkout() {
 	git checkout $(git branch | fzf --reverse)
