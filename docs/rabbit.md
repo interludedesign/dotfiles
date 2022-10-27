@@ -8,9 +8,9 @@
 
 ```sh
 cd ~/rabbitmq/sbin
+rabbitmq-plugins enable rabbitmq_management
 curl -o rabbitmqadmin http://localhost:15672/cli/rabbitmqadmin
 chmod +x rabbitmqadmin
-rabbitmq-plugins enable rabbitmq_management
 ```
 
 ## Import Config
