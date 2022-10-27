@@ -3,6 +3,11 @@
 # Used for the finder function
 FINDER_DIRS=(~/Sites ~/Sites/frimley ~/Sites/thales ~/Code ~/Code/costar ~/.dotfiles ~/Code/nvim-plugins)
 
+# Set up RabbitMQ
+export RABBITMQ_HOME="$HOME/rabbitmq"
+export PATH="$PATH:$RABBITMQ_HOME/sbin"
+export RABBITMQ_ROOT_PASSWORD="tsVNbdH_yCn!Qhe7E!R"
+
 # Brewfile location
 HOMEBREW_BUNDLE_FILE="$HOME/Brewfile"
 
