@@ -51,6 +51,18 @@ bindkey -v
 # Enable ctrl+r command searching (replaced with ripgrep)
 # bindkey '^R' history-incremental-search-backward
 
+function pdocs() {
+  cd ~/docs
+  git add .
+  git commit -m 'Update Docs'
+  git push
+}
+
+function pldocs() {
+  cd ~/docs
+  git pull
+}
+
 # Fuzzy-find and cd to a dir in an array of givven $FINDER_DIRS
 function finder() {
 	pushd $(find $FINDER_DIRS -type d -maxdepth 1 -mindepth 0 | fzf --reverse)
