@@ -6,6 +6,7 @@ require("chris.cmp")
 require("chris.telescope")
 require("chris.lsp")
 require("chris.azureutils")
+require("chris.user_commands")
 
 vim.api.nvim_create_user_command("FoldSpecExamples", function()
 	require('chris.treesitter_rspec').create_folds()
