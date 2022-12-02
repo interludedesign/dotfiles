@@ -1,0 +1,33 @@
+name: rabbit
+
+attach: true
+
+# startup_window: vim
+startup_pane: 2
+
+windows:
+  - vim:
+      layout: even-horizontal
+      root: ~/Sites/rabbit-test/
+      panes:
+        - vim:
+          - zsh
+          - clear
+          - vim .
+  - jobs:
+      layout: even-horizontal
+      root: ~/Sites/rabbit-test/
+      panes:
+          - send:
+            - pry
+          - receive:
+            - pry
+  - rabbit:
+      layout: even-horizontal
+      root: ~/Sites/rabbit-test/
+      panes:
+        - server:
+          - kill -9 $(lsof -t -i:25672)
+          - rabbitmq-server
+        - logs:
+          - tail -f /Users/chris/rabbitmq/var/log/rabbitmq/rabbit@Frimley.log

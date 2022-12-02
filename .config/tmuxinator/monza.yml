@@ -2,7 +2,7 @@ name: monza
 
 attach: true
 
-startup_window: vim
+startup_pane: 2
 
 windows:
   - vim:
@@ -15,3 +15,4 @@ windows:
         - vim:
           - zsh
           - clear
+          - vim .
