@@ -38,6 +38,9 @@ test -f $HOME/.personal_config && source $HOME/.personal_config
 # Work Config
 test -f $HOME/.work_config && source $HOME/.work_config
 
+# Rust
+[ -f ~/.cargo/env ] && source $HOME/.cargo/env
+
 function load_nvm() {
 	export NVM_DIR="$HOME/.nvm"
 	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
