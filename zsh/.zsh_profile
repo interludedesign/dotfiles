@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
 
+export PATH="$HOME/bin:$PATH"
+
 # Set EDITOR
 export EDITOR="nvim"
 
