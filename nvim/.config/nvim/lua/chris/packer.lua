@@ -18,6 +18,7 @@ return require("packer").startup(function(use)
   use('airblade/vim-gitgutter')
   use('sbdchd/neoformat')
   use('RRethy/nvim-treesitter-endwise')
+  use('github/copilot.vim')
 
   -- Treesitter
   use("nvim-treesitter/nvim-treesitter", { run = ":TSUpdate" })
