@@ -5,8 +5,6 @@ return require("packer").startup(function(use)
   use('vim-ruby/vim-ruby')
   use('nvim-lua/popup.nvim')
   use('ThePrimeagen/harpoon')
-  use('dense-analysis/ale')
-  use('neovim/nvim-lspconfig')
   use('tpope/vim-commentary')
   use('jiangmiao/auto-pairs')
   use('tpope/vim-fugitive')
@@ -26,17 +24,32 @@ return require("packer").startup(function(use)
   -- use("romgrk/nvim-treesitter-context")
   use("RRethy/nvim-treesitter-textsubjects")
 
-  -- Snippets
-  use('L3MON4D3/LuaSnip')
-  use('saadparwaiz1/cmp_luasnip') -- Luasnip complection source for nvim-cmp
+  use {
+	  'VonHeikemen/lsp-zero.nvim',
+	  branch = 'v1.x',
+	  requires = {
+		  -- LSP Support
+		  {'neovim/nvim-lspconfig'},
+		  {'williamboman/mason.nvim'},
+		  {'williamboman/mason-lspconfig.nvim'},
 
-  -- Completion & Sources
-  use('hrsh7th/nvim-cmp')
-  use('hrsh7th/cmp-buffer') -- Completes words from current buffer
-  use('hrsh7th/cmp-path') -- Completes paths
-  use('hrsh7th/cmp-nvim-lua') -- Lua completion with special nvim context
-  use('hrsh7th/cmp-cmdline')
-  use('hrsh7th/cmp-nvim-lsp')
+		  -- Autocompletion
+		  {'hrsh7th/nvim-cmp'},
+		  {'hrsh7th/cmp-buffer'},
+		  {'hrsh7th/cmp-path'},
+		  {'saadparwaiz1/cmp_luasnip'},
+		  {'hrsh7th/cmp-nvim-lsp'},
+		  {'hrsh7th/cmp-nvim-lua'},
+      {'hrsh7th/cmp-cmdline'},
+		  -- Snippets
+		  {'L3MON4D3/LuaSnip'},
+		  {'rafamadriz/friendly-snippets'},
+
+      -- Linting
+      {'mfussenegger/nvim-lint'},
+
+	  }
+  }
 
   -- Completion menu formatting with icon
   use('onsails/lspkind.nvim')
