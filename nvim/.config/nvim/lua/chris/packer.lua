@@ -19,7 +19,7 @@ return require("packer").startup(function(use)
   use('github/copilot.vim')
 
   -- Treesitter
-  use("nvim-treesitter/nvim-treesitter", { run = ":TSUpdate" })
+  use({"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"})
   use("nvim-treesitter/playground")
   -- use("romgrk/nvim-treesitter-context")
   use("RRethy/nvim-treesitter-textsubjects")
