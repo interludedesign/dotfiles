@@ -97,15 +97,15 @@ vim.keymap.set("n", "<leader>gl", function()
 end, {noremap = true})
 
 vim.keymap.set("n", "<leader>fv", function()
-	require('chris.telescope').search_dotfiles()
+	M.search_dotfiles()
 end, {noremap = true})
 
 vim.keymap.set("n", "<leader>fd", function()
-	require('chris.telescope').search_docs()
+	M.search_docs()
 end, {noremap = true})
 
 vim.keymap.set("n", "<leader>fD", function()
-	require('chris.telescope').search_docs(true)
+	M.search_docs(true)
 end, {noremap = true})
 
 vim.keymap.set("n", "<leader>fo", function()
