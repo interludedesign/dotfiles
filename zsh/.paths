@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+
+addToPath $HOME/.local/bin
+addToPath $HOME/Code/kindle_notes/bin/
+
