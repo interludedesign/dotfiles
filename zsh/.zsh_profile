@@ -8,11 +8,6 @@ source_if_exists $HOME/.personal_config
 source_if_exists $HOME/.work_config
 source_if_exists $HOME/.cargo/env
 
-export VIM="nvim"
-export EDITOR=$VIM
-export GIT_EDITOR=$VIM
-export DOTFILES=$HOME/.dotfiles
-
 # Colorize man pages
 export LESS_TERMCAP_mb=$'\e[1;32m'
 export LESS_TERMCAP_md=$'\e[1;32m'
