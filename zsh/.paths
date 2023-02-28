@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 
 addToPath $HOME/.local/bin
-addToPath $HOME/Code/kindle_notes/bin/
+addToPath $HOME/Code/kindle_notes/bin
+addToPath /usr/local/bin # work config
 
