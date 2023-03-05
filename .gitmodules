@@ -1,6 +1,6 @@
 [submodule "personal"]
 	path = personal
-	url = https://github.com/interludedesign/personal
+	url = git@github.com:interludedesign/personal.git
 [submodule "work"]
 	path = work
-	url = https://github.com/interludedesign/work
+	url = git@github.com:interludedesign/work.git
