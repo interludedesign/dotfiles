@@ -3,4 +3,4 @@
 addToPath $HOME/.local/bin
 addToPath $HOME/Code/kindle_notes/bin
 addToPath /usr/local/bin # work config
-
+addToPath $HOME/.rbenv/bin
