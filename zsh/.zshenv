@@ -16,3 +16,4 @@ function cd () {
     builtin cd "$@"    # perform the actual cd
     detect_gemfile_mode
 }
+. "$HOME/.cargo/env"
