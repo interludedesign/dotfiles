@@ -25,12 +25,22 @@ bindkey -v
 
 # Fuzzy-find and cd to a dir in an array of givven $FINDER_DIRS
 function finder() {
-	pushd $(find $FINDER_DIRS -type d -maxdepth 1 -mindepth 0 | fzf --reverse)
-	detect_gemfile_mode
+  local dirs=()
+  for d in $FINDER_DIRS; do
+    if test -d "$d"; then
+      dirs+=("$d")
+    fi
+  done
+  if [ ${#dirs[@]} -eq 0 ]; then
+    echo "No directories found in \$FINDER_DIRS"
+    return 1
+  fi
+  pushd $(find "${dirs[@]}" -type d -maxdepth 1 -mindepth 0 | fzf --reverse)
+  detect_gemfile_mode
   redraw-prompt
 }
 zle -N finder finder
-bindkey ^f finder
+bindkey '^f' finder
 
 redraw-prompt() {
   local precmd
