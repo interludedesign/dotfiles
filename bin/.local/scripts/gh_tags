@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'json'
+require 'net/http'
+require 'optparse'
+
+require_relative 'github_limiter'
+
+DEFAULT_RESULTS_PER_PAGE = 5
+
+def tags_for_repo(repo, options = {})
+  results_per_page = options[:limit] || DEFAULT_RESULTS_PER_PAGE
+
+  url = URI.parse(github_tags_url(repo, results_per_page))
+  response = Net::HTTP.get_response(url)
+
+  if (limit = GithubLimiter.new(response).human_readable)
+    warn limit
+    return false
+  end
+
+  JSON.parse(response.body).each { |tag| puts tag['name'] }
+
+  true
+end
+
+def github_tags_url(repo, results_per_page)
+  "https://api.github.com/repos/#{repo}/tags?per_page=#{results_per_page}"
+end
+
+options = {}
+
+OptionParser.new do |opts|
+  opts.on('-l', '--limit NUMBER', 'Limit number of results') do |l|
+    options[:limit] = l
+  end
+end.parse!
+
+if ARGV.empty?
+  warn 'No repo specified'
+  exit
+end
+
+tags_for_repo(ARGV[0], options)
