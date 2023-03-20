@@ -9,6 +9,7 @@ source_if_exists $HOME/.work_config
 source_if_exists $HOME/.cargo/env
 source_if_exists $HOME/.fzf/shell/completion.zsh
 source_if_exists $HOME/.fzf/shell/key-bindings.zsh
+source_if_exists $HOME/.config/op/plugins.sh
 
 # Colorize man pages
 export LESS_TERMCAP_mb=$'\e[1;32m'
