@@ -11,6 +11,8 @@ source_if_exists $HOME/.fzf/shell/completion.zsh
 source_if_exists $HOME/.fzf/shell/key-bindings.zsh
 source_if_exists $HOME/.config/op/plugins.sh
 
+export EDITOR="nvim"
+
 # Colorize man pages
 export LESS_TERMCAP_mb=$'\e[1;32m'
 export LESS_TERMCAP_md=$'\e[1;32m'
