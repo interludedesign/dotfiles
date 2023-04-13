@@ -4,3 +4,6 @@
 [submodule "work"]
 	path = work
 	url = git@github.com:interludedesign/work.git
+[submodule "alfred"]
+	path = alfred
+	url = https://github.com/interludedesign/alfred.git

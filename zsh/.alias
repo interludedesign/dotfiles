@@ -27,3 +27,9 @@ alias ri='ri -f ansi'
 
 # Places
 alias dotfiles="cd ~/Code/dotfiles"
+
+alias python="python3"
+
+# brew
+alias bs="brew services"
+alias bsr="brew services restart"

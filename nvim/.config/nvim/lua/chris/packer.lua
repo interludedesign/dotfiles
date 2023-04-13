@@ -71,8 +71,8 @@ return require("packer").startup(function(use)
   use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
 
   -- My plugins
-  use("~/Code/nvim-plugins/azureutils.nvim")
-  use("~/Code/nvim-plugins/luautils")
+  use("interludedesign/azureutils.nvim")
+  use("interludedesign/luautils")
 
   -- Plenary
   use("nvim-lua/plenary.nvim")
