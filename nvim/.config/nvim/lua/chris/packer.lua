@@ -17,7 +17,6 @@ return require("packer").startup(function(use)
   use('sbdchd/neoformat')
   use('RRethy/nvim-treesitter-endwise')
   use('github/copilot.vim')
-  use { 'sthendev/mariana.vim', run='make' }
 
   -- Treesitter
   use({"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"})
