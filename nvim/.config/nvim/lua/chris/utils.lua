@@ -38,7 +38,7 @@ end
 
 M.open_alternate_path = function(path, vim_command)
   path = path or vim.api.nvim_buf_get_name(0)
-  local result = M.alternatives(path)[2]
+  local result = M.alternate_path(path)
 
   if string.is_empty(result) then
     return string.format("No alternate file for %s exists!", path)
@@ -47,23 +47,10 @@ M.open_alternate_path = function(path, vim_command)
   end
 end
 
-M.alternatives = function(path)
-  local function isempty(s)
-    return s == nil or s == ''
-  end
-
-  local alternates = vim.fn.system("alt " .. path)
-    if isempty(alternates) then
-    return nil
-  else
-    local alternates_table = {}
-
-    for s in alternates:gmatch("[^\r\n]+") do
-      table.insert(alternates_table, s)
-    end
-
-    return alternates_table
-  end
+M.alternate_path = function(path)
+  path = path or vim.api.nvim_buf_get_name(0)
+  local command = string.format("! alt %s", path)
+  return vim.fn['system'](command)
 end
 
 M.run_spec_in_tmux = function()
@@ -73,7 +60,7 @@ M.run_spec_in_tmux = function()
   -- If the file is not a spec file, look for its alternate_path and use that instead
   local start_pos, _ = string.find(file, "_spec")
   if not start_pos then
-    file = M.alternatives()[2]
+    file = M.alternate_path()
   end
 
   local cmd = string.format("spec %s\n", file)
