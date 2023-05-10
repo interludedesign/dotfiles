@@ -119,4 +119,8 @@ vim.keymap.set("n", "<leader>fo", function()
 	telescope.vim_options{}
 end, {noremap = true})
 
+vim.keymap.set("n", "<leader>fa", function()
+	telescope.builtin{}
+end, {noremap = true})
+
 return M
