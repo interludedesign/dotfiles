@@ -49,7 +49,7 @@ end
 
 M.alternate_path = function(path)
   path = path or vim.api.nvim_buf_get_name(0)
-  local command = string.format("! find spec | alt -t 1 -f - %s", path)
+  local command = string.format("! alt %s", path)
   return vim.fn['system'](command)
 end
 
