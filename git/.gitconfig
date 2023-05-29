@@ -1,6 +1,7 @@
 [user]
 	name = Chris Swann
 	email = chris@interludedesign.com
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIg3w4AWC23S1rBg6HsUkBxme7GNqv6rlNKdL3EmfdSA
 
 [includeIf "gitdir:~/costar/**"]
 	path = .gitconfig-work
@@ -60,3 +61,9 @@
 	hunk-header-style = file line-number syntax
 [credential]
 	helper = cache
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+[commit]
+	gpgsign = true
