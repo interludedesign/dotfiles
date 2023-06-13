@@ -1,6 +1,6 @@
 local M = {}
 
-local example_query = vim.treesitter.parse_query(
+local example_query = vim.treesitter.query.parse(
   "ruby",
     [[
       (call
