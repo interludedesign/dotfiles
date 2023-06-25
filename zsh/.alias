@@ -11,6 +11,8 @@ alias localip="ipconfig getifaddr en0"
 alias be="bundle exec"
 alias bu="bundle update"
 alias bs="brew services list"
+alias v="vim ."
+alias subl="sublime-merge"
 
 # Git aliases
 alias gs="git status"
