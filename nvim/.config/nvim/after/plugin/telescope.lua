@@ -124,4 +124,8 @@ vim.keymap.set("n", "<leader>fa", function()
 	telescope.builtin{}
 end, {noremap = true})
 
+vim.keymap.set("n", "<leader>fs", function()
+	telescope.spell_suggest{}
+end, {noremap = true})
+
 return M
