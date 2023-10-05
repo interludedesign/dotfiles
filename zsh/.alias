@@ -13,6 +13,7 @@ alias bu="bundle update"
 alias bs="brew services list"
 alias v="vim ."
 alias subl="sublime-merge"
+alias csr="csharprepl"
 
 # Git aliases
 alias gs="git status"

@@ -8,3 +8,4 @@ addToPath $HOME/.rbenv/bin
 addToPath /opt/homebrew/opt/fzf/bin
 addToPath $HOME/.fzf/bin
 addToPath /usr/local/share/dotnet/x64/
+addToPath $HOME/.dotnet/tools
