@@ -18,6 +18,7 @@ alias csr="csharprepl"
 # Git aliases
 alias gs="git status"
 alias gam="git add -A && git commit -m"
+alias gap="git add -A && git commit -m 'Updates' && git push"
 alias co="git checkout"
 alias gp="git push"
 alias gpl="git pull"
