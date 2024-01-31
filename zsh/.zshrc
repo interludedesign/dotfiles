@@ -4,8 +4,7 @@
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
-source "$(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme"
+source "$(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme"
 source $HOME/.zsh_profile
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
