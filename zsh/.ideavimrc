@@ -37,3 +37,6 @@ Plug 'tpope/vim-commentary'
 
 inoremap kj <Esc>
 set timeoutlen=1000
+
+set relativenumber
+set number
