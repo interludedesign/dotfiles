@@ -15,6 +15,8 @@ return require("packer").startup(function(use)
   use('sbdchd/neoformat')
   use('RRethy/nvim-treesitter-endwise')
   use('github/copilot.vim')
+  use('tpope/vim-dispatch')
+  use('datamadsen/vim-compiler-plugin-for-dotnet')
 
   -- Treesitter
   use({"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"})
