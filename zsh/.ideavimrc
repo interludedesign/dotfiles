@@ -40,3 +40,6 @@ set timeoutlen=1000
 
 set relativenumber
 set number
+
+" Use the system clipboard
+set clipboard+=unnamed
