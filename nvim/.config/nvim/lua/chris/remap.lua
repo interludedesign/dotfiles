@@ -50,3 +50,8 @@ vim.keymap.set("n", "<leader>gb", ":lua require('chris.utils').toggle_blame()<CR
 
 -- Find and replace under cursor
 vim.keymap.set("n", "<leader>r", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", {noremap = true})
+
+vim.keymap.set("n", "<leader>pc", function()
+  require('chris.projects').setup()
+  require('chris.projects').create_story_from_task()
+end)
