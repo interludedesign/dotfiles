@@ -56,6 +56,11 @@ if (require('chris.utils').buf_name_contains("dotfiles") == true) then
 	end
 end
 
+-- Ability to search all snippets (via luasnip) with telescope
+-- benfowler/telescope-luasnip.nvim
+require('telescope').load_extension('luasnip')
+
+
 vim.keymap.set("n", "<C-f>", function()
 	telescope.find_files{hidden = search_hidden}
 end, {noremap = true})
@@ -128,4 +133,6 @@ vim.keymap.set("n", "<leader>fs", function()
 	telescope.spell_suggest{}
 end, {noremap = true})
 
-return M
+vim.keymap.set("n", "<leader>fl", function()
+  require'telescope'.extensions.luasnip.luasnip{}
+end, {noremap = true})

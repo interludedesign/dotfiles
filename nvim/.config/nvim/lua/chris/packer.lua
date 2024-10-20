@@ -43,7 +43,10 @@ return require("packer").startup(function(use)
       {'hrsh7th/cmp-cmdline'},
 		  -- Snippets
 		  {'L3MON4D3/LuaSnip'},
-		  {'rafamadriz/friendly-snippets'},
+      {'rafamadriz/friendly-snippets'},
+
+      -- Ability to search snippets with telescope
+      {'benfowler/telescope-luasnip.nvim'},
 
       -- Linting
       {'mfussenegger/nvim-lint'},

@@ -16,20 +16,13 @@ in the appropriate directory.
 
 ## Snippets - luasnip
 Snippets are added from rafamadriz/friendly-snippets
+`<leader>fl` to list snippets (`:Telescope luasnip`)
+`<Ctrl-L>` Jump forward
+`<Ctrl-J>` Jump backward
+
 
 ## Completion - nvim-cmp
 Sources for completion are also installed via plugins, of which there are several
 `:help ins-completion` for vim completion keymaps
 
 ## LSP
-
-## TODO
-[] im and am for spec blocks
-[] custom luasnips
-[] Better switching between vim and tmux
-[] Improved project finder
-[] Refresh bash line when changing dirs
-[] Better launch control of postgres via launchd
-[] Turn off truncated branch names in zsh prompt
-[] Grep without specs or fixtures
-[] Git aliases for dealing with submodules
