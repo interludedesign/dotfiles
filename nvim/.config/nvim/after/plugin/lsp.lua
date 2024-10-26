@@ -2,13 +2,6 @@ local lsp = require("lsp-zero")
 
 lsp.preset("recommended")
 
-lsp.ensure_installed({
-  'tsserver',
-  'rust_analyzer',
-  'solargraph',
-  'eslint'
-})
-
 -- Fix Undefined global 'vim'
 lsp.configure('sumneko_lua', {
     settings = {
