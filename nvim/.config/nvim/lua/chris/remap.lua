@@ -7,6 +7,9 @@ vim.keymap.set("n", "<leader><leader>t", "<Plug>PlenaryTestFile", {noremap = tru
 -- Spec runner
 vim.keymap.set("n", "<leader>s", ":lua require('chris.utils').run_spec_in_tmux()<CR>", {noremap = true})
 
+-- Go runner
+vim.keymap.set("n", "<leader><leader>r", ":lua require('chris.utils').run_go_in_tmux()<CR>", {noremap = true})
+
 -- Keep result in center screen when hitting n
 vim.keymap.set("n", "n", "nzz", {noremap = true})
 vim.keymap.set("n", "N", "Nzz", {noremap = true})

@@ -53,6 +53,15 @@ M.alternate_path = function(path)
   return vim.fn['system'](command)
 end
 
+M.run_go_in_tmux = function()
+  vim.api.nvim_command('write')
+  local file = vim.api.nvim_buf_get_name(0)
+
+  local cmd = string.format("go run main.go\n")
+  require("harpoon.tmux").sendCommand("%0", "clear\n")
+  require("harpoon.tmux").sendCommand("%0", cmd)
+end
+
 M.run_spec_in_tmux = function()
   vim.api.nvim_command('write')
   local file = vim.api.nvim_buf_get_name(0)
