@@ -62,3 +62,4 @@ vim.g.rspec_command = "!bundle exec rspec {spec} --format progress --require $HO
 
 -- Emmet
 vim.g.user_emmet_leader_key='<C-,>'
+
