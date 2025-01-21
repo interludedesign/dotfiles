@@ -43,3 +43,6 @@ set number
 
 " Use the system clipboard
 set clipboard+=unnamed
+
+" Paste in visual mode without copying
+vnoremap p p:let @+=@0<CR>
