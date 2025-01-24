@@ -1,11 +1,17 @@
-require("luautils.string")
-
 local M = {}
 local a = vim.api
 
 P = function(v)
   print(vim.inspect(v))
   return v
+end
+
+string.is_empty = function(s)
+	if string.len(s) < 1 then
+		return true
+	else
+		return false
+	end
 end
 
 R = function(name)
