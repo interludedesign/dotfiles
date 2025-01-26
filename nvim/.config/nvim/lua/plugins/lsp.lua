@@ -38,8 +38,8 @@ return {
         vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
       end
 
-      -- Enable capabilities for `nvim-cmp`
-      local capabilities = cmp_nvim_lsp.default_capabilities()
+      -- Enhanced capabilities with blink.cmp
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
 
       -- Automatically set up servers installed by Mason
       mason_lspconfig.setup_handlers({
