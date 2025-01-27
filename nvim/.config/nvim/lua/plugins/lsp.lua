@@ -4,8 +4,6 @@ return {
     dependencies = {
       "williamboman/mason.nvim", -- Mason for managing LSP servers
       "williamboman/mason-lspconfig.nvim", -- Mason bridge for nvim-lspconfig
-      "hrsh7th/nvim-cmp", -- Autocompletion plugin
-      "hrsh7th/cmp-nvim-lsp", -- LSP source for nvim-cmp
       {
         "folke/lazydev.nvim",
         ft = "lua", -- only load on lua files
@@ -22,8 +20,6 @@ return {
       local mason = require("mason")
       local mason_lspconfig = require("mason-lspconfig")
       local lspconfig = require("lspconfig")
-      local cmp = require("cmp")
-      local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
       -- Initialize Mason
       mason.setup()
@@ -51,18 +47,6 @@ return {
         end,
       })
 
-      -- Set up `nvim-cmp` for autocompletion
-      cmp.setup({
-        mapping = {
-          ["<C-p>"] = cmp.mapping.select_prev_item(),
-          ["<C-n>"] = cmp.mapping.select_next_item(),
-          ["<C-y>"] = cmp.mapping.confirm({ select = true }),
-          ["<C-Space>"] = cmp.mapping.complete(),
-        },
-        sources = {
-          { name = "nvim_lsp" },
-        },
-      })
     end,
   },
 }
