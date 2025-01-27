@@ -17,7 +17,7 @@ function testing.run_spec_in_tmux()
   -- If the file is not a spec file, look for its alternate_path and use that instead
   local start_pos, _ = string.find(file, "_spec")
   if not start_pos then
-    file = a.alternate_path()
+    file = a.find()
   end
 
   local cmd = string.format("spec %s\n", file)
