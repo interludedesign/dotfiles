@@ -15,4 +15,12 @@ function string_decorators.escape(str)
   return string.gsub(str, "-", "")
 end
 
+function string_decorators.is_empty(str)
+	if string.len(str) < 1 then
+		return true
+	else
+		return false
+	end
+end
+
 return string_decorators
