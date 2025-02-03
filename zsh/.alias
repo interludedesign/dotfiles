@@ -14,6 +14,7 @@ alias bs="brew services list"
 alias v="vim ."
 alias subl="sublime-merge"
 alias csr="csharprepl"
+alias ts="tmuxinator start"
 
 # Git aliases
 alias gs="git status"
