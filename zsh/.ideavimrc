@@ -46,3 +46,5 @@ set clipboard+=unnamed
 
 " Paste in visual mode without copying
 vnoremap p p:let @+=@0<CR>
+
+nmap gi :action GotoImplementation<CR>
