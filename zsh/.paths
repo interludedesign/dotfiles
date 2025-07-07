@@ -6,6 +6,7 @@ addToPath $HOME/Code/kindle_notes/bin
 addToPath /usr/local/bin # work config
 addToPath $HOME/.rbenv/bin
 addToPath /opt/homebrew/opt/fzf/bin
+addToPath /opt/homebrew/Cellar/postgresql@17/17.4_1/bin
 addToPath $HOME/.fzf/bin
 addToPath $HOME/.dotnet
 addToPath $HOME/go/bin
