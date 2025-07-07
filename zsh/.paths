@@ -10,3 +10,4 @@ addToPath /opt/homebrew/Cellar/postgresql@17/17.4_1/bin
 addToPath $HOME/.fzf/bin
 addToPath $HOME/.dotnet
 addToPath $HOME/go/bin
+addToPath $HOME/.opencode/bin
