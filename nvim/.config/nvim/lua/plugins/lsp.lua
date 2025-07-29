@@ -37,12 +37,38 @@ return {
       -- Enhanced capabilities with blink.cmp
       local capabilities = require('blink.cmp').get_lsp_capabilities()
 
+      -- Configure LSP floating windows with borders and padding
+      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+        border = "rounded",
+      })
+      
+      vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+        border = "rounded",
+      })
+
       -- Automatically set up servers installed by Mason
       mason_lspconfig.setup_handlers({
         function(server_name)
           lspconfig[server_name].setup({
             on_attach = on_attach,
             capabilities = capabilities,
+          })
+        end,
+        -- Ruby LSP with YARD support
+        ["ruby_lsp"] = function()
+          lspconfig.ruby_lsp.setup({
+            on_attach = on_attach,
+            capabilities = capabilities,
+            init_options = {
+              enabledFeatures = {
+                documentSymbols = true,
+                foldingRanges = true,
+                selectionRanges = true,
+                semanticHighlighting = true,
+                formatting = true,
+                codeActions = true,
+              },
+            },
           })
         end,
       })
