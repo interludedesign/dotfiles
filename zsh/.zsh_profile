@@ -60,5 +60,10 @@ redraw-prompt() {
   zle reset-prompt
 }
 
+clean_text_files() {
+  find . -type f \( -name "*.cs" -o -name "*.csproj" -o -name "*.sln" -o -name "*.txt" -o -name "*.md" -o -name "*.json" -o -name "*.xml" \) -exec sed -i '' $'s/\r//g; s/\ufeff//g' {} \;
+  echo "Cleaned carriage returns and BOM from text files"
+}
+
 # Enable vi mode
 set -o vi
