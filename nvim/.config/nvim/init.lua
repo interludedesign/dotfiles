@@ -4,4 +4,6 @@ require("set")
 require("commands")
 require("utils")
 
-vim.cmd([[colorscheme tokyonight]])
+vim.cmd("syntax on")
+
+vim.cmd[[colorscheme tokyonight]]

@@ -1,5 +1,8 @@
 # Chris Swann Dotfiles
 
+## Alacritty
+Terminal emulator configuration is located at `~/.config/alacritty/alacritty.toml`. Currently using JetBrainsMono Nerd Font.
+
 ## Brew
 There is a Brewfile for personal and work, which are symlinked to $HOME/Brewfile. Run
 `brew bundle list` from anywhere. To install a package, add it to the respective Brewfile then

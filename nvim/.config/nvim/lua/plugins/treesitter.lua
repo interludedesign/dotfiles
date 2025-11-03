@@ -5,19 +5,16 @@ return {
       "RRethy/nvim-treesitter-endwise", -- Automatically adds `end` for Ruby, etc.
       "RRethy/nvim-treesitter-textsubjects", -- Adds text subject mappings
     },
-    build = ":TSUpdate", -- Automatically updates installed parsers
     config = function()
       require("nvim-treesitter.configs").setup({
-        ensure_installed = { "ruby", "lua", "markdown", "json", "go" }, -- Add languages as needed
         sync_install = false, -- Install parsers asynchronously
 
         highlight = {
           enable = true, -- Enable Treesitter-based syntax highlighting
-          additional_vim_regex_highlighting = false,
         },
 
         endwise = {
-          enable = true, -- Enable endwise plugin
+          enable = false, -- Enable endwise plugin
         },
 
         textsubjects = {
