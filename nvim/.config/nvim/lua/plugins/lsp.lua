@@ -1,24 +1,30 @@
 return {
+  -- Mason for managing LSP servers
   {
-    "williamboman/mason.nvim", -- Mason for managing LSP servers  
+    "williamboman/mason.nvim",
     config = function()
-      require("mason").setup()
+      require("mason").setup()  -- Make sure Mason is properly initialized
     end,
   },
-  {
-    "saghen/blink.cmp", -- Completion engine
-    dependencies = { "williamboman/mason.nvim" },
-    config = function()
-      -- Setup global LSP capabilities with blink.cmp
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
 
-      -- Configure global LSP settings using the new vim.lsp.config API
-      vim.lsp.config('*', {
+  -- Mason-lspconfig integration for auto-configuration of LSP servers
+  {
+    "williamboman/mason-lspconfig.nvim",
+    dependencies = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
+    config = function()
+      -- Ensure mason-lspconfig is correctly initialized
+      require("mason-lspconfig").setup({})
+
+      -- LSP configuration via nvim-lspconfig
+      local lspconfig = require("lspconfig")
+      local capabilities = require("blink.cmp").get_lsp_capabilities()
+
+      -- LSP server setup for different languages
+      lspconfig.lua_ls.setup({
         capabilities = capabilities,
       })
 
-      -- Ruby LSP specific configuration
-      vim.lsp.config('ruby_lsp', {
+      lspconfig.ruby_ls.setup({
         capabilities = capabilities,
         init_options = {
           enabledFeatures = {
@@ -32,12 +38,16 @@ return {
         },
       })
 
-      -- Enable common LSP servers directly
-      vim.lsp.enable('lua_ls')
-      vim.lsp.enable('ruby_lsp')
-      vim.lsp.enable('ts_ls') -- TypeScript
+      -- Add OmniSharp configuration
+      lspconfig.omnisharp.setup({
+        cmd = { "dotnet", "/usr/local/bin/omnisharp/OmniSharp.dll" }, -- Make sure to point to your OmniSharp executable
+        capabilities = capabilities,
+        on_init = function(client)
+          -- Additional initialization logic for OmniSharp if needed
+        end,
+      })
 
-      -- LSP keybindings - set globally since handlers changed in 0.11
+      -- LSP keybindings
       vim.api.nvim_create_autocmd('LspAttach', {
         callback = function(args)
           local bufnr = args.buf
@@ -51,14 +61,19 @@ return {
       })
     end,
   },
+
+  -- Optional: Completion plugin (assuming blink.cmp for LSP completion)
   {
-    "folke/lazydev.nvim",
-    ft = "lua", -- only load on lua files
-    opts = {
-      library = {
-        -- Load luvit types when the `vim.uv` word is found
-        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-      },
-    },
+    "saghen/blink.cmp", -- Completion engine
+    dependencies = { "williamboman/mason-lspconfig.nvim" },
+    config = function()
+      -- Ensure LSP capabilities are set for completion
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
+
+      -- Update LSP configuration for completion integration
+      vim.lsp.config('*', {
+        capabilities = capabilities,
+      })
+    end,
   },
 }
