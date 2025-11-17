@@ -1,3 +1,3 @@
 return {
-    "preservim/nerdtree"
+  "preservim/nerdtree",
 }

@@ -1,7 +1,7 @@
 return {
-  'saghen/blink.cmp',
+  "saghen/blink.cmp",
 
-  version = '*',
+  version = "*",
 
   completion = {
     menu = {
@@ -12,9 +12,9 @@ return {
       draw = {
         columns = {
           { "label", "label_description", gap = 4 },
-          { "kind_icon", "kind" }
+          { "kind_icon", "kind" },
         },
-      }
+      },
     },
   },
 
@@ -23,12 +23,12 @@ return {
     -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
     -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
     -- See the full "keymap" documentation for information on defining your own keymap.
-    keymap = { preset = 'default' },
+    keymap = { preset = "default" },
 
     signature = { enabled = true },
 
     appearance = {
-      nerd_font_variant = 'normal'
+      nerd_font_variant = "normal",
     },
   },
 }

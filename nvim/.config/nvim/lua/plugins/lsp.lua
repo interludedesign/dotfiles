@@ -1,6 +1,6 @@
 return {
   {
-    "williamboman/mason.nvim", -- Mason for managing LSP servers  
+    "williamboman/mason.nvim", -- Mason for managing LSP servers
     config = function()
       require("mason").setup()
     end,
@@ -10,15 +10,15 @@ return {
     dependencies = { "williamboman/mason.nvim" },
     config = function()
       -- Setup global LSP capabilities with blink.cmp
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
+      local capabilities = require("blink.cmp").get_lsp_capabilities()
 
       -- Configure global LSP settings using the new vim.lsp.config API
-      vim.lsp.config('*', {
+      vim.lsp.config("*", {
         capabilities = capabilities,
       })
 
       -- Ruby LSP specific configuration
-      vim.lsp.config('ruby_lsp', {
+      vim.lsp.config("ruby_lsp", {
         capabilities = capabilities,
         init_options = {
           enabledFeatures = {
@@ -33,12 +33,12 @@ return {
       })
 
       -- Enable common LSP servers directly
-      vim.lsp.enable('lua_ls')
-      vim.lsp.enable('ruby_lsp')
-      vim.lsp.enable('ts_ls') -- TypeScript
+      vim.lsp.enable("lua_ls")
+      vim.lsp.enable("ruby_lsp")
+      vim.lsp.enable("ts_ls") -- TypeScript
 
       -- LSP keybindings - set globally since handlers changed in 0.11
-      vim.api.nvim_create_autocmd('LspAttach', {
+      vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
           local bufnr = args.buf
           local opts = { buffer = bufnr }

@@ -27,7 +27,7 @@ vim.opt.scrolloff = 8
 vim.opt.incsearch = true
 vim.opt.hlsearch = true
 
-vim.opt.colorcolumn= "100"
+vim.opt.colorcolumn = "100"
 
 vim.opt.termguicolors = true
 
@@ -43,12 +43,12 @@ vim.opt.splitright = true
 
 vim.g.mapleader = " "
 
-vim.cmd [[set mouse=a]]
+vim.cmd([[set mouse=a]])
 
 -- Netrw
 vim.g.netrw_liststyle = 3
 vim.g.netrw_banner = 0
-vim.g.netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
+vim.g.netrw_bufsettings = "noma nomod nu nobl nowrap ro"
 
 -- NERDTree
 vim.g.NERDTreeShowHidden = 1
@@ -58,8 +58,8 @@ vim.g.NERDTreeChDirMode = 2
 vim.g.NERDTreeShowLineNumbers = 1
 
 -- Rspec runner
-vim.g.rspec_command = "!bundle exec rspec {spec} --format progress --require $HOME/.local/bin/quickfix_formatter.rb --format QuickfixFormatter --out /tmp/quickfix.out"
+vim.g.rspec_command =
+  "!bundle exec rspec {spec} --format progress --require $HOME/.local/bin/quickfix_formatter.rb --format QuickfixFormatter --out /tmp/quickfix.out"
 
 -- Emmet
-vim.g.user_emmet_leader_key='<C-,>'
-
+vim.g.user_emmet_leader_key = "<C-,>"

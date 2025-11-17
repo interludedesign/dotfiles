@@ -4,8 +4,8 @@ function string_decorators.split(inputstr, sep)
   if sep == nil then
     sep = "%s"
   end
-  local t={}
-  for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+  local t = {}
+  for str in string.gmatch(inputstr, "([^" .. sep .. "]+)") do
     table.insert(t, str)
   end
   return t
@@ -16,11 +16,11 @@ function string_decorators.escape(str)
 end
 
 function string_decorators.is_empty(str)
-	if string.len(str) < 1 then
-		return true
-	else
-		return false
-	end
+  if string.len(str) < 1 then
+    return true
+  else
+    return false
+  end
 end
 
 return string_decorators

@@ -3,7 +3,7 @@ local a = require("utils.alternate_path")
 local testing = {}
 
 function testing.run_go_in_tmux()
-  vim.api.nvim_command('write')
+  vim.api.nvim_command("write")
 
   local cmd = string.format("go run main.go\n")
   require("harpoon.tmux").sendCommand("%0", "clear\n")
@@ -11,7 +11,7 @@ function testing.run_go_in_tmux()
 end
 
 function testing.run_spec_in_tmux()
-  vim.api.nvim_command('write')
+  vim.api.nvim_command("write")
   local file = vim.api.nvim_buf_get_name(0)
 
   -- If the file is not a spec file, look for its alternate_path and use that instead
