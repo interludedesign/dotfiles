@@ -1,0 +1,24 @@
+#!/bin/sh
+
+if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+  echo "Usage: tags [PATH]"
+  echo ""
+  echo "Extract and list unique hashtags from markdown files."
+  echo ""
+  echo "Arguments:"
+  echo "  PATH    Directory or file to search (default: current directory)"
+  echo ""
+  echo "Options:"
+  echo "  -h, --help    Show this help message"
+  echo ""
+  echo "Requires ripgrep (rg) to be installed."
+  exit 0
+fi
+
+TARGET_PATH="${1:-.}"
+
+if command -v rg > /dev/null 2>&1; then
+  rg --glob '*.md' -o '#\w+' --no-filename "$TARGET_PATH" | sort | uniq
+else
+  echo "ripgrep is NOT installed"
+fi
