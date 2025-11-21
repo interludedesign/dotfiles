@@ -7,10 +7,12 @@ return {
     },
     config = function()
       require("nvim-treesitter.configs").setup({
+        ensure_installed = { "markdown", "markdown_inline", "ruby", "bash", "lua", "vim", "vimdoc", "c_sharp", "go", "typescript", "javascript" }, -- Ensure parsers are installed
         sync_install = false, -- Install parsers asynchronously
 
         highlight = {
           enable = true, -- Enable Treesitter-based syntax highlighting
+          additional_vim_regex_highlighting = { "markdown" }, -- Ensure markdown highlights work
         },
 
         endwise = {
