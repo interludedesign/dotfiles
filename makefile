@@ -12,5 +12,8 @@ personal:
 work:
 	./stow-work
 
+omarchy:
+	./stow-omarchy
+
 delete:
 	stow --verbose --delete */
