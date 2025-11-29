@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/bash
 
 export STOW_FOLDERS="alacritty"
 
