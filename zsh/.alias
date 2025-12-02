@@ -27,6 +27,10 @@ alias gl="git log"
 alias ch="checkout"
 alias gd="git diff"
 
+# LLM Aliases
+alias lmcp="copilot"
+alias lmc="claude"
+
 # Colorize RI
 alias ri='ri -f ansi'
 
