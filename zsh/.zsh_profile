@@ -45,7 +45,7 @@ function finder() {
     echo "No directories found in \$FINDER_DIRS"
     return 1
   fi
-  pushd $(find "${dirs[@]}" -type d -maxdepth 1 -mindepth 0 | fzf --reverse)
+  pushd $(find -L "${dirs[@]}" -type d -maxdepth 1 -mindepth 0 | fzf --reverse)
   detect_gemfile_mode
   redraw-prompt
 }
