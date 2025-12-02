@@ -16,6 +16,8 @@ return {
     "package.json",
     ".git",
   },
+  on_attach = common.on_attach,
+  capabilities = common.capabilities,
   init_options = {
     hostInfo = "neovim",
   },
