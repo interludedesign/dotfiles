@@ -4,6 +4,8 @@ return {
   cmd = { "lua-language-server" },
   filetypes = { "lua" },
   root_markers = { { ".luarc.json", ".luarc.jsonc" }, ".git" },
+  on_attach = common.on_attach,
+  capabilities = common.capabilities,
   settings = {
     Lua = {
       runtime = {
@@ -15,6 +17,10 @@ return {
       },
       workspace = {
         checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME,
+          "${3rd}/luv/library",
+        },
       },
       telemetry = {
         enable = false,
