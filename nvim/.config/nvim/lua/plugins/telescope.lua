@@ -30,7 +30,7 @@ return {
     M.search_dotfiles = function()
       builtin.find_files({
         prompt_title = "Dotfiles",
-        cwd = vim.fn.expand("~/.dotfiles"),
+        cwd = vim.fn.expand("~/dotfiles"),
         hidden = true,
       })
     end
@@ -41,12 +41,12 @@ return {
       if live then
         builtin.live_grep({
           prompt_title = "Docs",
-          cwd = vim.fn.expand("~/Docs"),
+          cwd = vim.fn.expand("~/docs"),
         })
       else
         builtin.find_files({
           prompt_title = "Docs",
-          cwd = vim.fn.expand("~/Docs"),
+          cwd = vim.fn.expand("~/docs"),
         })
       end
     end
