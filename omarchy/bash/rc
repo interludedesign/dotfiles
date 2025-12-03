@@ -1,0 +1,3 @@
+#!/bin/sh
+
+source ~/dotfiles/omarchy/bash/aliases
