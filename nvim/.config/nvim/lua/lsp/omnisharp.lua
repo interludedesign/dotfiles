@@ -1,7 +1,7 @@
 local common = require("lsp.common")
 
 return {
-  cmd = { "dotnet", "/usr/local/bin/omnisharp/OmniSharp.dll" },
+  cmd = { "/home/chris/.local/share/mise/installs/dotnet/9.0.305/dotnet", "/home/chris/.local/share/nvim/mason/packages/omnisharp/libexec/OmniSharp.dll", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
   filetypes = { "cs" },
   root_markers = { "*.sln", "*.csproj", ".git" },
   on_attach = common.on_attach,
