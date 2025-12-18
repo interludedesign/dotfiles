@@ -29,6 +29,7 @@ alias gd="git diff"
 
 # LLM Aliases
 alias lmcp="copilot"
+alias lmcpa="copilot --allow-all-paths"
 alias lmc="claude"
 
 # Colorize RI
