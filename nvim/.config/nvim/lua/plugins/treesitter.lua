@@ -7,7 +7,7 @@ return {
     },
     config = function()
       require("nvim-treesitter.configs").setup({
-        ensure_installed = { "markdown", "markdown_inline", "ruby", "bash", "lua", "vim", "vimdoc", "c_sharp", "go", "typescript", "javascript", "python" }, -- Ensure parsers are installed
+        ensure_installed = { "markdown", "markdown_inline", "ruby", "bash", "lua", "vim", "vimdoc", "c_sharp", "go", "typescript", "javascript", "python", "json" }, -- Ensure parsers are installed
         sync_install = false, -- Install parsers asynchronously
 
         highlight = {
@@ -29,6 +29,9 @@ return {
           },
         },
       })
+
+      -- Map csharp alias to c_sharp parser
+      vim.treesitter.language.register("c_sharp", "csharp")
     end,
   },
 }
