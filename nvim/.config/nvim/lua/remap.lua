@@ -60,3 +60,6 @@ vim.keymap.set('i', '<D-l>', function() require('utils.markdown-checkboxes').tog
 vim.keymap.set('n', '<leader>mc', function() require('utils.markdown-checkboxes').create_checkbox() end, { desc = 'Create markdown checkbox' })
 vim.keymap.set('n', '<leader>mx', function() require('utils.markdown-checkboxes').check_checkbox() end, { desc = 'Check markdown checkbox' })
 vim.keymap.set('n', '<leader>mu', function() require('utils.markdown-checkboxes').uncheck_checkbox() end, { desc = 'Uncheck markdown checkbox' })
+
+-- Smart gx - opens URLs in browser, files in vim
+vim.keymap.set('n', 'gx', function() require('utils').SmartOpen() end, { noremap = true, desc = 'Smart open URLs or files' })

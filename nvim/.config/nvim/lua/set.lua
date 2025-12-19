@@ -49,6 +49,7 @@ vim.cmd([[set mouse=a]])
 vim.g.netrw_liststyle = 3
 vim.g.netrw_banner = 0
 vim.g.netrw_bufsettings = "noma nomod nu nobl nowrap ro"
+vim.g.netrw_nogx = 1  -- Disable netrw's gx mapping
 
 -- NERDTree
 vim.g.NERDTreeShowHidden = 1
