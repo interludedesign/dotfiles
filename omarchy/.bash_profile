@@ -4,4 +4,3 @@
 
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 
-export PATH="$PATH:/home/chris/.dotnet/tools"

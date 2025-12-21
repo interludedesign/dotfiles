@@ -1,0 +1,4 @@
+#!/bin/sh
+
+addToPath $HOME/dotnet/tools
+addToPath $HOME/.local/bin
