@@ -11,3 +11,14 @@ source_if_exists() {
     source $1
   fi
 }
+
+copy() {
+  if command -v wl-copy &> /dev/null; then
+    wl-copy
+  elif command -v pbcopy &> /dev/null; then
+    pbcopy
+  else
+    echo "Error: Neither wl-copy nor pbcopy is available" >&2
+    return 1
+  fi
+}
