@@ -2,7 +2,7 @@
 	name = Chris Swann
 	email = chris@interludedesign.com
 
-[includeIf "gitdir:~/costar/**"]
+[includeIf "gitdir:~/code/**"]
 	path = .gitconfig-work
 
 [core]
