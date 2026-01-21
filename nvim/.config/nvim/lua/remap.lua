@@ -61,5 +61,11 @@ vim.keymap.set('n', '<leader>mc', function() require('utils.markdown-checkboxes'
 vim.keymap.set('n', '<leader>mx', function() require('utils.markdown-checkboxes').check_checkbox() end, { desc = 'Check markdown checkbox' })
 vim.keymap.set('n', '<leader>mu', function() require('utils.markdown-checkboxes').uncheck_checkbox() end, { desc = 'Uncheck markdown checkbox' })
 
+-- Markdown extract section
+vim.keymap.set('v', '<leader>me', ':ExtractSection<CR>', { desc = 'Extract markdown section to new file' })
+
 -- Smart gx - opens URLs in browser, files in vim
 vim.keymap.set('n', 'gx', function() require('utils').SmartOpen() end, { noremap = true, desc = 'Smart open URLs or files' })
+
+-- Tmux sessionizer
+vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")

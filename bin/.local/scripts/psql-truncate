@@ -1,0 +1,86 @@
+#!/bin/bash
+# Script to truncate all tables in a PostgreSQL database
+# This preserves the schema but removes all data
+
+set -e
+
+# Check for required argument
+if [ $# -eq 0 ]; then
+    echo "Usage: $(basename "$0") <database_name>"
+    echo ""
+    echo "Environment variables (optional):"
+    echo "  PGHOST     - Database host (default: localhost)"
+    echo "  PGPORT     - Database port (default: 5432)"
+    echo "  PGUSER     - Database user (default: postgres)"
+    echo "  PGPASSWORD - Database password (default: postgres)"
+    exit 1
+fi
+
+DB_NAME="$1"
+
+# Database connection settings
+DB_HOST=${PGHOST:-localhost}
+DB_PORT=${PGPORT:-5432}
+DB_USER=${PGUSER:-postgres}
+DB_PASSWORD=${PGPASSWORD:-postgres}
+
+# Safety check: Only allow running on localhost
+if [[ "$DB_HOST" != "localhost" && "$DB_HOST" != "127.0.0.1" && "$DB_HOST" != "::1" ]]; then
+    echo "❌ ERROR: This script can only run against localhost databases."
+    echo "   Current host: ${DB_HOST}"
+    echo "   This is a safety measure to prevent accidental data loss on remote databases."
+    exit 1
+fi
+
+echo "🗑️  Truncating all tables in database: ${DB_NAME}"
+echo "   Host: ${DB_HOST}:${DB_PORT}"
+echo "   User: ${DB_USER}"
+echo ""
+
+# Confirm action
+read -p "⚠️  This will delete ALL data from ALL tables. Continue? (yes/no): " confirm
+if [ "$confirm" != "yes" ]; then
+    echo "❌ Aborted."
+    exit 1
+fi
+
+# Generate and execute truncate commands
+PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d "${DB_NAME}" <<EOF
+DO \$\$
+DECLARE
+    r RECORD;
+    schema_name TEXT;
+    table_count INTEGER := 0;
+BEGIN
+    -- Disable foreign key checks temporarily
+    SET session_replication_role = 'replica';
+
+    -- Truncate tables in each application schema
+    FOR schema_name IN
+        SELECT nspname
+        FROM pg_namespace
+        WHERE nspname NOT IN ('pg_catalog', 'information_schema', 'pg_toast')
+        ORDER BY nspname
+    LOOP
+        FOR r IN
+            SELECT tablename
+            FROM pg_tables
+            WHERE schemaname = schema_name
+            ORDER BY tablename
+        LOOP
+            EXECUTE format('TRUNCATE TABLE %I.%I CASCADE', schema_name, r.tablename);
+            table_count := table_count + 1;
+            RAISE NOTICE 'Truncated %.%', schema_name, r.tablename;
+        END LOOP;
+    END LOOP;
+
+    -- Re-enable foreign key checks
+    SET session_replication_role = 'origin';
+
+    RAISE NOTICE '';
+    RAISE NOTICE '✅ Successfully truncated % tables', table_count;
+END \$\$;
+EOF
+
+echo ""
+echo "✅ All tables truncated successfully!"

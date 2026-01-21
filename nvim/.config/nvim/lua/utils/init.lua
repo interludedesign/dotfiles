@@ -8,6 +8,7 @@ utils.alternate_path = require("utils.alternate_path")
 utils.testing = require("utils.testing")
 utils.git = require("utils.git")
 utils.case_converters = require("utils.case_converters")
+utils.date = require("utils.date")
 
 function utils.SmartOpen()
   local target = vim.fn.expand('<cfile>')

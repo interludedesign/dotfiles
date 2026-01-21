@@ -1,0 +1,10 @@
+#!/bin/bash
+# Wrapper script for psql with sensible defaults
+
+host="${PGHOST:-localhost}"
+port="${PGPORT:-5432}"
+user="${PGUSER:-postgres}"
+password="${PGPASSWORD:-postgres}"
+
+PGHOST="$host" PGPORT="$port" PGUSER="$user" PGPASSWORD="$password" \
+    exec psql "$@"

@@ -12,6 +12,7 @@ source_if_exists $HOME/.fzf/shell/key-bindings.zsh
 source_if_exists $HOME/.config/op/plugins.sh
 source_if_exists $HOME/.vault
 source_if_exists $HOMEBREW_PREFIX/etc/profile.d/z.sh
+source_if_exists $HOME/vault.sh
 
 
 
