@@ -44,17 +44,30 @@ return {
           cwd = vim.fn.expand("~/docs"),
         })
       else
+        local actions = require("telescope.actions")
+        local action_state = require("telescope.actions.state")
+        local docs_util = require("utils.docs")
+        
         builtin.find_files({
-          prompt_title = "Docs",
+          prompt_title = "Docs (Ctrl-n to create new)",
           cwd = vim.fn.expand("~/docs"),
+          attach_mappings = function(prompt_bufnr, map)
+            -- Add custom keybinding to create new doc
+            map("i", "<C-n>", function()
+              local picker = action_state.get_current_picker(prompt_bufnr)
+              local query = picker:_get_prompt()
+              
+              actions.close(prompt_bufnr)
+              docs_util.create_doc(query)
+            end)
+            
+            return true
+          end,
         })
       end
     end
 
     -- Keybindings
-    vim.keymap.set("n", "<C-f>", function()
-      builtin.find_files({ hidden = false }) -- Add logic for hidden files if needed
-    end, { noremap = true, desc = "Find Files" })
 
     vim.keymap.set("n", "<leader>fg", function()
       builtin.live_grep({
