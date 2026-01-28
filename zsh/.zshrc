@@ -23,3 +23,4 @@ bindkey -s ^f "tmux-sessionizer\n"
 # Set tmux pane name to 'copilot' instead of 'node'
 # alias copilot='tmux rename-window copilot 2>/dev/null; command copilot'
 
+source ~/dotfiles/shared/sh/rc
