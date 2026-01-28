@@ -1,6 +1,13 @@
 #!/bin/sh
 
-source ~/dotfiles/omarchy/bash/aliases
 source ~/dotfiles/omarchy/bash/functions
+source ~/dotfiles/omarchy/bash/shell
 source ~/dotfiles/omarchy/bash/paths
+source ~/dotfiles/omarchy/bash/aliases
+source ~/dotfiles/omarchy/bash/init
+source ~/dotfiles/omarchy/bash/envs
 
+
+# Keybindings
+#
+bind -x '"\C-f":tmux-sessionizer'

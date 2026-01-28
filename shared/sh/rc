@@ -1,0 +1,8 @@
+#!/bin/sh
+
+source ~/dotfiles/shared/sh/functions
+source ~/dotfiles/shared/sh/shell
+source ~/dotfiles/shared/sh/paths
+source ~/dotfiles/shared/sh/aliases
+source ~/dotfiles/shared/sh/init
+source ~/dotfiles/shared/sh/envs

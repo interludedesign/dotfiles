@@ -1,0 +1,5 @@
+#!/bin/sh
+
+addToPath ~/dotfiles/bin/
+addToPath $HOME/dotnet/tools
+addToPath $HOME/Sites/leaf

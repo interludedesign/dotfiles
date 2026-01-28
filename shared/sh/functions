@@ -1,0 +1,24 @@
+#!/bin/sh
+
+addToPath() {
+  if [[ "$PATH" != *"$1"* ]]; then
+    export PATH=$PATH:$1
+  fi
+}
+
+source_if_exists() {
+  if [ -f $1 ]; then
+    source $1
+  fi
+}
+
+copy() {
+  if command -v wl-copy &> /dev/null; then
+    wl-copy
+  elif command -v pbcopy &> /dev/null; then
+    pbcopy
+  else
+    echo "Error: Neither wl-copy nor pbcopy is available" >&2
+    return 1
+  fi
+}

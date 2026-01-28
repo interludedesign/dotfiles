@@ -1,0 +1,44 @@
+#!/bin/sh
+
+# Global aliases
+alias vim="nvim"
+alias rmf="rm -rf"
+alias cl=clear
+alias ll="ls -la"
+alias ..="cd .."
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="ipconfig getifaddr en0"
+alias be="bundle exec"
+alias bu="bundle update"
+alias bs="brew services list"
+alias v="vim ."
+alias subl="sublime-merge"
+alias csr="csharprepl"
+alias ts="tmuxinator start"
+
+# Git aliases
+alias gs="git status"
+alias gam="git add -A && git commit -m"
+alias gap="git add -A && git commit -m 'Updates' && git push"
+alias co="git checkout"
+alias gp="git push"
+alias gpl="git pull"
+alias gl="git log"
+alias ch="checkout"
+alias gd="git diff"
+
+# LLM Aliases
+alias lmcp="copilot"
+alias lmc="claude"
+
+# Colorize RI
+alias ri='ri -f ansi'
+
+# Places
+alias dotfiles="cd ~/Code/dotfiles"
+
+alias python="python3"
+
+# brew
+alias bs="brew services"
+alias bsr="brew services restart"

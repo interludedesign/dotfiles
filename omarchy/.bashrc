@@ -5,7 +5,10 @@
 # (don't mess with these directly, just overwrite them here!)
 source ~/.local/share/omarchy/default/bash/rc
 
-## Custom
+## Shared shell
+source ~/dotfiles/shared/sh/rc
+
+## Custom Omarchy shell
 source ~/dotfiles/omarchy/bash/rc
 
 # Add your own exports, aliases, and functions here.

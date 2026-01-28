@@ -1,0 +1,2 @@
+# Bind Ctrl+f to tmux sessionizer
+bind -x '"\C-f":tmux-sessionizer'
