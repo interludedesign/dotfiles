@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-export STOW_FOLDERS="zsh,work,git,tmux,readline,bin,nvim,fzf,alfred,alacritty,ghostty"
+export STOW_FOLDERS="work,git,tmux,bin,nvim,fzf,alfred,ghostty"
 
 pushd $HOME/.dotfiles
 for folder in $(echo $STOW_FOLDERS | sed "s/,/ /g")
