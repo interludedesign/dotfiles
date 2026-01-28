@@ -8,6 +8,7 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function()
     vim.opt_local.wrap = true
     vim.opt_local.linebreak = true
+    vim.opt_local.colorcolumn = ""
     vim.keymap.set('n', 'j', 'gj', { buffer = true })
     vim.keymap.set('n', 'k', 'gk', { buffer = true })
   end,

@@ -17,7 +17,23 @@ function utils.SmartOpen()
     if not target:match('^https?://') then
       target = 'https://' .. target
     end
-    vim.fn.system(string.format('open "%s"', target))
+    
+    -- Detect OS and use appropriate command
+    local open_cmd
+    if vim.fn.has('mac') == 1 then
+      open_cmd = 'open'
+    elseif vim.fn.has('unix') == 1 then
+      open_cmd = 'xdg-open'
+    elseif vim.fn.has('win32') == 1 then
+      open_cmd = 'start'
+    else
+      print('Unsupported OS for opening URLs')
+      return
+    end
+    
+    -- Run in background to avoid blocking and handle errors
+    vim.fn.jobstart({ open_cmd, target }, { detach = true })
+    print('Opening: ' .. target)
     return
   end
   
