@@ -1,39 +1,35 @@
 return {
   {
-    "nvim-treesitter/nvim-treesitter", -- Core Treesitter plugin
+    "nvim-treesitter/nvim-treesitter",
     dependencies = {
-      "RRethy/nvim-treesitter-endwise", -- Automatically adds `end` for Ruby, etc.
-      "RRethy/nvim-treesitter-textsubjects", -- Adds text subject mappings
+      "RRethy/nvim-treesitter-endwise",
     },
-    config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = { "markdown", "markdown_inline", "ruby", "bash", "lua", "vim", "vimdoc", "c_sharp", "go", "typescript", "javascript", "python", "json", "css", "sql", "javascript" }, -- Ensure parsers are installed
-        sync_install = false, -- Install parsers asynchronously
+    build = ":TSUpdate",
+    opts = {
+      ensure_installed = { 
+        "markdown", "markdown_inline", "ruby", "bash", "lua", "vim", 
+        "vimdoc", "c_sharp", "go", "typescript", "javascript", "python", 
+        "json", "css", "sql" 
+      },
+      sync_install = false,
+      auto_install = true,
 
-        highlight = {
-          enable = true, -- Enable Treesitter-based syntax highlighting
-          additional_vim_regex_highlighting = { "markdown" }, -- Ensure markdown highlights work
-        },
+      highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = { "markdown" },
+      },
 
-        endwise = {
-          enable = false, -- Enable endwise plugin
-        },
+      indent = {
+        enable = true,
+      },
 
-        textsubjects = {
-          enable = true, -- Enable textsubjects plugin
-          prev_selection = ",", -- Keymap to select the previous selection
-          keymaps = {
-            ["."] = "textsubjects-smart", -- Select smart text objects
-            ["am"] = "textsubjects-container-outer", -- Outer container
-            ["im"] = "textsubjects-container-inner", -- Inner container
-          },
-        },
-
-        injections = {
-          enable = true, -- Enable language injections (e.g., SQL in bash heredocs)
-        },
-      })
-
+      endwise = {
+        enable = false,
+      },
+    },
+    config = function(_, opts)
+      require("nvim-treesitter").setup(opts)
+      
       -- Map csharp alias to c_sharp parser
       vim.treesitter.language.register("c_sharp", "csharp")
     end,
