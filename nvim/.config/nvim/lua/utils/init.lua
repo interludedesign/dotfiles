@@ -11,7 +11,8 @@ utils.case_converters = require("utils.case_converters")
 utils.date = require("utils.date")
 
 function utils.SmartOpen()
-  local target = vim.fn.expand('<cfile>')
+  -- Get the entire WORD under cursor (includes special chars like :)
+  local target = vim.fn.expand('<cWORD>')
   
   if target:match('^https?://') or target:match('%.com$') then
     -- Add protocol if missing
@@ -22,10 +23,20 @@ function utils.SmartOpen()
     return
   end
   
-  local full_path = vim.fn.fnamemodify(vim.fn.expand(target), ':p')
+  -- Extract file path and line number (e.g., "file.rb:175")
+  local file_path, line_num = target:match('^(.+):(%d+)$')
+  if not file_path then
+    file_path = target
+    line_num = nil
+  end
+  
+  local full_path = vim.fn.fnamemodify(vim.fn.expand(file_path), ':p')
   
   if vim.fn.filereadable(full_path) == 1 or vim.fn.isdirectory(full_path) == 1 then
     vim.cmd('edit ' .. vim.fn.fnameescape(full_path))
+    if line_num then
+      vim.cmd(line_num)
+    end
   else
     print('File not found: ' .. full_path)
   end
