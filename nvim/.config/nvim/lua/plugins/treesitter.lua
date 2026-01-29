@@ -1,37 +1,42 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    lazy = false,
+    build = ":TSUpdate",
     dependencies = {
       "RRethy/nvim-treesitter-endwise",
     },
-    build = ":TSUpdate",
-    opts = {
-      ensure_installed = { 
-        "markdown", "markdown_inline", "ruby", "bash", "lua", "vim", 
-        "vimdoc", "c_sharp", "go", "typescript", "javascript", "python", 
-        "json", "css", "sql" 
-      },
-      sync_install = false,
-      auto_install = true,
+    config = function()
+      -- Setup with new syntax (optional, uses defaults if not called)
+      require'nvim-treesitter'.setup {
+        install_dir = vim.fn.stdpath('data') .. '/site'
+      }
 
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = { "markdown" },
-      },
+      -- Install parsers
+      require'nvim-treesitter'.install {
+        'markdown', 'markdown_inline', 'ruby', 'bash', 'lua', 'vim',
+        'vimdoc', 'c_sharp', 'go', 'typescript', 'javascript', 'python',
+        'json', 'css', 'sql'
+      }
 
-      indent = {
-        enable = true,
-      },
-
-      endwise = {
-        enable = false,
-      },
-    },
-    config = function(_, opts)
-      require("nvim-treesitter").setup(opts)
-      
       -- Map csharp alias to c_sharp parser
-      vim.treesitter.language.register("c_sharp", "csharp")
+      vim.treesitter.language.register('c_sharp', 'csharp')
+
+      -- Enable highlighting for all filetypes
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = '*',
+        callback = function()
+          pcall(vim.treesitter.start)
+        end,
+      })
+
+      -- Enable indent for all filetypes
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = '*',
+        callback = function()
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
+      })
     end,
   },
 }
