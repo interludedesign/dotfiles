@@ -1,0 +1,3 @@
+#!/bin/sh
+
+source_if_exists $HOMEBREW_PREFIX/etc/profile.d/z.sh
