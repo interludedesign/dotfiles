@@ -59,3 +59,7 @@ gitls() {
 function spec() {
 	bundle exec rspec "$1" --format documentation --require $HOME/.local/bin/quickfix_formatter.rb --format QuickfixFormatter --out /tmp/quickfix.out
 }
+
+function checkout() {
+	git checkout $(git branch | fzf --reverse)
+}
