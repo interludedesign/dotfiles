@@ -4,48 +4,88 @@
 
 set -e
 
-# Check for required argument
-if [ $# -eq 0 ]; then
-    echo "Usage: $(basename "$0") <database_name>"
-    echo ""
-    echo "Environment variables (optional):"
-    echo "  PGHOST     - Database host (default: localhost)"
-    echo "  PGPORT     - Database port (default: 5432)"
-    echo "  PGUSER     - Database user (default: postgres)"
-    echo "  PGPASSWORD - Database password (default: postgres)"
-    exit 1
-fi
+# Default connection settings
+host="${PGHOST:-localhost}"
+port="${PGPORT:-5432}"
+user="${PGUSER:-postgres}"
+password="${PGPASSWORD:-postgres}"
+database="${PGDATABASE:-postgres}"
+skip_confirm=false
 
-DB_NAME="$1"
-
-# Database connection settings
-DB_HOST=${PGHOST:-localhost}
-DB_PORT=${PGPORT:-5432}
-DB_USER=${PGUSER:-postgres}
-DB_PASSWORD=${PGPASSWORD:-postgres}
+# Parse command line arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --database)
+            database="$2"
+            shift 2
+            ;;
+        --user)
+            user="$2"
+            shift 2
+            ;;
+        --host)
+            host="$2"
+            shift 2
+            ;;
+        --port)
+            port="$2"
+            shift 2
+            ;;
+        -y|--yes)
+            skip_confirm=true
+            shift
+            ;;
+        -h|--help)
+            echo "Usage: $(basename "$0") [OPTIONS]"
+            echo ""
+            echo "Truncates all tables in a PostgreSQL database (localhost only)."
+            echo ""
+            echo "Options:"
+            echo "  --database <name>  Database name (default: \$PGDATABASE or 'postgres')"
+            echo "  --user <name>      Database user (default: \$PGUSER or 'postgres')"
+            echo "  --host <name>      Database host (default: \$PGHOST or 'localhost')"
+            echo "  --port <number>    Database port (default: \$PGPORT or '5432')"
+            echo "  -y, --yes          Skip confirmation prompt"
+            echo "  -h, --help         Show this help message"
+            echo ""
+            echo "Environment variables:"
+            echo "  PGHOST, PGPORT, PGUSER, PGPASSWORD, PGDATABASE"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Use --help for usage information"
+            exit 1
+            ;;
+    esac
+done
 
 # Safety check: Only allow running on localhost
-if [[ "$DB_HOST" != "localhost" && "$DB_HOST" != "127.0.0.1" && "$DB_HOST" != "::1" ]]; then
+if [[ "$host" != "localhost" && "$host" != "127.0.0.1" && "$host" != "::1" ]]; then
     echo "❌ ERROR: This script can only run against localhost databases."
-    echo "   Current host: ${DB_HOST}"
+    echo "   Current host: ${host}"
     echo "   This is a safety measure to prevent accidental data loss on remote databases."
     exit 1
 fi
 
-echo "🗑️  Truncating all tables in database: ${DB_NAME}"
-echo "   Host: ${DB_HOST}:${DB_PORT}"
-echo "   User: ${DB_USER}"
+echo "🗑️  Truncating all tables in database: ${database}"
+echo "   Host: ${host}:${port}"
+echo "   User: ${user}"
 echo ""
 
-# Confirm action
-read -p "⚠️  This will delete ALL data from ALL tables. Continue? (yes/no): " confirm
-if [ "$confirm" != "yes" ]; then
-    echo "❌ Aborted."
+# Confirm action unless -y flag is set
+if [ "$skip_confirm" = false ]; then
+    read -p "⚠️  This will delete ALL data from ALL tables. Continue? (yes/no): " confirm
+    if [ "$confirm" != "yes" ]; then
+        echo "❌ Aborted."
+        exit 1
+    fi
+fi
     exit 1
 fi
 
 # Generate and execute truncate commands
-PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -d "${DB_NAME}" <<EOF
+PGPASSWORD="${password}" psql -h "${host}" -p "${port}" -U "${user}" -d "${database}" <<EOF
 DO \$\$
 DECLARE
     r RECORD;

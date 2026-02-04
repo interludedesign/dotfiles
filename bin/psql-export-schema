@@ -1,0 +1,98 @@
+#!/bin/bash
+# Script to export PostgreSQL database schema (no data)
+
+set -e
+
+# Default connection settings
+host="${PGHOST:-localhost}"
+port="${PGPORT:-5432}"
+user="${PGUSER:-postgres}"
+password="${PGPASSWORD:-postgres}"
+database="${PGDATABASE:-postgres}"
+output_file=""
+
+# Parse command line arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --database)
+            database="$2"
+            shift 2
+            ;;
+        --user)
+            user="$2"
+            shift 2
+            ;;
+        --host)
+            host="$2"
+            shift 2
+            ;;
+        --port)
+            port="$2"
+            shift 2
+            ;;
+        --output|-o)
+            output_file="$2"
+            shift 2
+            ;;
+        -h|--help)
+            echo "Usage: $(basename "$0") [OPTIONS]"
+            echo ""
+            echo "Exports PostgreSQL database schema (structure only, no data)."
+            echo ""
+            echo "Options:"
+            echo "  --database <name>  Database name (default: \$PGDATABASE or 'postgres')"
+            echo "  --user <name>      Database user (default: \$PGUSER or 'postgres')"
+            echo "  --host <name>      Database host (default: \$PGHOST or 'localhost')"
+            echo "  --port <number>    Database port (default: \$PGPORT or '5432')"
+            echo "  -o, --output <file> Output file (default: stdout)"
+            echo "  -h, --help         Show this help message"
+            echo ""
+            echo "Environment variables:"
+            echo "  PGHOST, PGPORT, PGUSER, PGPASSWORD, PGDATABASE"
+            echo ""
+            echo "Examples:"
+            echo "  $(basename "$0")                          # Export to stdout"
+            echo "  $(basename "$0") -o schema.sql            # Export to file"
+            echo "  $(basename "$0") --database mydb -o dump.sql"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Use --help for usage information"
+            exit 1
+            ;;
+    esac
+done
+
+# Safety check: Only allow running on localhost
+if [[ "$host" != "localhost" && "$host" != "127.0.0.1" && "$host" != "::1" ]]; then
+    echo "❌ ERROR: This script can only run against localhost databases."
+    echo "   Current host: ${host}"
+    echo "   This is a safety measure to prevent accidental data access on remote databases."
+    exit 1
+fi
+
+# Build pg_dump command
+dump_cmd="PGPASSWORD=\"${password}\" pg_dump -h \"${host}\" -p \"${port}\" -U \"${user}\" -d \"${database}\" --schema-only --no-owner --no-acl"
+
+# Add output file if specified
+if [ -n "$output_file" ]; then
+    dump_cmd="$dump_cmd -f \"${output_file}\""
+    echo "📦 Exporting schema from database: ${database}"
+    echo "   Host: ${host}:${port}"
+    echo "   User: ${user}"
+    echo "   Output: ${output_file}"
+    echo ""
+else
+    echo "📦 Exporting schema from database: ${database} to stdout" >&2
+    echo "   Host: ${host}:${port}" >&2
+    echo "   User: ${user}" >&2
+    echo "" >&2
+fi
+
+# Execute the dump
+eval "$dump_cmd"
+
+if [ -n "$output_file" ]; then
+    echo "✅ Schema exported successfully to: ${output_file}"
+fi
