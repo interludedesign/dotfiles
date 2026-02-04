@@ -51,6 +51,7 @@ return {
         builtin.find_files({
           prompt_title = "Docs (Ctrl-n to create new)",
           cwd = vim.fn.expand("~/docs"),
+          find_command = { "fd", "--type", "f", "--strip-cwd-prefix", "-X", "ls", "-t" },
           attach_mappings = function(prompt_bufnr, map)
             -- Add custom keybinding to create new doc
             map("i", "<C-n>", function()
