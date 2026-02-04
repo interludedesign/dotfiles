@@ -16,7 +16,7 @@ function string_decorators.escape(str)
 end
 
 function string_decorators.is_empty(str)
-  if string.len(str) < 1 then
+  if str == nil or string.len(str) < 1 then
     return true
   else
     return false

@@ -7,7 +7,8 @@ function alternate_path.open(path, vim_command)
   local result = alternate_path.find(path)
 
   if s.is_empty(result) then
-    return string.format("No alternate file for %s exists!", path)
+    vim.notify(string.format("No alternate file for %s exists!", path), vim.log.levels.WARN)
+    return
   else
     vim.fn["execute"](vim_command .. " " .. result)
   end
