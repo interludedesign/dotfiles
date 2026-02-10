@@ -81,8 +81,6 @@ if [ "$skip_confirm" = false ]; then
         exit 1
     fi
 fi
-    exit 1
-fi
 
 # Generate and execute truncate commands
 PGPASSWORD="${password}" psql -h "${host}" -p "${port}" -U "${user}" -d "${database}" <<EOF
