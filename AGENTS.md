@@ -10,8 +10,8 @@ This file contains instructions for AI coding assistants working with this dotfi
 - **Plugins**: `lua/plugins/`
 - **Colors**: `lua/plugins/color.lua`
 
-### Alacritty
-- **Location**: `~/.config/alacritty/alacritty.toml`
+### Ghostty
+- **Location**: `~/.config/ghostty/config`
 
 ## General Guidelines
 

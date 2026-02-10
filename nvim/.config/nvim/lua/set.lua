@@ -1,6 +1,6 @@
 vim.opt.clipboard = "unnamedplus"
 
-vim.opt.shell = "/bin/zsh"
+vim.opt.shell = os.getenv("SHELL") or "/bin/bash"
 
 vim.opt.number = true
 vim.opt.relativenumber = true

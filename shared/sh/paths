@@ -3,3 +3,4 @@
 addToPath ~/dotfiles/bin/
 addToPath $HOME/dotnet/tools
 addToPath $HOME/Sites/leaf
+addToPath $HOME/.local/bin
