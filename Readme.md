@@ -29,3 +29,9 @@ Sources for completion are also installed via plugins, of which there are severa
 `:help ins-completion` for vim completion keymaps
 
 ## LSP
+
+## Omarchy
+AMD GPU high performance service installer (useful when driving a 6K screen causes compositor lag; forces higher GPU clocks):
+`~/dotfiles/omarchy/install-amd-gpu-performance.sh`
+Disable:
+`sudo systemctl disable --now amd-gpu-performance.service`
