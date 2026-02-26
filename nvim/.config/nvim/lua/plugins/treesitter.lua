@@ -17,7 +17,7 @@ return {
       require'nvim-treesitter'.install {
         'markdown', 'markdown_inline', 'ruby', 'bash', 'lua', 'vim',
         'vimdoc', 'c_sharp', 'go', 'typescript', 'javascript', 'python',
-        'json', 'css', 'sql', 'handlebars'
+        'json', 'yaml', 'css', 'sql', 'handlebars'
       }
 
       -- Map csharp alias to c_sharp parser
