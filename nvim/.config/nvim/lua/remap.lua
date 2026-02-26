@@ -1,5 +1,9 @@
--- Copy current file to clipboard
-vim.keymap.set("n", "<leader>c", ":let @+=expand('%:p')<CR>", { noremap = true })
+-- Copy current file path with line number to clipboard (uses $HOME instead of /Users/...)
+vim.keymap.set("n", "<leader>c", function()
+  local path = vim.fn.expand("%:p"):gsub(vim.fn.expand("$HOME"), "$HOME")
+  local line = vim.fn.line(".")
+  vim.fn.setreg("+", path .. ":" .. line)
+end, { noremap = true })
 
 -- Run Plenary tests
 vim.keymap.set("n", "<leader><leader>t", "<Plug>PlenaryTestFile", { noremap = true })
