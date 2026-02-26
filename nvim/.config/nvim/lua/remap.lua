@@ -73,3 +73,4 @@ vim.keymap.set('n', 'gx', function() require('utils').SmartOpen() end, { noremap
 
 -- Tmux sessionizer
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+vim.keymap.set("i", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
