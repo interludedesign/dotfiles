@@ -1,4 +1,4 @@
-vim.opt.clipboard = "unnamedplus"
+vim.opt.clipboard = "unnamed,unnamedplus"
 
 vim.opt.shell = os.getenv("SHELL") or "/bin/bash"
 

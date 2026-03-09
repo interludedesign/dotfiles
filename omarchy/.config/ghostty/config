@@ -46,3 +46,6 @@ selection-background = 7aa2f7
 keybind = ctrl+z=close_surface
 # keybind = ctrl+d=new_split:right - Interfering with vim page down
 keybind = f11=toggle_fullscreen
+
+# Fix general slowness on hyprland (https://github.com/ghostty-org/ghostty/discussions/3224)
+async-backend = epoll
