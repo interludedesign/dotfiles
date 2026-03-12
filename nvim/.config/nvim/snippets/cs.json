@@ -1,0 +1,20 @@
+{
+	"Operation Interface": {
+		"prefix": "operation",
+		"description": "Public API operation interface with [Operation] attribute and route",
+		"body": [
+			"using System.Threading;",
+			"using System.Threading.Tasks;",
+			"using CoStar.Neo.Api;",
+			"",
+			"namespace ${1:Apartments.Payments.Public}.Operations;",
+			"",
+			"[Operation]",
+			"public interface I${2:Name}Operations",
+			"{",
+			"\t[Route(HttpMethod.${3|Get,Post,Put,Patch,Delete|}, \"/${4:route}\")]",
+			"\tTask<Response<${5:ResponseType}>> ${6:MethodName}Async(${7}CancellationToken token = default);",
+			"}"
+		]
+	}
+}

@@ -37,41 +37,35 @@ This document lists all installed Neovim plugins, their purpose, and where their
 
 ## LSP & Completion
 
-### blink.cmp
-**Purpose**: Modern, fast completion engine with LSP support  
-**Configuration**: `~/.config/nvim/lua/plugins/completion.lua`  
-**Repository**: saghen/blink.cmp  
-**Features**:
-- Auto-show completion menu
-- Default keybindings for navigation
-- Signature help
-- LSP integration
+### Native vim.lsp
+**Purpose**: LSP client configuration using Neovim's built-in `vim.lsp.config` and `vim.lsp.enable`  
+**Configuration**: `~/.config/nvim/lua/lsp.lua` (entry point), `~/.config/nvim/lua/lsp/` (per-server configs)  
+**Configured LSP Servers**: lua_ls, ruby_lsp, ts_ls, gopls, omnisharp, bash-language-server, marksman, html
 
-### nvim-lspconfig
-**Purpose**: Configurations for Neovim's built-in LSP client  
-**Configuration**: `~/.config/nvim/lua/plugins/lsp.lua`  
-**Repository**: neovim/nvim-lspconfig  
-**Configured LSP Servers**:
-- `lua_ls` - Lua language server
-- `ruby_ls` - Ruby language server
-- `omnisharp` - C# language server (at `/usr/local/bin/omnisharp/OmniSharp.dll`)
-
-**Keybindings** (on LSP attach):
+**Keybindings** (via `~/.config/nvim/lua/lsp/common.lua`):
 - `gd` - Go to definition
 - `K` - Hover documentation
 - `gi` - Go to implementation
 - `gr` - Find references
 - `<leader>ca` - Code actions
+- `gl` - Open diagnostic float
+- `ql` - Send diagnostics to quickfix list
+
+### blink.cmp
+**Purpose**: Modern, fast completion engine with LSP support  
+**Configuration**: `~/.config/nvim/lua/plugins/completion.lua`  
+**Repository**: saghen/blink.cmp  
+**Features**:
+- Auto-show completion menu with documentation preview
+- Snippet support via built-in snippets source (loads from friendly-snippets and custom snippets)
+- Default keybindings (`<Tab>` / `<S-Tab>` for snippet tabstops)
+- Signature help
+- Sources: lsp, path, snippets, buffer
 
 ### mason.nvim
 **Purpose**: Package manager for LSP servers, linters, and formatters  
-**Configuration**: `~/.config/nvim/lua/plugins/lsp.lua`  
-**Repository**: williamboman/mason.nvim
-
-### mason-lspconfig.nvim
-**Purpose**: Bridge between mason.nvim and nvim-lspconfig  
-**Configuration**: `~/.config/nvim/lua/plugins/lsp.lua`  
-**Repository**: williamboman/mason-lspconfig.nvim
+**Configuration**: `~/.config/nvim/lua/plugins/mason.lua`  
+**Repository**: mason-org/mason.nvim
 
 ### fidget.nvim
 **Purpose**: LSP progress notifications UI  
@@ -88,12 +82,11 @@ This document lists all installed Neovim plugins, their purpose, and where their
 **Configuration**: `~/.config/nvim/lua/plugins/snippets.lua`  
 **Repository**: rafamadriz/friendly-snippets
 
-### mini.snippets (from mini.nvim)
-**Purpose**: Snippet engine and loader  
-**Configuration**: `~/.config/nvim/lua/plugins/mini.lua`  
-**Snippet Locations**:
-- `~/.config/nvim/snippets/global.json` - Custom global snippets
-- Language-specific snippets loaded automatically
+### Custom Snippets
+**Purpose**: Project-specific snippet definitions loaded by blink.cmp's snippets source  
+**Location**: `~/.config/nvim/snippets/`  
+**Files**:
+- `cs.json` - C# snippets (e.g., Public API operation interface)
 
 ---
 
@@ -298,12 +291,6 @@ This document lists all installed Neovim plugins, their purpose, and where their
 **Configuration**: Dependency for DAP and neotest  
 **Repository**: nvim-neotest/nvim-nio
 
-### nvim-cmp
-**Purpose**: Completion engine (legacy, currently using blink.cmp)  
-**Configuration**: Installed but not actively configured  
-**Repository**: hrsh7th/nvim-cmp  
-**Note**: You have this installed but are using blink.cmp as primary completion
-
 ---
 
 ## Configuration Entry Points
@@ -315,7 +302,7 @@ This document lists all installed Neovim plugins, their purpose, and where their
 - **Keybindings**: `~/.config/nvim/lua/remap.lua`
 - **Settings**: `~/.config/nvim/lua/set.lua`
 - **Commands**: `~/.config/nvim/lua/commands.lua`
-- **Custom snippets**: `~/.config/nvim/snippets/global.json`
+- **Custom snippets**: `~/.config/nvim/snippets/` (e.g., `cs.json` for C#)
 
 ---
 
