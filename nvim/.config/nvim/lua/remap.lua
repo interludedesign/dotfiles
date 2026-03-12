@@ -61,7 +61,8 @@ vim.keymap.set("n", "<leader>r", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left>
 -- Markdown checkbox keybindings
 vim.keymap.set('n', '<D-l>', function() require('utils.markdown-checkboxes').toggle_checkbox() end, { desc = 'Toggle markdown checkbox' })
 vim.keymap.set('i', '<D-l>', function() require('utils.markdown-checkboxes').toggle_checkbox() end, { desc = 'Toggle markdown checkbox' })
-vim.keymap.set('n', '<leader>mc', function() require('utils.markdown-checkboxes').create_checkbox() end, { desc = 'Create markdown checkbox' })
+vim.keymap.set('n', '<leader>mc', function() require('utils.markdown-checkboxes').toggle_checkbox() end, { desc = 'Toggle markdown checkbox (create or check/uncheck)' })
+vim.keymap.set('v', '<leader>mc', function() require('utils.markdown-checkboxes').toggle_checkbox_range() end, { desc = 'Toggle markdown checkboxes on selection' })
 vim.keymap.set('n', '<leader>mx', function() require('utils.markdown-checkboxes').check_checkbox() end, { desc = 'Check markdown checkbox' })
 vim.keymap.set('n', '<leader>mu', function() require('utils.markdown-checkboxes').uncheck_checkbox() end, { desc = 'Uncheck markdown checkbox' })
 
