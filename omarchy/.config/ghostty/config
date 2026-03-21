@@ -6,7 +6,7 @@ font-family = JetBrainsMono Nerd Font
 font-style = Regular
 font-style-bold = Bold
 font-style-italic = Italic
-font-size = 8
+font-size = 10
 
 # Window Configuration
 window-padding-x = 14
