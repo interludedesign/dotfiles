@@ -1,5 +1,3 @@
-source $HOME/.zsh_profile
-
 export NVM_DIR="$HOME/.nvm"
 if [ -s "$NVM_DIR/nvm.sh" ]; then
   . "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -24,3 +22,9 @@ bindkey -s ^f "tmux-sessionizer\n"
 # alias copilot='tmux rename-window copilot 2>/dev/null; command copilot'
 
 source ~/dotfiles/shared/sh/rc
+
+# Personal config (aliases and machine-specific settings)
+source ~/dotfiles/personal/personal-sh/rc
+
+# opencode
+export PATH=/Users/chris/.opencode/bin:$PATH

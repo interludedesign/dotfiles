@@ -15,6 +15,7 @@ alias v="vim ."
 alias subl="sublime-merge"
 alias csr="csharprepl"
 alias ts="tmuxinator start"
+alias tks="tmux kill-server"
 
 # Git aliases
 alias gs="git status"

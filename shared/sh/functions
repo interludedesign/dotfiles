@@ -63,3 +63,43 @@ function spec() {
 function checkout() {
 	git checkout $(git branch | fzf --reverse)
 }
+
+# Create a tmux layout with an AI assistant pane, a small shell pane, and the editor
+# Usage: tmux-code [copilot|opencode|claude]
+#   copilot (default) - GitHub Copilot with --yolo flag
+#   opencode - OpenCode CLI
+#   claude - Claude Code
+tmux-code() {
+  local current_dir="${PWD}"
+  local ai_agent="${1:-copilot}"
+  
+  local ai_cmd
+  case "$ai_agent" in
+    copilot)
+      ai_cmd="copilot --yolo"
+      ;;
+    opencode)
+      ai_cmd="opencode"
+      ;;
+    claude)
+      ai_cmd="claude"
+      ;;
+    *)
+      echo "Unknown AI agent: $ai_agent" >&2
+      echo "Usage: tl [copilot|opencode|claude]" >&2
+      return 1
+      ;;
+  esac
+
+  # Left pane (current): nvim
+  tmux split-window -h -p 33 -c "$current_dir"
+  tmux send-keys "$ai_cmd" C-m
+
+  # Split left pane to add small bottom shell
+  tmux select-pane -L
+  tmux split-window -v -p 15 -c "$current_dir"
+
+  # Focus top-left for nvim
+  tmux select-pane -U
+  tmux send-keys "$EDITOR ." C-m
+}

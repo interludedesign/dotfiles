@@ -20,6 +20,18 @@ This file contains instructions for AI coding assistants working with this dotfi
 - Test changes when possible before committing
 - Keep this file minimal - only document locations, not implementation details or current settings
 
+## Shell Configuration Pattern
+
+All shell setups follow a consistent two-level sourcing pattern:
+
+| Setup | Shell Config | Sources |
+|-------|-------------|---------|
+| **Personal** | `zsh/.zshrc` | `shared/sh/rc` + `personal/personal-sh/rc` |
+| **Work** | `work/.zshrc` | `shared/sh/rc` + `work/work-sh/rc` |
+| **Omarchy** | `omarchy/.bashrc` | `shared/sh/rc` + `omarchy/bash/rc` |
+
+Each `rc` file sources its sibling files (functions, aliases, paths, envs, init, shell).
+
 ---
 
 # Neovim Plugin Configuration
