@@ -16,6 +16,24 @@ command("Test", function()
   testing_util.dotnet_test_to_clipboard()
 end, { desc = "Copy dotnet test command for current file to clipboard" })
 
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client then
+      vim.notify(client.name .. " ready", vim.log.levels.INFO, { title = "LSP" })
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd("LspDetach", {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client then
+      vim.notify(client.name .. " stopped", vim.log.levels.WARN, { title = "LSP" })
+    end
+  end,
+})
+
 command("Pascal", function()
   case_converters.to_pascal()
 end, { desc = "Convert word under cursor to PascalCase (auto-detects snake, camel, kebab, etc.)" })
