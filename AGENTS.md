@@ -13,6 +13,11 @@ This file contains instructions for AI coding assistants working with this dotfi
 ### Ghostty
 - **Location**: `~/.config/ghostty/config`
 
+### tmux
+- **Main config**: `~/dotfiles/tmux/.tmux.conf`
+- **Sessionizer**: `~/dotfiles/bin/tmux-sessionizer` (script), `~/.config/tmux-sessionizer/tmux-sessionizer.conf` (search paths)
+- **Session switching**: `Ctrl+1/2/3/4` switches to tmux session by position (requires `extended-keys on` and a terminal that passes Ctrl+number, e.g. Ghostty)
+
 ## General Guidelines
 
 - Always check this file before making significant changes to configurations
@@ -77,7 +82,7 @@ This document lists all installed Neovim plugins, their purpose, and where their
 **Configured LSP Servers**: lua_ls, ruby_lsp, ts_ls, gopls, omnisharp, bash-language-server, marksman, html
 
 **Keybindings** (via `~/.config/nvim/lua/lsp/common.lua`):
-- `gd` - Go to definition
+- `gd` - Go to definition (markdown: also follows `[[wiki-links]]` and `![[embedded]]`)
 - `K` - Hover documentation
 - `gi` - Go to implementation
 - `gr` - Find references
@@ -151,6 +156,7 @@ This document lists all installed Neovim plugins, their purpose, and where their
 - `<leader>fv` - Search dotfiles
 - `<leader>fd` - Search docs
 - `<leader>fD` - Live search docs
+- `<leader>fm` - Files changed since main (git diff vs main/origin/main)
 - `<leader>fo` - Vim options
 - `<leader>fa` - Telescope builtins
 - `<leader>fs` - Spell suggestions
@@ -309,7 +315,7 @@ This document lists all installed Neovim plugins, their purpose, and where their
 ### mini.statusline (from mini.nvim)
 **Purpose**: Minimal statusline
 **Configuration**: `~/.config/nvim/lua/plugins/mini.lua`
-**Features**: Shows file info, git status, diagnostics
+**Features**: Shows file info, git status, diagnostics, and active LSP server names
 
 ---
 
