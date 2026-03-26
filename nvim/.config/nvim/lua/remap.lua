@@ -75,3 +75,10 @@ vim.keymap.set('n', 'gx', function() require('utils').SmartOpen() end, { noremap
 -- Tmux sessionizer
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 vim.keymap.set("i", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+
+-- Switch to tmux session by position (fallback when tmux binding can't fire, e.g. outside tmux)
+for i = 1, 4 do
+  vim.keymap.set("n", "<C-" .. i .. ">", function()
+    vim.fn.system("tmux list-sessions -F '#S' | sed -n '" .. i .. "p' | xargs -I{} tmux switch-client -t {}")
+  end, { noremap = true, desc = "Switch to tmux session " .. i })
+end
