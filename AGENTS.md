@@ -32,6 +32,28 @@ All shell setups follow a consistent two-level sourcing pattern:
 
 Each `rc` file sources its sibling files (functions, aliases, paths, envs, init, shell).
 
+
+## Bash Function Conventions
+
+When writing functions in
+- ./shared/sh/functions
+- ./work/sh/functions
+- ./personal/sh/functions
+- ./omarchy/sh/functions
+
+Every function must follow this exact layout:
+
+```sh
+# Short one-line description of what the function does
+function_name() {
+  if [[ "$1" == "--help" ]]; then
+    echo "Usage: function_name [arg1] [arg2]"
+    echo "Any additional detail, flags, defaults, examples"
+    return 0
+  fi
+  # implementation
+}
+```
 ---
 
 # Neovim Plugin Configuration
@@ -41,8 +63,8 @@ This document lists all installed Neovim plugins, their purpose, and where their
 ## Plugin Manager
 
 ### lazy.nvim
-**Purpose**: Plugin manager for Neovim  
-**Configuration**: `~/.config/nvim/lua/config/lazy.lua`  
+**Purpose**: Plugin manager for Neovim
+**Configuration**: `~/.config/nvim/lua/config/lazy.lua`
 **Repository**: folke/lazy.nvim
 
 ---
@@ -50,8 +72,8 @@ This document lists all installed Neovim plugins, their purpose, and where their
 ## LSP & Completion
 
 ### Native vim.lsp
-**Purpose**: LSP client configuration using Neovim's built-in `vim.lsp.config` and `vim.lsp.enable`  
-**Configuration**: `~/.config/nvim/lua/lsp.lua` (entry point), `~/.config/nvim/lua/lsp/` (per-server configs)  
+**Purpose**: LSP client configuration using Neovim's built-in `vim.lsp.config` and `vim.lsp.enable`
+**Configuration**: `~/.config/nvim/lua/lsp.lua` (entry point), `~/.config/nvim/lua/lsp/` (per-server configs)
 **Configured LSP Servers**: lua_ls, ruby_lsp, ts_ls, gopls, omnisharp, bash-language-server, marksman, html
 
 **Keybindings** (via `~/.config/nvim/lua/lsp/common.lua`):
@@ -64,9 +86,9 @@ This document lists all installed Neovim plugins, their purpose, and where their
 - `ql` - Send diagnostics to quickfix list
 
 ### blink.cmp
-**Purpose**: Modern, fast completion engine with LSP support  
-**Configuration**: `~/.config/nvim/lua/plugins/completion.lua`  
-**Repository**: saghen/blink.cmp  
+**Purpose**: Modern, fast completion engine with LSP support
+**Configuration**: `~/.config/nvim/lua/plugins/completion.lua`
+**Repository**: saghen/blink.cmp
 **Features**:
 - Auto-show completion menu with documentation preview
 - Snippet support via built-in snippets source (loads from friendly-snippets and custom snippets)
@@ -75,14 +97,14 @@ This document lists all installed Neovim plugins, their purpose, and where their
 - Sources: lsp, path, snippets, buffer
 
 ### mason.nvim
-**Purpose**: Package manager for LSP servers, linters, and formatters  
-**Configuration**: `~/.config/nvim/lua/plugins/mason.lua`  
+**Purpose**: Package manager for LSP servers, linters, and formatters
+**Configuration**: `~/.config/nvim/lua/plugins/mason.lua`
 **Repository**: mason-org/mason.nvim
 
 ### fidget.nvim
-**Purpose**: LSP progress notifications UI  
-**Configuration**: `~/.config/nvim/lua/plugins/fidget.lua`  
-**Repository**: j-hui/fidget.nvim  
+**Purpose**: LSP progress notifications UI
+**Configuration**: `~/.config/nvim/lua/plugins/fidget.lua`
+**Repository**: j-hui/fidget.nvim
 **Features**: Shows LSP server status and progress in the corner
 
 ---
@@ -90,13 +112,13 @@ This document lists all installed Neovim plugins, their purpose, and where their
 ## Snippets
 
 ### friendly-snippets
-**Purpose**: Collection of pre-configured snippets for various languages  
-**Configuration**: `~/.config/nvim/lua/plugins/snippets.lua`  
+**Purpose**: Collection of pre-configured snippets for various languages
+**Configuration**: `~/.config/nvim/lua/plugins/snippets.lua`
 **Repository**: rafamadriz/friendly-snippets
 
 ### Custom Snippets
-**Purpose**: Project-specific snippet definitions loaded by blink.cmp's snippets source  
-**Location**: `~/.config/nvim/snippets/`  
+**Purpose**: Project-specific snippet definitions loaded by blink.cmp's snippets source
+**Location**: `~/.config/nvim/snippets/`
 **Files**:
 - `cs.json` - C# snippets (e.g., Public API operation interface)
 
@@ -105,9 +127,9 @@ This document lists all installed Neovim plugins, their purpose, and where their
 ## Fuzzy Finder & Navigation
 
 ### telescope.nvim
-**Purpose**: Highly extensible fuzzy finder for files, text, commands, and more  
-**Configuration**: `~/.config/nvim/lua/plugins/telescope.lua`  
-**Repository**: nvim-telescope/telescope.nvim  
+**Purpose**: Highly extensible fuzzy finder for files, text, commands, and more
+**Configuration**: `~/.config/nvim/lua/plugins/telescope.lua`
+**Repository**: nvim-telescope/telescope.nvim
 **Extensions**:
 - `fzf` - Native FZF sorter for better performance
 - `harpoon` - Integration with Harpoon
@@ -135,19 +157,19 @@ This document lists all installed Neovim plugins, their purpose, and where their
 - `<leader>fl` - LuaSnip suggestions
 
 ### telescope-fzf-native.nvim
-**Purpose**: Native FZF sorter for Telescope (faster performance)  
-**Configuration**: `~/.config/nvim/lua/plugins/telescope.lua`  
+**Purpose**: Native FZF sorter for Telescope (faster performance)
+**Configuration**: `~/.config/nvim/lua/plugins/telescope.lua`
 **Repository**: nvim-telescope/telescope-fzf-native.nvim
 
 ### telescope-luasnip.nvim
-**Purpose**: Telescope extension for browsing snippets  
-**Configuration**: `~/.config/nvim/lua/plugins/telescope.lua`  
+**Purpose**: Telescope extension for browsing snippets
+**Configuration**: `~/.config/nvim/lua/plugins/telescope.lua`
 **Repository**: benfowler/telescope-luasnip.nvim
 
 ### harpoon
-**Purpose**: Quick file navigation - mark and jump to frequently used files  
-**Configuration**: `~/.config/nvim/lua/plugins/harpoon.lua`  
-**Repository**: ThePrimeagen/harpoon  
+**Purpose**: Quick file navigation - mark and jump to frequently used files
+**Configuration**: `~/.config/nvim/lua/plugins/harpoon.lua`
+**Repository**: ThePrimeagen/harpoon
 **Keybindings**:
 - `<C-e>` - Toggle Harpoon menu
 - `<leader>a` - Add current file to Harpoon
@@ -157,8 +179,8 @@ This document lists all installed Neovim plugins, their purpose, and where their
 - `<leader>;` - Navigate to file 4
 
 ### NERDTree
-**Purpose**: File system explorer tree  
-**Configuration**: `~/.config/nvim/lua/plugins/nerdtree.lua`  
+**Purpose**: File system explorer tree
+**Configuration**: `~/.config/nvim/lua/plugins/nerdtree.lua`
 **Repository**: preservim/nerdtree
 
 ---
@@ -166,9 +188,9 @@ This document lists all installed Neovim plugins, their purpose, and where their
 ## Syntax & Parsing
 
 ### nvim-treesitter
-**Purpose**: Advanced syntax highlighting and code understanding using tree-sitter  
-**Configuration**: `~/.config/nvim/lua/plugins/treesitter.lua`  
-**Repository**: nvim-treesitter/nvim-treesitter  
+**Purpose**: Advanced syntax highlighting and code understanding using tree-sitter
+**Configuration**: `~/.config/nvim/lua/plugins/treesitter.lua`
+**Repository**: nvim-treesitter/nvim-treesitter
 **Features**:
 - Syntax highlighting
 - Code folding
@@ -176,15 +198,15 @@ This document lists all installed Neovim plugins, their purpose, and where their
 - Text objects
 
 ### nvim-treesitter-endwise
-**Purpose**: Auto-add `end` keywords for Ruby, Lua, Bash, etc.  
-**Configuration**: `~/.config/nvim/lua/plugins/treesitter.lua`  
-**Repository**: RRethy/nvim-treesitter-endwise  
+**Purpose**: Auto-add `end` keywords for Ruby, Lua, Bash, etc.
+**Configuration**: `~/.config/nvim/lua/plugins/treesitter.lua`
+**Repository**: RRethy/nvim-treesitter-endwise
 **Status**: Currently disabled in config
 
 ### nvim-treesitter-textsubjects
-**Purpose**: Smart text object selection using tree-sitter  
-**Configuration**: `~/.config/nvim/lua/plugins/treesitter.lua`  
-**Repository**: RRethy/nvim-treesitter-textsubjects  
+**Purpose**: Smart text object selection using tree-sitter
+**Configuration**: `~/.config/nvim/lua/plugins/treesitter.lua`
+**Repository**: RRethy/nvim-treesitter-textsubjects
 **Keybindings**:
 - `.` - Select smart text object
 - `am` - Select outer container
@@ -196,20 +218,20 @@ This document lists all installed Neovim plugins, their purpose, and where their
 ## Testing
 
 ### neotest
-**Purpose**: Testing framework integration - run and view test results  
-**Configuration**: `~/.config/nvim/lua/plugins/neotest.lua`  
-**Repository**: nvim-neotest/neotest  
+**Purpose**: Testing framework integration - run and view test results
+**Configuration**: `~/.config/nvim/lua/plugins/neotest.lua`
+**Repository**: nvim-neotest/neotest
 **Adapters**:
 - `neotest-go` - Go test adapter
 
 ### neotest-go
-**Purpose**: Go language adapter for neotest  
-**Configuration**: `~/.config/nvim/lua/plugins/neotest.lua`  
+**Purpose**: Go language adapter for neotest
+**Configuration**: `~/.config/nvim/lua/plugins/neotest.lua`
 **Repository**: nvim-neotest/neotest-go
 
 ### FixCursorHold.nvim
-**Purpose**: Fix CursorHold performance issue (required by neotest)  
-**Configuration**: Dependency of neotest  
+**Purpose**: Fix CursorHold performance issue (required by neotest)
+**Configuration**: Dependency of neotest
 **Repository**: antoinemadec/FixCursorHold.nvim
 
 ---
@@ -217,9 +239,9 @@ This document lists all installed Neovim plugins, their purpose, and where their
 ## Debugging
 
 ### nvim-dap
-**Purpose**: Debug Adapter Protocol client - debugging support  
-**Configuration**: `~/.config/nvim/lua/plugins/dap.lua`  
-**Repository**: mfussenegger/nvim-dap  
+**Purpose**: Debug Adapter Protocol client - debugging support
+**Configuration**: `~/.config/nvim/lua/plugins/dap.lua`
+**Repository**: mfussenegger/nvim-dap
 **Keybindings**:
 - `<space>b` - Toggle breakpoint
 - `<space>gb` - Run to cursor
@@ -232,18 +254,18 @@ This document lists all installed Neovim plugins, their purpose, and where their
 - `<F13>` - Restart
 
 ### nvim-dap-go
-**Purpose**: Go language adapter for DAP  
-**Configuration**: `~/.config/nvim/lua/plugins/dap.lua`  
+**Purpose**: Go language adapter for DAP
+**Configuration**: `~/.config/nvim/lua/plugins/dap.lua`
 **Repository**: leoluz/nvim-dap-go
 
 ### nvim-dap-ui
-**Purpose**: UI for nvim-dap with windows for scopes, breakpoints, stack traces  
-**Configuration**: `~/.config/nvim/lua/plugins/dap.lua`  
+**Purpose**: UI for nvim-dap with windows for scopes, breakpoints, stack traces
+**Configuration**: `~/.config/nvim/lua/plugins/dap.lua`
 **Repository**: rcarriga/nvim-dap-ui
 
 ### nvim-dap-virtual-text
-**Purpose**: Show variable values as virtual text during debugging  
-**Configuration**: `~/.config/nvim/lua/plugins/dap.lua`  
+**Purpose**: Show variable values as virtual text during debugging
+**Configuration**: `~/.config/nvim/lua/plugins/dap.lua`
 **Repository**: theHamsta/nvim-dap-virtual-text
 
 ---
@@ -251,8 +273,8 @@ This document lists all installed Neovim plugins, their purpose, and where their
 ## Git Integration
 
 ### vim-fugitive
-**Purpose**: Git wrapper - run Git commands from Neovim  
-**Configuration**: `~/.config/nvim/lua/plugins/fugative.lua`  
+**Purpose**: Git wrapper - run Git commands from Neovim
+**Configuration**: `~/.config/nvim/lua/plugins/fugative.lua`
 **Repository**: tpope/vim-fugitive
 
 ---
@@ -260,9 +282,9 @@ This document lists all installed Neovim plugins, their purpose, and where their
 ## AI Assistance
 
 ### codecompanion.nvim
-**Purpose**: AI coding assistant with chat and inline editing  
-**Configuration**: `~/.config/nvim/lua/plugins/codecompanion.lua`  
-**Repository**: olimorris/codecompanion.nvim  
+**Purpose**: AI coding assistant with chat and inline editing
+**Configuration**: `~/.config/nvim/lua/plugins/codecompanion.lua`
+**Repository**: olimorris/codecompanion.nvim
 **Features**:
 - Chat interface with AI
 - Inline code suggestions
@@ -270,8 +292,8 @@ This document lists all installed Neovim plugins, their purpose, and where their
 - Uses Anthropic (Claude) by default
 
 ### dressing.nvim
-**Purpose**: Improve default Neovim UI (used by codecompanion)  
-**Configuration**: Dependency of codecompanion  
+**Purpose**: Improve default Neovim UI (used by codecompanion)
+**Configuration**: Dependency of codecompanion
 **Repository**: stevearc/dressing.nvim
 
 ---
@@ -279,14 +301,14 @@ This document lists all installed Neovim plugins, their purpose, and where their
 ## UI & Appearance
 
 ### tokyonight.nvim
-**Purpose**: Color scheme  
-**Configuration**: `~/.config/nvim/lua/plugins/color.lua`  
-**Repository**: folke/tokyonight.nvim  
+**Purpose**: Color scheme
+**Configuration**: `~/.config/nvim/lua/plugins/color.lua`
+**Repository**: folke/tokyonight.nvim
 **Style**: "moon" with transparent background
 
 ### mini.statusline (from mini.nvim)
-**Purpose**: Minimal statusline  
-**Configuration**: `~/.config/nvim/lua/plugins/mini.lua`  
+**Purpose**: Minimal statusline
+**Configuration**: `~/.config/nvim/lua/plugins/mini.lua`
 **Features**: Shows file info, git status, diagnostics
 
 ---
@@ -294,13 +316,13 @@ This document lists all installed Neovim plugins, their purpose, and where their
 ## Utilities
 
 ### plenary.nvim
-**Purpose**: Lua utility functions (required by many plugins)  
-**Configuration**: Dependency for multiple plugins  
+**Purpose**: Lua utility functions (required by many plugins)
+**Configuration**: Dependency for multiple plugins
 **Repository**: nvim-lua/plenary.nvim
 
 ### nvim-nio
-**Purpose**: Async IO library (required by DAP UI and neotest)  
-**Configuration**: Dependency for DAP and neotest  
+**Purpose**: Async IO library (required by DAP UI and neotest)
+**Configuration**: Dependency for DAP and neotest
 **Repository**: nvim-neotest/nvim-nio
 
 ---
@@ -324,3 +346,5 @@ The exact versions of all installed plugins are tracked in:
 `~/.config/nvim/lazy-lock.json`
 
 This ensures reproducible plugin installations across machines.
+
+
