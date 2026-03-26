@@ -35,6 +35,48 @@ return {
       })
     end
 
+    M.git_changed_files = function()
+      local git_root = vim.trim(vim.fn.system(
+        "git -C " .. vim.fn.shellescape(vim.fn.expand("%:p:h")) .. " rev-parse --show-toplevel 2>/dev/null"
+      ))
+      if vim.v.shell_error ~= 0 or git_root == "" then
+        vim.notify("Not in a git repository", vim.log.levels.WARN)
+        return
+      end
+
+      local function get_changed(branch)
+        local result = vim.fn.systemlist(
+          "git -C " .. vim.fn.shellescape(git_root) .. " diff --name-only " .. branch .. " 2>/dev/null"
+        )
+        return vim.v.shell_error == 0 and result or nil
+      end
+
+      local files = get_changed("main") or get_changed("origin/main") or {}
+      files = vim.tbl_filter(function(f) return f ~= "" end, files)
+
+      if #files == 0 then
+        vim.notify("No files changed since main", vim.log.levels.INFO)
+        return
+      end
+
+      require("telescope.pickers").new({}, {
+        prompt_title = "Changed since main",
+        finder = require("telescope.finders").new_table({
+          results = files,
+          entry_maker = function(entry)
+            return {
+              value = entry,
+              display = entry,
+              ordinal = entry,
+              path = git_root .. "/" .. entry,
+            }
+          end,
+        }),
+        sorter = require("telescope.config").values.generic_sorter({}),
+        previewer = require("telescope.config").values.file_previewer({}),
+      }):find()
+    end
+
     M.search_docs = function(live)
       live = live or false
 
@@ -101,5 +143,6 @@ return {
     vim.keymap.set("n", "<leader>fl", function()
       telescope.extensions.luasnip.luasnip()
     end, { noremap = true, desc = "LuaSnip Suggestions" })
+    vim.keymap.set("n", "<leader>fm", M.git_changed_files, { noremap = true, desc = "Files changed since main" })
   end,
 }
