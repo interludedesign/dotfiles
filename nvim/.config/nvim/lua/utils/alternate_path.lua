@@ -16,7 +16,7 @@ end
 
 function alternate_path.find(path)
   path = path or vim.api.nvim_buf_get_name(0)
-  local command = string.format("! alt %s", path)
+  local command = string.format("! dot-alternative-path %s", path)
   return vim.fn["system"](command)
 end
 
