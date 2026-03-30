@@ -1,0 +1,8 @@
+#!/bin/bash
+# Sourced by postgres utility scripts to set shared connection defaults
+
+host="${PGHOST:-localhost}"
+port="${PGPORT:-5432}"
+user="${PGUSER:-postgres}"
+password="${PGPASSWORD:-postgres}"
+database="${PGDATABASE:-postgres}"

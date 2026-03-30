@@ -1,0 +1,25 @@
+#!/bin/bash
+# Wrapper script for psql with sensible defaults
+
+# shellcheck source=dot-postgres-env
+source "$(dirname "$0")/dot-postgres-env"
+
+# Print settings (redact password except last 2 chars)
+password_length=${#password}
+if [ $password_length -gt 2 ]; then
+    redacted_password="$(printf '*%.0s' $(seq 1 $((password_length - 2))))${password: -2}"
+else
+    redacted_password="**"
+fi
+
+echo "=== PostgreSQL Connection Settings ==="
+echo "Host:     $host"
+echo "Port:     $port"
+echo "User:     $user"
+echo "Database: $database"
+echo "Password: $redacted_password"
+echo "======================================"
+echo
+
+PGHOST="$host" PGPORT="$port" PGUSER="$user" PGPASSWORD="$password" PGDATABASE="$database" \
+    exec psql "$@"
