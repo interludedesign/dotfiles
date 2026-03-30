@@ -41,3 +41,18 @@ end, { desc = "Convert word under cursor to PascalCase (auto-detects snake, came
 command("Camel", function()
   case_converters.to_camel()
 end, { desc = "Convert word under cursor to camelCase (auto-detects snake, pascal, kebab, etc.)" })
+
+command("SqlLoad", function()
+  vim.api.nvim_command("write")
+  vim.fn.setenv("NVIM_SQL_FILE", vim.api.nvim_buf_get_name(0))
+  local shell = vim.fn.getenv("SHELL") or "sh"
+  vim.cmd("botright split | resize 15 | terminal " .. shell .. " -i -c 'psql-load \"$NVIM_SQL_FILE\"'")
+  local buf = vim.api.nvim_get_current_buf()
+  vim.api.nvim_create_autocmd("TermClose", {
+    buffer = buf,
+    once = true,
+    callback = function()
+      vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = buf, silent = true })
+    end,
+  })
+end, { desc = "Load the current SQL file into PostgreSQL via psql-load" })
