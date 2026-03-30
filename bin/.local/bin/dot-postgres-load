@@ -1,0 +1,67 @@
+#!/bin/bash
+# Load a SQL script file into a PostgreSQL database
+
+set -e
+
+# shellcheck source=dot-postgres-env
+source "$(dirname "$0")/dot-postgres-env"
+
+script_file=""
+
+print_help() {
+  echo "Usage: dot-postgres-load <script.sql> [OPTIONS]"
+  echo "  Loads a SQL script into a PostgreSQL database."
+  echo "  Defaults: host=\${PGHOST:-localhost}, port=\${PGPORT:-5432}, user=\${PGUSER:-postgres},"
+  echo "            password=\${PGPASSWORD:-postgres}, database=\${PGDATABASE:-postgres}"
+  echo ""
+  echo "  Options:"
+  echo "    --database <name>   Database to load into (overrides \$PGDATABASE)"
+  echo "    --user <name>       Database user (overrides \$PGUSER)"
+  echo "    --host <name>       Database host (overrides \$PGHOST)"
+  echo "    --port <number>     Database port (overrides \$PGPORT)"
+  echo "    --help              Show this help message"
+  echo ""
+  echo "  Examples:"
+  echo "    dot-postgres-load seed.sql"
+  echo "    dot-postgres-load fixtures.sql --database acme"
+  echo "    PGDATABASE=acme dot-postgres-load fixtures.sql"
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --help)     print_help; exit 0 ;;
+    --database) database="$2"; shift 2 ;;
+    --user)     user="$2";     shift 2 ;;
+    --host)     host="$2";     shift 2 ;;
+    --port)     port="$2";     shift 2 ;;
+    *)
+      if [[ -z "$script_file" ]]; then
+        script_file="$1"
+      else
+        echo "Error: unexpected argument '$1'" >&2
+        exit 1
+      fi
+      shift
+      ;;
+  esac
+done
+
+if [[ -z "$script_file" ]]; then
+  echo "Error: no SQL script file provided" >&2
+  echo "Run 'dot-postgres-load --help' for usage." >&2
+  exit 1
+fi
+
+if [[ ! -f "$script_file" ]]; then
+  echo "Error: file not found: $script_file" >&2
+  exit 1
+fi
+
+echo "Loading $script_file → $database @ $host:$port (user: $user)"
+
+PGPASSWORD="$password" psql \
+  --host="$host" \
+  --port="$port" \
+  --username="$user" \
+  --dbname="$database" \
+  --file="$script_file"
