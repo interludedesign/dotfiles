@@ -73,8 +73,8 @@ vim.keymap.set('v', '<leader>me', ':ExtractSection<CR>', { desc = 'Extract markd
 vim.keymap.set('n', 'gx', function() require('utils').SmartOpen() end, { noremap = true, desc = 'Smart open URLs or files' })
 
 -- Tmux sessionizer
-vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
-vim.keymap.set("i", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww dot-tmux-sessionizer<CR>")
+vim.keymap.set("i", "<C-f>", "<cmd>silent !tmux neww dot-tmux-sessionizer<CR>")
 
 -- Switch to tmux session by position (fallback when tmux binding can't fire, e.g. outside tmux)
 for i = 1, 4 do
