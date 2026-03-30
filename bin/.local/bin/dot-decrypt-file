@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ENCRYPTED_FILE=""
+OUTPUT_DIR=""
+KEY_REF=""
+
+print_help() {
+  cat <<EOF
+decrypt — decrypt + extract an age-encrypted tar archive
+
+Usage:
+  decrypt --input <file.tar.age> \
+          --output <directory> \
+          --key-ref <op://vault/item/field>
+
+Arguments:
+  --input <file>
+      Path to the encrypted .tar.age file created by 'encrypt'.
+
+  --output <dir>
+      Directory to extract the decrypted archive into.
+      It will be created if it does not exist.
+
+  --key-ref <op://...>
+      1Password CLI item reference for the AGE private key.
+      Examples:
+        --key-ref "op://Personal/Age Key/private_key"
+        --key-ref "op://z9y8x7w6v5u4t3s2r1q0/private_key"
+
+  --help
+      Show this help text and exit.
+
+Examples:
+  decrypt --input ~/Backups/notes.tar.age \
+          --output ~/RestoredNotes \
+          --key-ref "op://Personal/Age Key/private_key"
+EOF
+}
+
+# --- required commands ---
+for cmd in op age tar; do
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "ERROR: required program '$cmd' is not installed or not on PATH."
+    exit 1
+  fi
+done
+
+# --- helper to ensure flags have values ---
+need_value() {
+  if [[ -z "${2:-}" ]]; then
+    echo "ERROR: $1 requires a value"
+    exit 1
+  fi
+}
+
+# --- argument parsing ---
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --help)
+      print_help
+      exit 0
+      ;;
+    --input)
+      need_value "$1" "$2"
+      ENCRYPTED_FILE="$2"
+      shift 2
+      ;;
+    --output)
+      need_value "$1" "$2"
+      OUTPUT_DIR="$2"
+      shift 2
+      ;;
+    --key-ref)
+      need_value "$1" "$2"
+      KEY_REF="$2"
+      shift 2
+      ;;
+    *)
+      echo "ERROR: Unknown option: $1"
+      echo "Run: decrypt --help"
+      exit 1
+      ;;
+  esac
+done
+
+# --- validation ---
+if [[ -z "$ENCRYPTED_FILE" ]]; then
+  echo "ERROR: --input is required"
+  exit 1
+fi
+
+if [[ -z "$OUTPUT_DIR" ]]; then
+  echo "ERROR: --output is required"
+  exit 1
+fi
+
+if [[ -z "$KEY_REF" ]]; then
+  echo "ERROR: --key-ref is required"
+  exit 1
+fi
+
+if [[ ! -f "$ENCRYPTED_FILE" ]]; then
+  echo "ERROR: encrypted file does not exist: $ENCRYPTED_FILE"
+  exit 1
+fi
+
+mkdir -p "$OUTPUT_DIR"
+
+echo "Decrypting:"
+echo "  $ENCRYPTED_FILE"
+echo "→"
+echo "  $OUTPUT_DIR"
+echo
+
+# Read private key from 1Password, feed to age via stdin, then untar into OUTPUT_DIR
+op read "$KEY_REF" \
+  | age -d -i /dev/stdin "$ENCRYPTED_FILE" \
+  | tar -C "$OUTPUT_DIR" -xvf -
+
+echo "Done."
