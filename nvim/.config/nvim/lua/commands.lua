@@ -46,7 +46,7 @@ command("SqlLoad", function()
   vim.api.nvim_command("write")
   vim.fn.setenv("NVIM_SQL_FILE", vim.api.nvim_buf_get_name(0))
   local shell = vim.fn.getenv("SHELL") or "sh"
-  vim.cmd("botright split | resize 15 | terminal " .. shell .. " -i -c 'psql-load \"$NVIM_SQL_FILE\"'")
+  vim.cmd("botright split | resize 15 | terminal " .. shell .. " -i -c 'dot-postgres-load \"$NVIM_SQL_FILE\"'")
   local buf = vim.api.nvim_get_current_buf()
   vim.api.nvim_create_autocmd("TermClose", {
     buffer = buf,
@@ -55,4 +55,4 @@ command("SqlLoad", function()
       vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = buf, silent = true })
     end,
   })
-end, { desc = "Load the current SQL file into PostgreSQL via psql-load" })
+end, { desc = "Load the current SQL file into PostgreSQL via dot-postgres-load" })
