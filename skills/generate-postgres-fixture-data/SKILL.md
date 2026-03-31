@@ -32,6 +32,10 @@ If the user explicitly wants all scenarios in one file, create a combined `fixtu
 
 Export the schema so you understand the tables, columns, constraints, and enums before writing any SQL.
 
+### Step 2.5: Identify the Authenticated User
+
+There is almost always a pre-defined authenticated user configured in the global instructions (e.g. a specific email, user ID, or subject identifier). Use that user as the authenticated identity or record owner in your fixtures rather than creating a new one.
+
 ### Step 3: Determine What Records Need Creating
 
 Determine which records need creating to set up the 'given' scenario.
