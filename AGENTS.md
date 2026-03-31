@@ -2,6 +2,30 @@
 
 This file contains instructions for AI coding assistants working with this dotfiles repository.
 
+## Overview
+
+- These dotfiles are shared across 3 types of machines - Work (osx + zsh), Personal (osx + zsh), Omarchy (Arch + bash).
+- Stow files in `./stow-work`, `./stow-personal` and `./stow-omarchy` symlink the appropriate directory contents for each type of system.
+- Work (`./work/`) and Personal (`./personal/`) are separate private Git repositories set up as submodules.
+- This dotfiles repository is public, and so no personal or work information should be committed.
+
+---
+
+## Functions
+
+Shell functions can be in a few places:
+
+- `./bin/.local/bin/` - Individual executable function files, shared by all systems
+- `./shared/sh/functions` - Single file with smaller functions, shared by all systems
+- `./work/sh/functions` - Single file with smaller functions, work only
+- `./personal/sh/functions` - Single file with smaller functions, personal only
+- `./omarchy/sh/functions` - Single file with smaller functions, omarchy only
+
+All functions follow a standard format, so reference an existing function before writing a new one.
+When the user asks for a new 'shared function' - assume this will be `./bin/.local/bin/`. This is the preferred method. Ensure these functions are system agnostic and contain no personal or work references.
+
+---
+
 ## Configuration Locations
 
 ### Neovim
@@ -38,27 +62,6 @@ All shell setups follow a consistent two-level sourcing pattern:
 Each `rc` file sources its sibling files (functions, aliases, paths, envs, init, shell).
 
 
-## Bash Function Conventions
-
-When writing functions in
-- ./shared/sh/functions
-- ./work/sh/functions
-- ./personal/sh/functions
-- ./omarchy/sh/functions
-
-Every function must follow this exact layout:
-
-```sh
-# Short one-line description of what the function does
-function_name() {
-  if [[ "$1" == "--help" ]]; then
-    echo "Usage: function_name [arg1] [arg2]"
-    echo "Any additional detail, flags, defaults, examples"
-    return 0
-  fi
-  # implementation
-}
-```
 ---
 
 # Neovim Plugin Configuration

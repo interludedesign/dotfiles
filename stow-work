@@ -1,10 +1,16 @@
 #!/bin/zsh
 
-export STOW_FOLDERS="work,git,tmux,bin,nvim,fzf,alfred,ghostty"
+export STOW_FOLDERS="work/code/skills,git,tmux,bin,nvim,fzf,alfred,ghostty"
 
 pushd $HOME/.dotfiles
 for folder in $(echo $STOW_FOLDERS | sed "s/,/ /g")
 do
-    stow --verbose --restow $folder
+    if [[ "$folder" == */* ]]; then
+        dir="${folder%/*}"
+        pkg="${folder##*/}"
+        stow --verbose --restow --dir="$HOME/.dotfiles/$dir" --target="$HOME" "$pkg"
+    else
+        stow --verbose --restow $folder
+    fi
 done
 popd
