@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# Show the diff between a branch and a base branch (default: current branch vs main)
+# Intended for LLM consumption (e.g. drafting PR descriptions, summarising changes)
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" ]]; then
+    echo "Usage: dot-git-branch-diff [base-branch [head-branch]]"
+    echo ""
+    echo "Outputs the diff between head-branch and base-branch."
+    echo "Shows only commits and changes introduced on head-branch since it diverged from base."
+    echo ""
+    echo "Arguments:"
+    echo "  base-branch   Branch to compare against (default: main)"
+    echo "  head-branch   Branch to diff (default: current branch)"
+    echo ""
+    echo "Examples:"
+    echo "  dot-git-branch-diff"
+    echo "  dot-git-branch-diff develop"
+    echo "  dot-git-branch-diff main my-feature"
+    exit 0
+fi
+
+base="${1:-main}"
+head="${2:-}"
+
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+    echo "ERROR: not inside a git repository" >&2
+    exit 1
+fi
+
+if [[ -z "$head" ]]; then
+    head=$(git rev-parse --abbrev-ref HEAD)
+fi
+
+if [[ "$head" == "$base" ]]; then
+    echo "ERROR: head and base are both '$base'; nothing to diff" >&2
+    exit 1
+fi
+
+if ! git rev-parse --verify "$base" > /dev/null 2>&1; then
+    echo "ERROR: base branch '$base' not found" >&2
+    exit 1
+fi
+
+if ! git rev-parse --verify "$head" > /dev/null 2>&1; then
+    echo "ERROR: head branch '$head' not found" >&2
+    exit 1
+fi
+
+merge_base=$(git merge-base "$base" "$head")
+
+echo "Branch : $head"
+echo "Base   : $base"
+echo "Diverged at: $merge_base"
+echo ""
+echo "Commits on this branch:"
+git --no-pager log --oneline "$merge_base..$head"
+echo ""
+echo "--- diff ---"
+git --no-pager diff "$merge_base..$head"
