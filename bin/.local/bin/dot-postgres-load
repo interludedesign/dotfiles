@@ -3,9 +3,6 @@
 
 set -e
 
-# shellcheck source=dot-postgres-env
-source "$(dirname "$0")/dot-postgres-env"
-
 script_file=""
 
 print_help() {
@@ -56,6 +53,14 @@ if [[ ! -f "$script_file" ]]; then
   echo "Error: file not found: $script_file" >&2
   exit 1
 fi
+
+if [[ "$script_file" != *.sql ]]; then
+  echo "Error: expected a .sql file, got: $script_file" >&2
+  exit 1
+fi
+
+# shellcheck source=dot-postgres-env
+source "$(dirname "$0")/dot-postgres-env"
 
 echo "Loading $script_file → $database @ $host:$port (user: $user)"
 
