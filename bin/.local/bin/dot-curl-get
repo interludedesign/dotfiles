@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Make an authenticated GET request using the AUTH_COOKIE environment variable
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" || $# -lt 1 ]]; then
+    echo "Usage: dot-curl-get <url>"
+    echo "Makes a GET request with the AUTH_COOKIE environment variable set as the cookie header."
+    echo ""
+    echo "Requires: AUTH_COOKIE env var to be set"
+    exit 0
+fi
+
+if [[ -z "${AUTH_COOKIE:-}" ]]; then
+    echo "ERROR: AUTH_COOKIE environment variable is not set" >&2
+    exit 1
+fi
+
+curl --silent --show-error \
+    -b "$AUTH_COOKIE" \
+    -H 'accept: application/json' \
+    "$1"
