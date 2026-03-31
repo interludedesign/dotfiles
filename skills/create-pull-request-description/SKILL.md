@@ -1,5 +1,5 @@
 ---
-name: author-pull-request-description
+name: create-pull-request-description
 description: Use this when writing a description for a new pull request the user is raising
 ---
 

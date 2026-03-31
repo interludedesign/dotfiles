@@ -1,5 +1,5 @@
 ---
-name: author-acceptance-criteria
+name: create-acceptance-criteria
 description: This skill should be used when creating acceptance criteria for features, bugs, or user stories. Use when the user asks to write AC, create acceptance criteria, or needs help defining scenarios in Given/When/Then format.
 ---
 

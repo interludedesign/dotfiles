@@ -26,6 +26,22 @@ When the user asks for a new 'shared function' - assume this will be `./bin/.loc
 
 ---
 
+## Skills
+
+Agent skills are located at:
+
+- `./skills/` - Shared agnostic skills
+- `./work/code/skills/` - Work-specific skills
+
+There is a naming convention for skills:
+
+- `create-*` - Primary job of the skill is to produce output — documents, code, SQL, reviews, etc.
+- `guide-{project-name}-*` - How to do something in a specific project or context — implementation patterns, conventions, operational procedures.
+- `domain-{project-name}-*` - Business domain knowledge about a feature or product within a project.
+
+
+---
+
 ## Configuration Locations
 
 ### Neovim
