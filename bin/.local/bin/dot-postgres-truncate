@@ -4,8 +4,7 @@
 
 set -e
 
-# shellcheck source=dot-postgres-env
-source "$(dirname "$0")/dot-postgres-env"
+source dot-postgres-env
 
 skip_confirm=false
 

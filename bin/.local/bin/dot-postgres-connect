@@ -1,8 +1,7 @@
 #!/bin/bash
 # Wrapper script for psql with sensible defaults
 
-# shellcheck source=dot-postgres-env
-source "$(dirname "$0")/dot-postgres-env"
+source dot-postgres-env
 
 # Print settings (redact password except last 2 chars)
 password_length=${#password}

@@ -59,8 +59,7 @@ if [[ "$script_file" != *.sql ]]; then
   exit 1
 fi
 
-# shellcheck source=dot-postgres-env
-source "$(dirname "$0")/dot-postgres-env"
+source dot-postgres-env
 
 echo "Loading $script_file → $database @ $host:$port (user: $user)"
 
