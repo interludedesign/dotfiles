@@ -38,6 +38,7 @@ There is a naming convention for skills:
 - `create-*` - Primary job of the skill is to produce output — documents, code, SQL, reviews, etc.
 - `guide-{project-name}-*` - How to do something in a specific project or context — implementation patterns, conventions, operational procedures.
 - `domain-{project-name}-*` - Business domain knowledge about a feature or product within a project.
+- `styleguide-{language}` - Language-level code style and conventions, not specific to any one project.
 
 
 ---
