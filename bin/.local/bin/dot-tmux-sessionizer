@@ -213,7 +213,7 @@ sanity_check
 # pipe-separated format avoids conflict with the path:depth notation (e.g. "$HOME/code|$HOME/dotfiles:0")
 if ! declare -p TS_SEARCH_PATHS &>/dev/null; then
     TS_SEARCH_PATHS=(~/ ~/personal ~/personal/dev/env/.config)
-elif declare -p TS_SEARCH_PATHS 2>/dev/null | grep -q '^declare --'; then
+elif ! declare -p TS_SEARCH_PATHS 2>/dev/null | grep -q 'declare -[^ ]*a '; then
     IFS='|' read -ra TS_SEARCH_PATHS <<< "$TS_SEARCH_PATHS"
 fi
 
