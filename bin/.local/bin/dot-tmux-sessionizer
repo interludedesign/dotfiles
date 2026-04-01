@@ -209,13 +209,8 @@ cleanup_dead_panes() {
 
 sanity_check
 
-# if TS_SEARCH_PATHS is not set use default; if passed as a pipe-separated env var, parse it into an array
-# pipe-separated format avoids conflict with the path:depth notation (e.g. "$HOME/code|$HOME/dotfiles:0")
-if ! declare -p TS_SEARCH_PATHS &>/dev/null; then
-    TS_SEARCH_PATHS=(~/ ~/personal ~/personal/dev/env/.config)
-elif ! declare -p TS_SEARCH_PATHS 2>/dev/null | grep -q 'declare -[^ ]*a '; then
-    IFS='|' read -ra TS_SEARCH_PATHS <<< "$TS_SEARCH_PATHS"
-fi
+# if TS_SEARCH_PATHS is not set use default
+[[ -n "$TS_SEARCH_PATHS" ]] || TS_SEARCH_PATHS=(~/ ~/personal ~/personal/dev/env/.config)
 
 # Add any extra search paths to the TS_SEARCH_PATHS array
 # e.g : EXTRA_SEARCH_PATHS=("$HOME/extra1:4" "$HOME/extra2")
@@ -239,7 +234,6 @@ find_dirs() {
     # if the path ends with :number, it will search for directories with a max depth of number ;)
     # if there is no number, it will search for directories with a max depth defined by TS_MAX_DEPTH or 1 if not set
     for entry in "${TS_SEARCH_PATHS[@]}"; do
-        depth=""
         # Check if entry as :number as suffix then adapt the maxdepth parameter
         if [[ "$entry" =~ ^([^:]+):([0-9]+)$ ]]; then
             path="${BASH_REMATCH[1]}"
@@ -248,11 +242,7 @@ find_dirs() {
             path="$entry"
         fi
 
-        if [[ "$depth" == "0" ]]; then
-            [[ -d "$path" ]] && echo "$path"
-        else
-            [[ -d "$path" ]] && find "$path" -mindepth 1 -maxdepth "${depth:-${TS_MAX_DEPTH:-1}}" -path '*/.git' -prune -o -type d -print
-        fi
+        [[ -d "$path" ]] && find "$path" -mindepth 1 -maxdepth "${depth:-${TS_MAX_DEPTH:-1}}" -path '*/.git' -prune -o -type d -print
     done
 }
 
