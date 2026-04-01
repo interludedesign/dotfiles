@@ -6,7 +6,7 @@
 #   dot-rabbit-publish <routing_key> <payload> [message_id]
 #
 # Environment variables:
-#   RABBITMQ_CONTAINER  Docker container name (default: payments-rabbitmq)
+#   RABBITMQ_CONTAINER  Docker container name (required)
 #
 # Examples:
 #   dot-rabbit-publish "acme.event.update" '[123,{"field":["old","new"]}]'
@@ -15,14 +15,11 @@
 
 set -euo pipefail
 
+dot-env-check RABBITMQ_CONTAINER
+
 # Default values
 EXCHANGE="events"
-
-if [[ -z "${RABBITMQ_CONTAINER:-}" ]]; then
-    echo "WARNING: RABBITMQ_CONTAINER is not set, defaulting to 'payments-rabbitmq'" >&2
-    echo "Add to your shell config: export RABBITMQ_CONTAINER=payments-rabbitmq" >&2
-fi
-CONTAINER_NAME="${RABBITMQ_CONTAINER:-payments-rabbitmq}"
+CONTAINER_NAME="$RABBITMQ_CONTAINER"
 
 print_error() {
     echo "ERROR: $1" >&2
@@ -165,7 +162,7 @@ main() {
         echo "Usage: $0 <routing_key> <payload> [message_id]"
         echo ""
         echo "Environment variables:"
-        echo "  RABBITMQ_CONTAINER  Docker container name (default: payments-rabbitmq)"
+        echo "  RABBITMQ_CONTAINER  Docker container name (required)"
         echo ""
         echo "Examples:"
         echo "  $0 'acme.event.update' '[123,{\"field\":[\"old\",\"new\"]}]'"
