@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Create a tmux layout with an AI assistant pane, a small shell pane, and the editor
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" ]]; then
+    echo "Usage: dot-tmux-code [copilot|opencode|claude]"
+    echo "Creates a tmux layout: editor (left, large), AI assistant (right), shell (bottom-left, small)."
+    echo ""
+    echo "Arguments:"
+    echo "  copilot    Use GitHub Copilot CLI (default)"
+    echo "  opencode   Use opencode"
+    echo "  claude     Use Claude"
+    exit 0
+fi
+
+current_dir="${PWD}"
+ai_agent="${1:-copilot}"
+
+case "$ai_agent" in
+    copilot)
+        ai_cmd="copilot --yolo"
+        ;;
+    opencode)
+        ai_cmd="opencode"
+        ;;
+    claude)
+        ai_cmd="claude"
+        ;;
+    *)
+        echo "ERROR: Unknown AI agent: $ai_agent" >&2
+        echo "Usage: dot-tmux-code [copilot|opencode|claude]" >&2
+        exit 1
+        ;;
+esac
+
+tmux split-window -h -p 33 -c "$current_dir"
+tmux send-keys "$ai_cmd" C-m
+
+tmux select-pane -L
+tmux split-window -v -p 15 -c "$current_dir"
+
+tmux select-pane -U
+tmux send-keys "${EDITOR:?EDITOR is not set} ." C-m

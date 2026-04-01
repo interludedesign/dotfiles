@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Copy stdin to clipboard (supports wl-copy and pbcopy)
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" ]]; then
+    echo "Usage: dot-copy"
+    echo "Reads from stdin and copies to the system clipboard."
+    echo "Supports wl-copy (Wayland) and pbcopy (macOS)."
+    exit 0
+fi
+
+if command -v wl-copy > /dev/null 2>&1; then
+    wl-copy
+elif command -v pbcopy > /dev/null 2>&1; then
+    pbcopy
+else
+    echo "ERROR: Neither wl-copy nor pbcopy is available" >&2
+    exit 1
+fi

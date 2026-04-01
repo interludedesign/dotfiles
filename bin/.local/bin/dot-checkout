@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Fuzzy checkout a git branch using fzf
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" ]]; then
+    echo "Usage: dot-checkout"
+    echo "Presents an interactive fzf list of local branches and checks out the selected one."
+    echo ""
+    echo "Requires: fzf, git"
+    exit 0
+fi
+
+branch=$(git branch | fzf --reverse)
+git checkout "$branch"

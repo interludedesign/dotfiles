@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Run RSpec on a file with documentation format and quickfix output
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" || $# -lt 1 ]]; then
+    echo "Usage: dot-spec <spec_file>"
+    echo "Runs RSpec on the given file with documentation format."
+    echo "Quickfix output is written to /tmp/quickfix.out"
+    exit 0
+fi
+
+bundle exec rspec "$1" \
+    --format documentation \
+    --require "$HOME/.local/bin/quickfix_formatter.rb" \
+    --format QuickfixFormatter \
+    --out /tmp/quickfix.out
