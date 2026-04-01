@@ -8,6 +8,15 @@ description: Use this when writing a description for a new pull request the user
 - If you don't have the information you need (e.g. branch name, acceptance criteria), ask the user for it, otherwise you probably have it in your context
 - You are expected to amend the most recent commit on the feature branch with the description you write
 
+## Get the diff
+
+Use `dot-git-branch-diff` to retrieve the commits and file changes introduced on the branch:
+
+```bash
+dot-git-branch-diff        # diffs current branch against main
+dot-git-branch-diff main my-feature-branch
+```
+
 ## Write the pull request description
 
 - Start with a short one-line description that will become the PR title
