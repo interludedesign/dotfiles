@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Script to export PostgreSQL database schema (no data)
 
-set -e
+set -euo pipefail
 
 source dot-postgres-env
 
@@ -62,33 +62,33 @@ done
 
 # Safety check: Only allow running on localhost
 if [[ "$host" != "localhost" && "$host" != "127.0.0.1" && "$host" != "::1" ]]; then
-    echo "❌ ERROR: This script can only run against localhost databases."
+    echo "ERROR: This script can only run against localhost databases."
     echo "   Current host: ${host}"
     echo "   This is a safety measure to prevent accidental data access on remote databases."
     exit 1
 fi
 
 # Build pg_dump command
-dump_cmd="PGPASSWORD=\"${password}\" pg_dump -h \"${host}\" -p \"${port}\" -U \"${user}\" -d \"${database}\" --schema-only --no-owner --no-acl"
+dump_cmd=(pg_dump -h "$host" -p "$port" -U "$user" -d "$database" --schema-only --no-owner --no-acl)
 
 # Add output file if specified
 if [ -n "$output_file" ]; then
-    dump_cmd="$dump_cmd -f \"${output_file}\""
-    echo "📦 Exporting schema from database: ${database}"
+    dump_cmd+=(-f "$output_file")
+    echo "Exporting schema from database: ${database}"
     echo "   Host: ${host}:${port}"
     echo "   User: ${user}"
     echo "   Output: ${output_file}"
     echo ""
 else
-    echo "📦 Exporting schema from database: ${database} to stdout" >&2
+    echo "Exporting schema from database: ${database} to stdout" >&2
     echo "   Host: ${host}:${port}" >&2
     echo "   User: ${user}" >&2
     echo "" >&2
 fi
 
 # Execute the dump
-eval "$dump_cmd"
+PGPASSWORD="$password" "${dump_cmd[@]}"
 
 if [ -n "$output_file" ]; then
-    echo "✅ Schema exported successfully to: ${output_file}"
+    echo "Schema exported successfully to: ${output_file}"
 fi

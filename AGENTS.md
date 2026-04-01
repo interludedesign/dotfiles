@@ -24,6 +24,26 @@ Shell functions can be in a few places:
 All functions follow a standard format, so reference an existing function before writing a new one.
 When the user asks for a new 'shared function' - assume this will be `./bin/.local/bin/`. This is the preferred method. Ensure these functions are system agnostic and contain no personal or work references.
 
+## bin/.local/bin Script Standards
+
+All standalone scripts in `./bin/.local/bin/` must follow these standards:
+
+- Shebang: always `#!/usr/bin/env bash`
+- Strict mode: always `set -euo pipefail` at the top (omit only in sourced files)
+- Help flag: every script must handle `--help` and print usage + required env vars
+- No emojis or ANSI colour codes in output
+- Error messages go to stderr: `echo "ERROR: ..." >&2`
+- Use plain text prefixes: `ERROR:`, `WARNING:`, `OK:` — no symbols
+- No `eval` for building commands; use arrays: `cmd=(prog arg1 arg2); "${cmd[@]}"`
+- No hardcoded values that should vary by environment — use env vars with fallbacks
+- Required env vars: if unset, print the missing var name and suggest the export line, then exit 1:
+  ```
+  echo "ERROR: FOO_VAR is not set" >&2
+  echo "Add to your shell config: export FOO_VAR=" >&2
+  exit 1
+  ```
+- Optional env vars with defaults: use `${VAR:-default}` and warn if using the default when it matters (e.g. container names)
+
 ---
 
 ## Skills

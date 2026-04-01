@@ -1,5 +1,17 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Wrapper script for psql with sensible defaults
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" ]]; then
+    echo "Usage: dot-postgres-connect [psql-options]"
+    echo ""
+    echo "Connects to PostgreSQL using connection defaults from environment variables."
+    echo "Any additional arguments are passed directly to psql."
+    echo ""
+    echo "Requires: PGHOST, PGPORT, PGUSER, PGPASSWORD, PGDATABASE"
+    exit 0
+fi
 
 source dot-postgres-env
 

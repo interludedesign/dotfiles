@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Sourced by postgres utility scripts to set shared connection defaults
 
 missing=()

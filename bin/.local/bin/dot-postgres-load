@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Load a SQL script file into a PostgreSQL database
 
-set -e
+set -euo pipefail
 
 script_file=""
 

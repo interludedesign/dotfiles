@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Script to truncate all tables in a PostgreSQL database
 # This preserves the schema but removes all data
 
-set -e
+set -euo pipefail
 
 source dot-postgres-env
 
@@ -58,22 +58,22 @@ done
 
 # Safety check: Only allow running on localhost
 if [[ "$host" != "localhost" && "$host" != "127.0.0.1" && "$host" != "::1" ]]; then
-    echo "❌ ERROR: This script can only run against localhost databases."
+    echo "ERROR: This script can only run against localhost databases."
     echo "   Current host: ${host}"
     echo "   This is a safety measure to prevent accidental data loss on remote databases."
     exit 1
 fi
 
-echo "🗑️  Truncating all tables in database: ${database}"
+echo "Truncating all tables in database: ${database}"
 echo "   Host: ${host}:${port}"
 echo "   User: ${user}"
 echo ""
 
 # Confirm action unless -y flag is set
 if [ "$skip_confirm" = false ]; then
-    read -p "⚠️  This will delete ALL data from ALL tables. Continue? (yes/no): " confirm
+    read -p "WARNING: This will delete ALL data from ALL tables. Continue? (yes/no): " confirm
     if [ "$confirm" != "yes" ]; then
-        echo "❌ Aborted."
+        echo "Aborted."
         exit 1
     fi
 fi
@@ -112,9 +112,9 @@ BEGIN
     SET session_replication_role = 'origin';
 
     RAISE NOTICE '';
-    RAISE NOTICE '✅ Successfully truncated % tables', table_count;
+    RAISE NOTICE 'Successfully truncated % tables', table_count;
 END \$\$;
 EOF
 
 echo ""
-echo "✅ All tables truncated successfully!"
+echo "All tables truncated successfully."

@@ -1,3 +1,4 @@
 nvim/.config/nvim/plugin/packer_compiled.lua
 bin/.local/share
 bin/.local/state
+tasks.md

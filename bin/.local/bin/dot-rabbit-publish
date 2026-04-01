@@ -1,44 +1,43 @@
 #!/usr/bin/env bash
 #
-# publish-event.sh - Publish RabbitMQ events for testing async job handlers
+# dot-rabbit-publish - Publish RabbitMQ events for testing async job handlers
 #
 # Usage:
-#   ./publish-event.sh <routing_key> <payload> [message_id] [container_name]
+#   dot-rabbit-publish <routing_key> <payload> [message_id]
+#
+# Environment variables:
+#   RABBITMQ_CONTAINER  Docker container name (default: payments-rabbitmq)
 #
 # Examples:
-#   ./publish-event.sh "acme.event.update" '[123,{"field":["old","new"]}]'
-#   ./publish-event.sh "acme.event.update" '[123,{"field":["old","new"]}]' "custom-msg-id"
-#   ./publish-event.sh "acme.event.update" '[123,{"field":["old","new"]}]' "" "my-rabbitmq"
+#   dot-rabbit-publish "acme.event.update" '[123,{"field":["old","new"]}]'
+#   dot-rabbit-publish "acme.event.update" '[123,{"field":["old","new"]}]' "custom-msg-id"
 #
 
 set -euo pipefail
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
-
 # Default values
 EXCHANGE="events"
-CONTAINER_NAME="${4:-payments-rabbitmq}"
 
-# Function to print colored messages
+if [[ -z "${RABBITMQ_CONTAINER:-}" ]]; then
+    echo "WARNING: RABBITMQ_CONTAINER is not set, defaulting to 'payments-rabbitmq'" >&2
+    echo "Add to your shell config: export RABBITMQ_CONTAINER=payments-rabbitmq" >&2
+fi
+CONTAINER_NAME="${RABBITMQ_CONTAINER:-payments-rabbitmq}"
+
 print_error() {
-    echo -e "${RED}ERROR: $1${NC}" >&2
+    echo "ERROR: $1" >&2
 }
 
 print_success() {
-    echo -e "${GREEN}✓ $1${NC}"
+    echo "OK: $1"
 }
 
 print_info() {
-    echo -e "${BLUE}ℹ $1${NC}"
+    echo "$1"
 }
 
 print_warning() {
-    echo -e "${YELLOW}⚠ $1${NC}"
+    echo "WARNING: $1" >&2
 }
 
 # Function to check if Docker is running
@@ -163,12 +162,15 @@ publish_event() {
 main() {
     # Check arguments
     if [ $# -lt 2 ]; then
-        echo "Usage: $0 <routing_key> <payload> [message_id] [container_name]"
-        echo
+        echo "Usage: $0 <routing_key> <payload> [message_id]"
+        echo ""
+        echo "Environment variables:"
+        echo "  RABBITMQ_CONTAINER  Docker container name (default: payments-rabbitmq)"
+        echo ""
         echo "Examples:"
         echo "  $0 'acme.event.update' '[123,{\"field\":[\"old\",\"new\"]}]'"
         echo "  $0 'acme.event.update' '[123,{\"field\":[\"old\",\"new\"]}]' 'custom-msg-id'"
-        echo
+        echo ""
         exit 1
     fi
 
