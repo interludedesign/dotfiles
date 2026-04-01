@@ -1,0 +1,8 @@
+#!/bin/sh
+
+source $HOME/dot-shared-functions
+source $HOME/dot-shared-shell
+source $HOME/dot-shared-paths
+source $HOME/dot-shared-aliases
+source $HOME/dot-shared-init
+source $HOME/dot-shared-envs
