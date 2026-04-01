@@ -1,22 +1,7 @@
 #!/usr/bin/env bash
-# Sourced by postgres utility scripts to set shared connection defaults
+# Sourced by postgres utility scripts to validate and alias connection env vars
 
-missing=()
-[ -z "$PGHOST" ] && missing+=("PGHOST")
-[ -z "$PGPORT" ] && missing+=("PGPORT")
-[ -z "$PGUSER" ] && missing+=("PGUSER")
-[ -z "$PGPASSWORD" ] && missing+=("PGPASSWORD")
-[ -z "$PGDATABASE" ] && missing+=("PGDATABASE")
-
-if [ ${#missing[@]} -gt 0 ]; then
-    echo "Error: missing required environment variables: ${missing[*]}" >&2
-    echo "" >&2
-    echo "Add the following to your shell config:" >&2
-    for var in "${missing[@]}"; do
-        echo "export ${var}=" >&2
-    done
-    exit 1
-fi
+dot-env-check PGHOST PGPORT PGUSER PGPASSWORD PGDATABASE
 
 host="$PGHOST"
 port="$PGPORT"

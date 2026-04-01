@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Validate that required environment variables are set
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" || $# -lt 1 ]]; then
+    echo "Usage: dot-env-check <VAR_NAME> [VAR_NAME...]"
+    echo ""
+    echo "Checks that all named environment variables are set and non-empty."
+    echo "Exits 1 with instructions if any are missing."
+    echo ""
+    echo "Examples:"
+    echo "  dot-env-check PGHOST PGPORT PGUSER"
+    echo "  dot-env-check RABBITMQ_CONTAINER"
+    exit 0
+fi
+
+missing=()
+for var in "$@"; do
+    if [[ -z "${!var:-}" ]]; then
+        missing+=("$var")
+    fi
+done
+
+if [[ ${#missing[@]} -gt 0 ]]; then
+    echo "ERROR: missing required environment variables: ${missing[*]}" >&2
+    echo "" >&2
+    echo "Add the following to your shell config:" >&2
+    for var in "${missing[@]}"; do
+        echo "  export ${var}=" >&2
+    done
+    exit 1
+fi
