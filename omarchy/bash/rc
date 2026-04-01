@@ -10,4 +10,4 @@ source ~/dotfiles/omarchy/bash/envs
 
 # Keybindings
 #
-bind -x '"\C-f":tmux-sessionizer'
+bind -x '"\C-f":dot-tmux-sessionizer'
