@@ -209,8 +209,12 @@ cleanup_dead_panes() {
 
 sanity_check
 
-# if TS_SEARCH_PATHS is not set use default
-[[ -n "$TS_SEARCH_PATHS" ]] || TS_SEARCH_PATHS=(~/ ~/personal ~/personal/dev/env/.config)
+# if TS_SEARCH_PATHS is not set use default; if passed as a colon-separated env var, parse it into an array
+if ! declare -p TS_SEARCH_PATHS &>/dev/null; then
+    TS_SEARCH_PATHS=(~/ ~/personal ~/personal/dev/env/.config)
+elif declare -p TS_SEARCH_PATHS 2>/dev/null | grep -q '^declare --'; then
+    IFS=':' read -ra TS_SEARCH_PATHS <<< "$TS_SEARCH_PATHS"
+fi
 
 # Add any extra search paths to the TS_SEARCH_PATHS array
 # e.g : EXTRA_SEARCH_PATHS=("$HOME/extra1:4" "$HOME/extra2")
