@@ -1,21 +1,21 @@
 #!/bin/sh
 
 # Add a directory to PATH if not already present
-addToPath() {
+dot-add-to-path() {
   if [[ "$PATH" != *"$1"* ]]; then
     export PATH=$PATH:$1
   fi
 }
 
 # Source a file only if it exists
-source_if_exists() {
+dot-source-if-exists() {
   if [ -f $1 ]; then
     source $1
   fi
 }
 
 # Copy stdin to clipboard (supports wl-copy and pbcopy)
-copy() {
+dot-copy() {
   if command -v wl-copy &> /dev/null; then
     wl-copy
   elif command -v pbcopy &> /dev/null; then
@@ -27,7 +27,7 @@ copy() {
 }
 
 # List git repos in the current directory with branch, last commit, and change status
-gitls() {
+dot-git-ls() {
   local RED=$(tput setaf 1)
   local CYAN=$(tput setaf 6)
   local RESET=$(tput sgr0)
@@ -61,17 +61,17 @@ gitls() {
 }
 
 # Run RSpec on a file with documentation format and quickfix output
-function spec() {
+function dot-spec() {
 	bundle exec rspec "$1" --format documentation --require $HOME/.local/bin/quickfix_formatter.rb --format QuickfixFormatter --out /tmp/quickfix.out
 }
 
 # Fuzzy checkout a git branch using fzf
-function checkout() {
+function dot-git-checkout() {
 	git checkout $(git branch | fzf --reverse)
 }
 
 # Create a tmux layout with an AI assistant pane, a small shell pane, and the editor
-tmux-code() {
+dot-tmux-code() {
   local current_dir="${PWD}"
   local ai_agent="${1:-copilot}"
   
