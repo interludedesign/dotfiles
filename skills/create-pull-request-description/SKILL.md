@@ -25,6 +25,7 @@ dot-git-branch-diff main my-feature-branch
 - Assume the reader understands the general domain, but not what this feature is and why it exists
 - List acceptance criteria in a condensed format, starting with the happy path (the reader can refer to the work item for the full acceptance criteria)
 - List only the most relevant component changes — no need to explain how the tests are comprehensive or DI was wired up
+- Make sure to use proper markdown formatting
 
 ### Template
 
@@ -45,12 +46,12 @@ Add rate limiting to the public search API
 
 The public search API has no request throttling, allowing clients to exceed acceptable load. This adds per-client rate limiting to protect downstream services.
 
-## Changes:
+### Changes:
 
 - Added RateLimitMiddleware — enforces per-client request quotas on all public API routes
 - Added IRateLimitStore and RedisRateLimitStore — persists per-client counters with TTL
 
-## Acceptance criteria:
+### Acceptance criteria:
 
 - Client within quota → request succeeds with 200
 - Client exceeds quota → 429 with Retry-After header
