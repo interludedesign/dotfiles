@@ -96,19 +96,32 @@ return {
       table.sort(skills)
 
       require("telescope.pickers").new({}, {
-        prompt_title = "Skills",
+        prompt_title = "Skills (Enter to open, Ctrl-i to insert)",
         finder = require("telescope.finders").new_table({ results = skills }),
         sorter = require("telescope.config").values.generic_sorter({}),
-        attach_mappings = function(prompt_bufnr, _)
-          require("telescope.actions").select_default:replace(function()
-            require("telescope.actions").close(prompt_bufnr)
-            local skill = require("telescope.actions.state").get_selected_entry()[1]
+        attach_mappings = function(prompt_bufnr, map)
+          local actions = require("telescope.actions")
+          local action_state = require("telescope.actions.state")
+
+          -- Enter: open the skill's SPEC.md for editing
+          actions.select_default:replace(function()
+            actions.close(prompt_bufnr)
+            local skill = action_state.get_selected_entry()[1]
+            local spec_path = vim.fn.expand("~/dotfiles/work/code/skills/") .. skill .. "/SPEC.md"
+            vim.cmd("edit " .. vim.fn.fnameescape(spec_path))
+          end)
+
+          -- Ctrl-i: insert skill name wrapped in backticks at cursor
+          map("i", "<C-i>", function()
+            actions.close(prompt_bufnr)
+            local skill = action_state.get_selected_entry()[1]
             local pos = vim.api.nvim_win_get_cursor(0)
             local row, col = pos[1] - 1, pos[2]
             local text = "`" .. skill .. "`"
             vim.api.nvim_buf_set_text(0, row, col, row, col, { text })
             vim.api.nvim_win_set_cursor(0, { row + 1, col + #text })
           end)
+
           return true
         end,
       }):find()
