@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+# Compare two JSON payloads field-by-field, order-insensitive.
+# Outputs a coloured table: green rows match, red rows differ.
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" ]]; then
+    echo "Usage: dot-json-diff <file1> <file2>"
+    echo ""
+    echo "Compares two JSON inputs field-by-field. Key order is ignored."
+    echo "Green rows indicate matching values; red rows indicate mismatches."
+    echo ""
+    echo "Accepts regular files or process substitution:"
+    echo "  dot-json-diff <(echo \"\$json_a\") <(echo \"\$json_b\")"
+    echo ""
+    echo "Requires: python3"
+    exit 0
+fi
+
+if [[ $# -ne 2 ]]; then
+    echo "ERROR: expected 2 arguments (file1 file2)" >&2
+    echo "Run with --help for usage." >&2
+    exit 1
+fi
+
+python3 - "$1" "$2" <<'PYTHON'
+import sys
+import json
+
+GREEN  = "\033[32m"
+RED    = "\033[31m"
+BOLD   = "\033[1m"
+DIM    = "\033[2m"
+RESET  = "\033[0m"
+
+def flatten(obj, prefix=""):
+    items = {}
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            path = f"{prefix}.{k}" if prefix else k
+            items.update(flatten(v, path))
+    elif isinstance(obj, list):
+        for i, v in enumerate(obj):
+            items.update(flatten(v, f"{prefix}[{i}]"))
+    else:
+        items[prefix] = obj
+    return items
+
+def fmt_val(v):
+    if v == "<missing>":
+        return DIM + "<missing>" + RESET
+    if isinstance(v, str):
+        s = f'"{v}"'
+    else:
+        s = str(v)
+    return s[:60] + ("..." if len(s) > 60 else "")
+
+with open(sys.argv[1]) as f1, open(sys.argv[2]) as f2:
+    try:
+        data1 = json.load(f1)
+    except json.JSONDecodeError as e:
+        print(f"ERROR: could not parse file1 as JSON: {e}", file=sys.stderr)
+        sys.exit(1)
+    try:
+        data2 = json.load(f2)
+    except json.JSONDecodeError as e:
+        print(f"ERROR: could not parse file2 as JSON: {e}", file=sys.stderr)
+        sys.exit(1)
+
+flat1 = flatten(data1)
+flat2 = flatten(data2)
+all_keys = sorted(set(flat1) | set(flat2))
+
+if not all_keys:
+    print("Both JSON payloads are empty.")
+    sys.exit(0)
+
+key_w = min(max(len(k) for k in all_keys), 50) + 2
+val_w = 40
+
+header = f"{BOLD}{'KEY':<{key_w}}  {'LEFT':<{val_w}}  {'RIGHT':<{val_w}}  {'':3}{RESET}"
+print(header)
+print(DIM + "-" * (key_w + val_w * 2 + 8) + RESET)
+
+matches = 0
+mismatches = 0
+
+for key in all_keys:
+    v1 = flat1.get(key, "<missing>")
+    v2 = flat2.get(key, "<missing>")
+
+    ok = v1 == v2
+    color = GREEN if ok else RED
+    mark  = "ok " if ok else "DIFF"
+
+    key_display = (key[:key_w - 4] + "...") if len(key) > key_w - 1 else key
+    v1_display  = fmt_val(v1)
+    v2_display  = fmt_val(v2)
+
+    print(f"{color}{key_display:<{key_w}}  {v1_display:<{val_w}}  {v2_display:<{val_w}}  {mark}{RESET}")
+
+    if ok:
+        matches += 1
+    else:
+        mismatches += 1
+
+print(DIM + "-" * (key_w + val_w * 2 + 8) + RESET)
+print(f"{GREEN}{matches} matching{RESET}  {RED}{mismatches} mismatches{RESET}  ({len(all_keys)} total fields)")
+PYTHON
