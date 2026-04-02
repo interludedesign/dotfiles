@@ -77,6 +77,43 @@ return {
       }):find()
     end
 
+    M.pick_skill = function()
+      local skills_dir = vim.fn.expand("~/dotfiles/work/code/skills")
+      local handle = vim.uv.fs_scandir(skills_dir)
+      if not handle then
+        vim.notify("Skills directory not found: " .. skills_dir, vim.log.levels.WARN)
+        return
+      end
+
+      local skills = {}
+      while true do
+        local name, type = vim.uv.fs_scandir_next(handle)
+        if not name then break end
+        if type == "directory" then
+          table.insert(skills, name)
+        end
+      end
+      table.sort(skills)
+
+      require("telescope.pickers").new({}, {
+        prompt_title = "Skills",
+        finder = require("telescope.finders").new_table({ results = skills }),
+        sorter = require("telescope.config").values.generic_sorter({}),
+        attach_mappings = function(prompt_bufnr, _)
+          require("telescope.actions").select_default:replace(function()
+            require("telescope.actions").close(prompt_bufnr)
+            local skill = require("telescope.actions.state").get_selected_entry()[1]
+            local pos = vim.api.nvim_win_get_cursor(0)
+            local row, col = pos[1] - 1, pos[2]
+            local text = "`" .. skill .. "`"
+            vim.api.nvim_buf_set_text(0, row, col, row, col, { text })
+            vim.api.nvim_win_set_cursor(0, { row + 1, col + #text })
+          end)
+          return true
+        end,
+      }):find()
+    end
+
     M.search_docs = function(live)
       live = live or false
 
@@ -144,5 +181,6 @@ return {
       telescope.extensions.luasnip.luasnip()
     end, { noremap = true, desc = "LuaSnip Suggestions" })
     vim.keymap.set("n", "<leader>fm", M.git_changed_files, { noremap = true, desc = "Files changed since main" })
+    vim.keymap.set("n", "<leader>fp", M.pick_skill, { noremap = true, desc = "Pick Skill" })
   end,
 }
