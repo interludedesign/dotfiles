@@ -29,6 +29,7 @@ PANE_CACHE_FILE="$PANE_CACHE_DIR/panes.cache"
 #
 # TS_LOG=true # will write logs to ~/.local/share/tmux-sessionizer/tmux-sessionizer.logs
 # TS_LOG_FILE=<file> # will write logs to <file> Defaults to ~/.local/share/tmux-sessionizer/tmux-sessionizer.logs
+# TS_INCLUDE_SEARCH_PATHS=true # include each configured search path itself as a direct target (not just their children)
 # ------------------------
 
 if [[ -f "$CONFIG_FILE" ]]; then
@@ -242,7 +243,10 @@ find_dirs() {
             path="$entry"
         fi
 
-        [[ -d "$path" ]] && find "$path" -mindepth 1 -maxdepth "${depth:-${TS_MAX_DEPTH:-1}}" -path '*/.git' -prune -o -type d -print
+        if [[ -d "$path" ]]; then
+            [[ "$TS_INCLUDE_SEARCH_PATHS" == "true" ]] && echo "$path"
+            find "$path" -mindepth 1 -maxdepth "${depth:-${TS_MAX_DEPTH:-1}}" -path '*/.git' -prune -o -type d -print
+        fi
     done
 }
 
