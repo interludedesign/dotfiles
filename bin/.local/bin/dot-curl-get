@@ -19,7 +19,7 @@ if [[ -z "${AUTH_COOKIE:-}" ]]; then
     exit 1
 fi
 
-curl --silent --show-error \
-    -b "$AUTH_COOKIE" \
+curl --silent --show-error --insecure \
+    -b "apd.session=$AUTH_COOKIE" \
     -H 'accept: application/json' \
     "$1"
