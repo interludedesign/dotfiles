@@ -6,10 +6,10 @@
 source ~/.local/share/omarchy/default/bash/rc
 
 ## Shared shell
-source ~/dotfiles/shared/sh/rc
+source ~/dot-shared-rc
 
 ## Custom Omarchy shell
-source ~/dotfiles/omarchy/bash/rc
+source ~/dot-omarchy-rc
 
 # Add your own exports, aliases, and functions here.
 #

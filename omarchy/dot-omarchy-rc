@@ -1,0 +1,13 @@
+#!/bin/sh
+
+source $HOME/dot-omarchy-functions
+source $HOME/dot-omarchy-shell
+source $HOME/dot-omarchy-paths
+source $HOME/dot-omarchy-aliases
+source $HOME/dot-omarchy-init
+source $HOME/dot-omarchy-envs
+
+
+# Keybindings
+#
+bind -x '"\C-f":dot-tmux-sessionizer'
