@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-export STOW_FOLDERS="nvim,hyperland,tmux,omarchy,ghostty,bin"
+export STOW_FOLDERS="shared,omarchy,nvim,hyperland,tmux,bin"
 
 pushd $HOME/.dotfiles
 for folder in $(echo $STOW_FOLDERS | sed "s/,/ /g")
