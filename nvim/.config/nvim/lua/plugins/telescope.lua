@@ -97,24 +97,36 @@ return {
 
       require("telescope.pickers").new({}, {
         prompt_title = "Skills (Enter to open, Ctrl-i to insert)",
-        finder = require("telescope.finders").new_table({ results = skills }),
+        finder = require("telescope.finders").new_table({
+          results = skills,
+          entry_maker = function(skill)
+            local skill_path = vim.fn.expand("~/dotfiles/work/code/skills/") .. skill .. "/SKILL.md"
+            return {
+              value = skill,
+              display = skill,
+              ordinal = skill,
+              path = skill_path,
+            }
+          end,
+        }),
         sorter = require("telescope.config").values.generic_sorter({}),
+        previewer = require("telescope.config").values.file_previewer({}),
         attach_mappings = function(prompt_bufnr, map)
           local actions = require("telescope.actions")
           local action_state = require("telescope.actions.state")
 
-          -- Enter: open the skill's SPEC.md for editing
+          -- Enter: open the skill's SKILL.md for editing
           actions.select_default:replace(function()
             actions.close(prompt_bufnr)
-            local skill = action_state.get_selected_entry()[1]
-            local spec_path = vim.fn.expand("~/dotfiles/work/code/skills/") .. skill .. "/SPEC.md"
-            vim.cmd("edit " .. vim.fn.fnameescape(spec_path))
+            local entry = action_state.get_selected_entry()
+            local skill_path = vim.fn.expand("~/dotfiles/work/code/skills/") .. entry.value .. "/SKILL.md"
+            vim.cmd("edit " .. vim.fn.fnameescape(skill_path))
           end)
 
           -- Ctrl-i: insert skill name wrapped in backticks at cursor
           map("i", "<C-i>", function()
             actions.close(prompt_bufnr)
-            local skill = action_state.get_selected_entry()[1]
+            local skill = action_state.get_selected_entry().value
             local pos = vim.api.nvim_win_get_cursor(0)
             local row, col = pos[1] - 1, pos[2]
             local text = "`" .. skill .. "`"
