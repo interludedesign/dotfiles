@@ -75,6 +75,36 @@ if [ -f "$alt_config" ]; then
     done < "$alt_config"
 fi
 
+# C# patterns: find alternate by searching for file by name
+# Source -> Test: src/.../Name.cs -> tests/.../NameTests.cs
+if [[ "$file" =~ ^(.*)/src/(.+)/([^/]+)\.cs$ ]]; then
+    prefix="${BASH_REMATCH[1]}"
+    name="${BASH_REMATCH[3]}"
+    test_name="${name}Tests"
+    tests_dir="${prefix}/tests"
+
+    if [ -d "$tests_dir" ]; then
+        result=$(find "$tests_dir" -name "${test_name}.cs" 2>/dev/null | head -1)
+        if [ -n "$result" ]; then
+            echo "$result"
+            exit 0
+        fi
+    fi
+# Test -> Source: tests/.../NameTests.cs -> src/.../Name.cs
+elif [[ "$file" =~ ^(.*)/tests/(.+)/([^/]+)Tests\.cs$ ]]; then
+    prefix="${BASH_REMATCH[1]}"
+    name="${BASH_REMATCH[3]}"
+    src_dir="${prefix}/src"
+
+    if [ -d "$src_dir" ]; then
+        result=$(find "$src_dir" -name "${name}.cs" 2>/dev/null | head -1)
+        if [ -n "$result" ]; then
+            echo "$result"
+            exit 0
+        fi
+    fi
+fi
+
 # Default Ruby/Rails patterns if no .alt.toml or no match found
 # Pattern: app/<type>/<name>.rb <-> test/<type>/<name>_test.rb
 if [[ "$file" =~ ^(.*/)?app/([^/]+)/(.+)\.rb$ ]]; then
