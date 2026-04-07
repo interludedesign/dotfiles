@@ -96,7 +96,7 @@ return {
       table.sort(skills)
 
       require("telescope.pickers").new({}, {
-        prompt_title = "Skills (Enter to open, Ctrl-i to insert)",
+        prompt_title = "Skills (Enter to open, Ctrl-i to insert, Ctrl-n to create)",
         finder = require("telescope.finders").new_table({
           results = skills,
           entry_maker = function(skill)
@@ -132,6 +132,29 @@ return {
             local text = "`" .. skill .. "`"
             vim.api.nvim_buf_set_text(0, row, col, row, col, { text })
             vim.api.nvim_win_set_cursor(0, { row + 1, col + #text })
+          end)
+
+          -- Ctrl-n: create a new skill using dot-skill-new and open its SKILL.md
+          map("i", "<C-n>", function()
+            local picker = action_state.get_current_picker(prompt_bufnr)
+            local query = picker:_get_prompt()
+            actions.close(prompt_bufnr)
+
+            if not query or vim.trim(query) == "" then
+              vim.notify("Please type a skill name first", vim.log.levels.WARN)
+              return
+            end
+
+            local skill_name = vim.trim(query)
+            local result = vim.fn.system("dot-skill-new " .. vim.fn.shellescape(skill_name))
+            if vim.v.shell_error ~= 0 then
+              vim.notify("dot-skill-new failed: " .. vim.trim(result), vim.log.levels.ERROR)
+              return
+            end
+
+            local skill_path = vim.fn.expand("~/dotfiles/work/code/skills/") .. skill_name .. "/SKILL.md"
+            vim.cmd("edit " .. vim.fn.fnameescape(skill_path))
+            vim.notify("Created skill: " .. skill_name, vim.log.levels.INFO)
           end)
 
           return true
