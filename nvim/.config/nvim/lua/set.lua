@@ -4,6 +4,8 @@ vim.opt.shell = os.getenv("SHELL") or "/bin/bash"
 
 vim.opt.number = true
 vim.opt.relativenumber = true
+vim.opt.cursorline = true
+vim.opt.cursorlineopt = "number"
 
 vim.opt.errorbells = false
 
