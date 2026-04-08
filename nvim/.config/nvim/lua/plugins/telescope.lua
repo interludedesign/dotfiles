@@ -119,6 +119,7 @@ return {
           actions.select_default:replace(function()
             actions.close(prompt_bufnr)
             local entry = action_state.get_selected_entry()
+            if not entry then return end
             local skill_path = vim.fn.expand("~/dotfiles/work/code/skills/") .. entry.value .. "/SKILL.md"
             vim.cmd("edit " .. vim.fn.fnameescape(skill_path))
           end)
