@@ -14,6 +14,12 @@ vim.keymap.set("n", "<leader>s", ":lua require('utils.testing').run_spec_in_tmux
 -- Go runner
 vim.keymap.set("n", "<leader><leader>r", ":lua require('utils.testing').run_go_in_tmux()<CR>", { noremap = true })
 
+-- Move by visual lines (so counts work correctly with wrapped lines)
+vim.keymap.set("n", "j", "gj", { noremap = true })
+vim.keymap.set("n", "k", "gk", { noremap = true })
+vim.keymap.set("n", "gj", "j", { noremap = true })
+vim.keymap.set("n", "gk", "k", { noremap = true })
+
 -- Keep result in center screen when hitting n
 vim.keymap.set("n", "n", "nzz", { noremap = true })
 vim.keymap.set("n", "N", "Nzz", { noremap = true })
