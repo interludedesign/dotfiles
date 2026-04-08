@@ -10,7 +10,9 @@ return {
       floats = "transparent",
     },
     on_highlights = function(hl, _)
-      hl.LineNr = { fg = "#7e8abd" }
+      hl.LineNrAbove = { fg = "#a9b1d6" }
+      hl.LineNrBelow = { fg = "#a9b1d6" }
+      hl.LineNr = { fg = "#a9b1d6" }
       hl.CursorLineNr = { fg = "#ff9e64", bold = true }
     end,
   },
