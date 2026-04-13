@@ -1,4 +1,4 @@
-vim.lsp.set_log_level("INFO")
+vim.lsp.set_log_level("WARN")
 
 local servers = { "lua_ls", "ruby_lsp", "ts_ls", "gopls", "omnisharp", "bash-language-server", "marksman", "html" }
 
