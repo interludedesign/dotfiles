@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Find a tmux pane by its title and print its target (session:window.pane)
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" || $# -lt 1 ]]; then
+    echo "Usage: dot-tmux-find-pane <pane-title>"
+    echo ""
+    echo "Searches all tmux sessions for a pane whose title matches <pane-title>."
+    echo "Prints the pane target (e.g. mysession:1.2) so it can be passed to tmux send-keys."
+    echo ""
+    echo "Pane titles are set with: tmux select-pane -T <title>"
+    echo ""
+    echo "Examples:"
+    echo "  dot-tmux-find-pane csharp-public-host"
+    echo "  tmux send-keys -t \$(dot-tmux-find-pane csharp-public-host) 'dotnet run' C-m"
+    exit 0
+fi
+
+TITLE="$1"
+
+if ! command -v tmux &>/dev/null; then
+    echo "ERROR: tmux is not installed" >&2
+    exit 1
+fi
+
+result=$(tmux list-panes -a -F "#{session_name}:#{window_index}.#{pane_index} #{pane_title}" 2>/dev/null \
+    | awk -v title="$TITLE" '$2 == title { print $1; exit }')
+
+if [[ -z "$result" ]]; then
+    echo "ERROR: no pane found with title '$TITLE'" >&2
+    exit 1
+fi
+
+echo "$result"
