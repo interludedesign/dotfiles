@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# Find and kill the process listening on a given port
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" || $# -lt 1 ]]; then
+    echo "Usage: dot-kill-port <port>"
+    echo ""
+    echo "Finds the process listening on <port> and sends SIGTERM."
+    echo "If the process does not exit within 5 seconds, sends SIGKILL."
+    echo ""
+    echo "Examples:"
+    echo "  dot-kill-port 3000"
+    echo "  dot-kill-port 8080"
+    exit 0
+fi
+
+PORT="$1"
+
+get_pid() {
+    if command -v lsof &>/dev/null; then
+        lsof -ti tcp:"$PORT" 2>/dev/null | head -1
+    elif command -v ss &>/dev/null; then
+        ss -tlnp "sport = :$PORT" 2>/dev/null \
+            | awk 'NR>1 {match($NF, /pid=([0-9]+)/, m); if (m[1]) print m[1]}' \
+            | head -1
+    else
+        echo "ERROR: neither lsof nor ss found" >&2
+        exit 1
+    fi
+}
+
+PID=$(get_pid)
+
+if [[ -z "$PID" ]]; then
+    echo "ERROR: no process found on port $PORT" >&2
+    exit 1
+fi
+
+echo "Sending SIGTERM to PID $PID (port $PORT)..."
+kill -TERM "$PID" 2>/dev/null || true
+
+for i in $(seq 1 5); do
+    sleep 1
+    if ! kill -0 "$PID" 2>/dev/null; then
+        echo "OK: process $PID exited gracefully"
+        exit 0
+    fi
+    echo "Waiting... ($i/5)"
+done
+
+echo "WARNING: process $PID did not exit — sending SIGKILL"
+kill -KILL "$PID" 2>/dev/null || true
+
+sleep 1
+if kill -0 "$PID" 2>/dev/null; then
+    echo "ERROR: process $PID could not be killed" >&2
+    exit 1
+fi
+
+echo "OK: process $PID force-killed"
