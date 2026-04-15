@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Make an authenticated POST request using the AUTH_COOKIE environment variable
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" || $# -lt 2 ]]; then
+    echo "Usage: dot-curl-post <url> <json-body>"
+    echo "Makes a POST request with a JSON body and the AUTH_COOKIE environment variable set as the cookie header."
+    echo ""
+    echo "Requires: AUTH_COOKIE env var to be set"
+    exit 0
+fi
+
+dot-env-check AUTH_COOKIE
+
+curl --silent --show-error --insecure \
+    -b "apd.session=$AUTH_COOKIE" \
+    -H 'accept: application/json' \
+    -H 'content-type: application/json' \
+    -X POST \
+    -d "$2" \
+    "$1"

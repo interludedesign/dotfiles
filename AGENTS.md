@@ -36,12 +36,11 @@ All standalone scripts in `./bin/.local/bin/` must follow these standards:
 - Use plain text prefixes: `ERROR:`, `WARNING:`, `OK:` — no symbols
 - No `eval` for building commands; use arrays: `cmd=(prog arg1 arg2); "${cmd[@]}"`
 - No hardcoded values that should vary by environment — use env vars with fallbacks
-- Required env vars: if unset, print the missing var name and suggest the export line, then exit 1:
+- Required env vars: validate using `dot-env-check`:
   ```
-  echo "ERROR: FOO_VAR is not set" >&2
-  echo "Add to your shell config: export FOO_VAR=" >&2
-  exit 1
+  dot-env-check FOO_VAR BAR_VAR
   ```
+  Env vars are expected to already be in the environment (sourced via `~/vault.sh` through `dot-work-envs`). Do not source `vault.sh` inside scripts.
 - Optional env vars with defaults: use `${VAR:-default}` and warn if using the default when it matters (e.g. container names)
 
 ---
