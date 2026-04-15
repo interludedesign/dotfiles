@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Open the pull request for the current branch in the browser, or the new PR page if none exists
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" ]]; then
+    echo "Usage: dot-ado-pr"
+    echo "Opens the Azure DevOps pull request for the current branch in the browser."
+    echo "If no PR exists, opens the page to raise a new one."
+    echo ""
+    echo "Requires: az CLI with Azure DevOps extension"
+    echo "Requires: AZDO_ORG_URL and AZDO_PROJECT env vars (set in ~/vault.sh)"
+    exit 0
+fi
+
+dot-env-check AZDO_ORG_URL AZDO_PROJECT
+
+BRANCH=$(git branch --show-current)
+REPO="${PWD##*/}"
+BASE_URL="$AZDO_ORG_URL/$AZDO_PROJECT/_git/$REPO"
+
+PR_ID=$(az repos pr list --source-branch "$BRANCH" --query "[0].pullRequestId" --output tsv 2>/dev/null || true)
+
+if [[ -n "$PR_ID" ]]; then
+    open "$BASE_URL/pullrequest/$PR_ID"
+else
+    echo "No PR found for branch '$BRANCH' - opening new PR page"
+    open "$BASE_URL/pullrequests"
+fi
