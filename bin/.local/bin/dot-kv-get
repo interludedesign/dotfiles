@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Get a value by key from the persistent store at $HOME/.kvstore
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" || $# -lt 1 ]]; then
+    echo "Usage: dot-kv-get <key>"
+    echo "Retrieves the value for a key from \$HOME/.kvstore"
+    exit 0
+fi
+
+key="$1"
+store="$HOME/.kvstore/$key"
+
+if [[ ! -f "$store" ]]; then
+    echo "ERROR: key '$key' not found" >&2
+    exit 1
+fi
+
+cat "$store"

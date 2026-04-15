@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# List all keys in the persistent store at $HOME/.kvstore
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" ]]; then
+    echo "Usage: dot-kv-list"
+    echo "Lists all keys stored in \$HOME/.kvstore"
+    exit 0
+fi
+
+store="$HOME/.kvstore"
+
+if [[ ! -d "$store" ]] || [[ -z "$(ls -A "$store" 2>/dev/null)" ]]; then
+    echo "No keys stored."
+    exit 0
+fi
+
+for file in "$store"/*; do
+    key="$(basename "$file")"
+    value="$(cat "$file")"
+    echo "$key=$value"
+done

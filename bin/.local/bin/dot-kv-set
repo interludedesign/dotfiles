@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Set a key-value pair in the persistent store at $HOME/.kvstore
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" || $# -lt 2 ]]; then
+    echo "Usage: dot-kv-set <key> <value>"
+    echo "Stores a key-value pair persistently in \$HOME/.kvstore"
+    exit 0
+fi
+
+key="$1"
+value="$2"
+
+mkdir -p "$HOME/.kvstore"
+printf '%s' "$value" > "$HOME/.kvstore/$key"
