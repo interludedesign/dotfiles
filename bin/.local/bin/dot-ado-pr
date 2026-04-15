@@ -18,8 +18,15 @@ dot-env-check AZDO_ORG_URL AZDO_PROJECT
 BRANCH=$(git branch --show-current)
 REPO="${PWD##*/}"
 BASE_URL="$AZDO_ORG_URL/$AZDO_PROJECT/_git/$REPO"
+CACHE_KEY="ado-pr-${REPO}-${BRANCH//\//-}"
 
-PR_ID=$(az repos pr list --source-branch "$BRANCH" --query "[0].pullRequestId" --output tsv 2>/dev/null || true)
+PR_ID=$(dot-kv-get "$CACHE_KEY" 2>/dev/null || true)
+
+if [[ -z "$PR_ID" ]]; then
+    echo "Cache miss - fetching PR ID from Azure DevOps..."
+    PR_ID=$(az repos pr list --source-branch "$BRANCH" --query "[0].pullRequestId" --output tsv 2>/dev/null || true)
+    [[ -n "$PR_ID" ]] && dot-kv-set "$CACHE_KEY" "$PR_ID"
+fi
 
 if [[ -n "$PR_ID" ]]; then
     open "$BASE_URL/pullrequest/$PR_ID"
