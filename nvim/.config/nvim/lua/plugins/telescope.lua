@@ -196,6 +196,46 @@ return {
       end
     end
 
+    M.search_meetings = function()
+      local meetings_dir = vim.fn.expand("~/docs/work/2 - Areas/Meetings")
+      local actions = require("telescope.actions")
+      local action_state = require("telescope.actions.state")
+
+      builtin.find_files({
+        prompt_title = "Meetings (Ctrl-n to create new)",
+        cwd = meetings_dir,
+        find_command = { "fd", "--type", "f", "--strip-cwd-prefix", "-X", "ls", "-t" },
+        attach_mappings = function(prompt_bufnr, map)
+          map("i", "<C-n>", function()
+            local picker = action_state.get_current_picker(prompt_bufnr)
+            local query = picker:_get_prompt()
+
+            actions.close(prompt_bufnr)
+
+            if not query or vim.trim(query) == "" then
+              vim.notify("Please type a meeting topic first", vim.log.levels.WARN)
+              return
+            end
+
+            local topic = vim.trim(query)
+            local result = vim.fn.system("dot-docs-create-meeting " .. vim.fn.shellescape(topic))
+            if vim.v.shell_error ~= 0 then
+              vim.notify("dot-docs-create-meeting failed: " .. vim.trim(result), vim.log.levels.ERROR)
+              return
+            end
+
+            local date = os.date("%Y-%m-%d")
+            local filename = "Meeting - " .. date .. " - " .. topic .. ".md"
+            local filepath = meetings_dir .. "/" .. filename
+            vim.cmd("edit " .. vim.fn.fnameescape(filepath))
+            vim.notify("Created meeting: " .. filename, vim.log.levels.INFO)
+          end)
+
+          return true
+        end,
+      })
+    end
+
     -- Keybindings
 
     vim.keymap.set("n", "<leader>fg", function()
@@ -231,5 +271,6 @@ return {
     end, { noremap = true, desc = "LuaSnip Suggestions" })
     vim.keymap.set("n", "<leader>fm", M.git_changed_files, { noremap = true, desc = "Files changed since main" })
     vim.keymap.set("n", "<leader>fp", M.pick_skill, { noremap = true, desc = "Pick Skill" })
+    vim.keymap.set("n", "<leader>dm", M.search_meetings, { noremap = true, desc = "Search Meetings" })
   end,
 }
