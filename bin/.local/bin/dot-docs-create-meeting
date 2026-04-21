@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+MEETINGS_DIR="${MEETINGS_DIR:-${HOME}/docs/work/2 - Areas/Meetings}"
+
+if [[ "${1:-}" == "--help" || $# -lt 1 ]]; then
+  echo "Usage: dot-docs-create-meeting <topic>"
+  echo ""
+  echo "Creates a meeting note in \$MEETINGS_DIR with the filename:"
+  echo "  Meeting - YYYY-MM-DD - <topic>.md"
+  echo ""
+  echo "Env vars:"
+  echo "  MEETINGS_DIR  Path to the meetings directory (default: ~/docs/work/2 - Areas/Meetings)"
+  exit 0
+fi
+
+TOPIC="$1"
+DATE="$(date +%Y-%m-%d)"
+FILENAME="Meeting - ${DATE} - ${TOPIC}.md"
+FILEPATH="${MEETINGS_DIR}/${FILENAME}"
+
+if [[ -f "${FILEPATH}" ]]; then
+  echo "WARNING: File already exists: ${FILEPATH}" >&2
+  exit 0
+fi
+
+mkdir -p "${MEETINGS_DIR}"
+
+cat > "${FILEPATH}" <<'TEMPLATE'
+## Summary
+
+
+## Decisions
+
+
+## Actions
+
+
+## Research Topics
+
+
+## Notes
+
+
+## Prep
+
+TEMPLATE
+
+echo "OK: Created ${FILEPATH}"
