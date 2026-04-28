@@ -176,8 +176,11 @@ return {
         local action_state = require("telescope.actions.state")
         local docs_util = require("utils.docs")
         
+        local caller_win = vim.api.nvim_get_current_win()
+        local caller_buf = vim.api.nvim_get_current_buf()
+
         builtin.find_files({
-          prompt_title = "Docs (Ctrl-n to create new)",
+          prompt_title = "Docs (Ctrl-n to create new, Ctrl-i to insert link)",
           cwd = vim.fn.expand("~/docs"),
           find_command = { "fd", "--type", "f", "--strip-cwd-prefix", "-X", "ls", "-t" },
           attach_mappings = function(prompt_bufnr, map)
@@ -185,11 +188,26 @@ return {
             map("i", "<C-n>", function()
               local picker = action_state.get_current_picker(prompt_bufnr)
               local query = picker:_get_prompt()
-              
+
               actions.close(prompt_bufnr)
               docs_util.create_doc(query)
             end)
-            
+
+            -- Ctrl-i: insert selected filename as a wiki link [[Name]] at cursor
+            map("i", "<C-i>", function()
+              local entry = action_state.get_selected_entry()
+              actions.close(prompt_bufnr)
+              if not entry then return end
+
+              local filename = vim.fn.fnamemodify(entry.value, ":t:r")
+              local link = "[[" .. filename .. "]]"
+
+              local pos = vim.api.nvim_win_get_cursor(caller_win)
+              local row, col = pos[1] - 1, pos[2]
+              vim.api.nvim_buf_set_text(caller_buf, row, col, row, col, { link })
+              vim.api.nvim_win_set_cursor(caller_win, { row + 1, col + #link })
+            end)
+
             return true
           end,
         })
