@@ -170,6 +170,7 @@ return {
         builtin.live_grep({
           prompt_title = "Docs",
           cwd = vim.fn.expand("~/docs"),
+          additional_args = { "--glob", "!**/4 - Archive/**" },
         })
       else
         local actions = require("telescope.actions")
@@ -182,7 +183,7 @@ return {
         builtin.find_files({
           prompt_title = "Docs (Ctrl-n to create new, Ctrl-i to insert link)",
           cwd = vim.fn.expand("~/docs"),
-          find_command = { "fd", "--type", "f", "--strip-cwd-prefix", "-X", "ls", "-t" },
+          find_command = { "fd", "--type", "f", "--exclude", "4 - Archive", "--strip-cwd-prefix", "-X", "ls", "-t" },
           attach_mappings = function(prompt_bufnr, map)
             -- Add custom keybinding to create new doc
             map("i", "<C-n>", function()
