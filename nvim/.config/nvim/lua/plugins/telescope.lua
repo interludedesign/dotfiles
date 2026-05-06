@@ -181,12 +181,12 @@ return {
         local caller_buf = vim.api.nvim_get_current_buf()
 
         builtin.find_files({
-          prompt_title = "Docs (Ctrl-n to create new, Ctrl-i to insert link)",
+          prompt_title = "Docs (Ctrl-s to create new, Ctrl-i to insert link)",
           cwd = vim.fn.expand("~/docs"),
           find_command = { "fd", "--type", "f", "--exclude", "4 - Archive", "--strip-cwd-prefix", "-X", "ls", "-t" },
           attach_mappings = function(prompt_bufnr, map)
             -- Add custom keybinding to create new doc
-            map("i", "<C-n>", function()
+            map("i", "<C-s>", function()
               local picker = action_state.get_current_picker(prompt_bufnr)
               local query = picker:_get_prompt()
 

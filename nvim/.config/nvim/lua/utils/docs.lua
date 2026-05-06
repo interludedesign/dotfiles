@@ -129,14 +129,27 @@ function M.extract_section()
 end
 
 -- Create a new doc file in ~/docs and open it
+-- The filename will be prefixed with the current date: "YYYY-MM-DD - My Note.md"
 function M.create_doc(filename)
-  local normalized = M.normalize_filename(filename)
-  
+  if not filename or vim.trim(filename) == "" then
+    vim.notify("Please provide a filename", vim.log.levels.WARN)
+    return false
+  end
+
+  local trimmed = vim.trim(filename)
+
+  -- Prepend date if not already present
+  if not trimmed:match("^%d%d%d%d%-%d%d%-%d%d") then
+    trimmed = os.date("%Y-%m-%d") .. " - " .. trimmed
+  end
+
+  local normalized = M.normalize_filename(trimmed)
+
   if not normalized then
     vim.notify("Please provide a filename", vim.log.levels.WARN)
     return false
   end
-  
+
   local docs_dir = vim.fn.expand("~/docs")
   local filepath = docs_dir .. "/" .. normalized
   
