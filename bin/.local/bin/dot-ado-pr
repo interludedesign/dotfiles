@@ -3,14 +3,23 @@
 
 set -euo pipefail
 
+URL_ONLY=false
+
 if [[ "${1:-}" == "--help" ]]; then
-    echo "Usage: dot-ado-pr"
+    echo "Usage: dot-ado-pr [--url]"
     echo "Opens the Azure DevOps pull request for the current branch in the browser."
     echo "If no PR exists, opens the page to raise a new one."
     echo ""
+    echo "Options:"
+    echo "  --url    Print the PR URL and exit"
+    echo ""
     echo "Requires: az CLI with Azure DevOps extension"
-    echo "Requires: AZDO_ORG_URL and AZDO_PROJECT env vars (set in ~/vault.sh)"
+    echo "Requires: AZDO_ORG_URL and AZDO_PROJECT env vars"
     exit 0
+fi
+
+if [[ "${1:-}" == "--url" ]]; then
+    URL_ONLY=true
 fi
 
 dot-env-check AZDO_ORG_URL AZDO_PROJECT
@@ -29,7 +38,11 @@ if [[ -z "$PR_ID" ]]; then
 fi
 
 if [[ -n "$PR_ID" ]]; then
-    open "$BASE_URL/pullrequest/$PR_ID"
+    if [[ "$URL_ONLY" == true ]]; then
+        echo "$BASE_URL/pullrequest/$PR_ID"
+    else
+        open "$BASE_URL/pullrequest/$PR_ID"
+    fi
 else
     echo "No PR found for branch '$BRANCH' - opening new PR page"
     open "$BASE_URL/pullrequests"

@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Open the Azure DevOps work item for the current branch in the browser
+
+set -euo pipefail
+
+URL_ONLY=false
+
+if [[ "${1:-}" == "--help" ]]; then
+    echo "Usage: dot-ado-wo [--url]"
+    echo "Opens the Azure DevOps work item for the current branch in the browser."
+    echo "The work item ID is extracted from the branch name (expects a 6-digit ID)."
+    echo ""
+    echo "Options:"
+    echo "  --url    Print the work item URL and exit"
+    echo ""
+    echo "Requires: AZDO_ORG_URL and AZDO_PROJECT env vars"
+    exit 0
+fi
+
+if [[ "${1:-}" == "--url" ]]; then
+    URL_ONLY=true
+fi
+
+dot-env-check AZDO_ORG_URL AZDO_PROJECT
+
+BRANCH=$(git branch --show-current)
+
+WORK_ITEM_ID=$(echo "$BRANCH" | grep -oE '[0-9]{6}' | head -1)
+
+if [[ -z "$WORK_ITEM_ID" ]]; then
+    echo "ERROR: No 6-digit work item ID found in branch name '$BRANCH'" >&2
+    exit 1
+fi
+
+URL="$AZDO_ORG_URL/$AZDO_PROJECT/_workitems/edit/$WORK_ITEM_ID"
+
+if [[ "$URL_ONLY" == true ]]; then
+    echo "$URL"
+else
+    open "$URL"
+fi

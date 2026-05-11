@@ -40,7 +40,7 @@ All standalone scripts in `./bin/.local/bin/` must follow these standards:
   ```
   dot-env-check FOO_VAR BAR_VAR
   ```
-  Env vars are expected to already be in the environment (sourced via `~/vault.sh` through `dot-work-envs`). Do not source `vault.sh` inside scripts.
+  Env vars are expected to already be in the environment. Do not source `vault.sh` inside scripts, and do not mention `vault.sh` in help text or comments.
 - Optional env vars with defaults: use `${VAR:-default}` and warn if using the default when it matters (e.g. container names)
 
 ---
