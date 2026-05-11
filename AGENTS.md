@@ -78,6 +78,7 @@ There is a naming convention for skills:
 - **Main config**: `~/dotfiles/tmux/.tmux.conf`
 - **Sessionizer**: `~/dotfiles/bin/tmux-sessionizer` (script), `~/.config/tmux-sessionizer/tmux-sessionizer.conf` (search paths)
 - **Session switching**: `Ctrl+1/2/3/4` switches to tmux session by position (requires `extended-keys on` and a terminal that passes Ctrl+number, e.g. Ghostty)
+- **Pane naming**: tmux layout functions (e.g. `tapi`, `tnexus`) must prefix all pane names with a short project identifier to avoid collisions across sessions (e.g. `nexus-api-host`, not `api-host`)
 
 ## General Guidelines
 
