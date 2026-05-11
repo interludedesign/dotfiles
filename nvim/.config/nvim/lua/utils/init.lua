@@ -11,8 +11,26 @@ utils.case_converters = require("utils.case_converters")
 utils.date = require("utils.date")
 
 function utils.SmartOpen()
-  -- Get the entire WORD under cursor (includes special chars like :)
-  local target = vim.fn.expand('<cWORD>')
+  -- Check if cursor is within a markdown link [text](url) on the current line
+  local line = vim.api.nvim_get_current_line()
+  local col = vim.api.nvim_win_get_cursor(0)[2] + 1  -- convert to 1-indexed
+
+  local target = nil
+  local search_pos = 1
+  while true do
+    local s, e, link_url = line:find('%[.-%]%((.-)%)', search_pos)
+    if not s then break end
+    if col >= s and col <= e then
+      target = link_url
+      break
+    end
+    search_pos = e + 1
+  end
+
+  -- Fall back to WORD under cursor (includes special chars like :)
+  if not target then
+    target = vim.fn.expand('<cWORD>')
+  end
   
   if target:match('^https?://') or target:match('%.com$') then
     -- Add protocol if missing
