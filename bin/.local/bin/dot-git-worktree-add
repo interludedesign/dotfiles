@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# Create a new feature branch as a git worktree, branched from an up-to-date base branch
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" ]]; then
+    echo "Usage: dot-git-worktree-add <branch-name> [base-branch]"
+    echo ""
+    echo "Creates a new worktree for <branch-name>, branched from <base-branch>."
+    echo "Pulls the latest changes on <base-branch> before creating the worktree."
+    echo "The worktree directory is created as a sibling of the main worktree."
+    echo ""
+    echo "Arguments:"
+    echo "  branch-name   Name of the new branch (slashes are replaced with dashes in the directory name)"
+    echo "  base-branch   Branch to base the new branch on (default: main)"
+    echo ""
+    echo "Examples:"
+    echo "  dot-git-worktree-add feature/my-thing"
+    echo "  dot-git-worktree-add bugfix/123 develop"
+    exit 0
+fi
+
+if [[ -z "${1:-}" ]]; then
+    echo "ERROR: branch name is required" >&2
+    echo "Usage: dot-git-worktree-add <branch-name> [base-branch]" >&2
+    exit 1
+fi
+
+branch="$1"
+base="${2:-main}"
+
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+    echo "ERROR: not inside a git repository" >&2
+    exit 1
+fi
+
+base_worktree="$PWD/$base"
+
+if [[ ! -d "$base_worktree" ]]; then
+    echo "ERROR: base worktree directory not found: $base_worktree" >&2
+    exit 1
+fi
+
+repo_root="$PWD"
+worktree_dir="$repo_root/${branch//\//-}"
+
+if [[ -d "$worktree_dir" ]]; then
+    echo "ERROR: worktree directory already exists: $worktree_dir" >&2
+    exit 1
+fi
+
+if git rev-parse --verify "$branch" > /dev/null 2>&1; then
+    echo "ERROR: branch '$branch' already exists" >&2
+    exit 1
+fi
+
+echo "Pulling latest on '$base'..."
+git -C "$base_worktree" pull
+
+echo "Creating worktree '$worktree_dir' on new branch '$branch'..."
+git worktree add -b "$branch" "$worktree_dir" "$base"
+
+echo "OK: worktree ready at $worktree_dir"
