@@ -3,13 +3,16 @@
 
 set -euo pipefail
 
-SKILLS_DIR="${HOME}/dotfiles/work/code/skills"
+if [[ -z "${SKILLS_DIR:-}" ]]; then
+  echo "ERROR: SKILLS_DIR is not set" >&2
+  exit 1
+fi
 
 if [[ "${1:-}" == "--help" || $# -lt 1 ]]; then
   echo "Usage: dot-skill-new <skill-name>"
   echo ""
-  echo "Creates a new skill directory at \$SKILLS_DIR/<skill-name>/ and populates"
-  echo "SKILL.md with standard front-matter."
+  echo "Creates a new skill directory at \$SKILLS_DIR/.claude/skills/<skill-name>/"
+  echo "and populates SKILL.md with standard front-matter."
   echo ""
   echo "Naming conventions:"
   echo "  create-*         Skills whose primary job is to produce output"
@@ -18,12 +21,12 @@ if [[ "${1:-}" == "--help" || $# -lt 1 ]]; then
   echo "  styleguide-{lang} Language-level code style conventions"
   echo ""
   echo "Env vars:"
-  echo "  SKILLS_DIR  Path to the skills directory (default: ~/dotfiles/work/code/skills)"
+  echo "  SKILLS_DIR  Path to the skills directory (required)"
   exit 0
 fi
 
 SKILL_NAME="$1"
-SKILL_DIR="${SKILLS_DIR}/${SKILL_NAME}"
+SKILL_DIR="${SKILLS_DIR}/.claude/skills/${SKILL_NAME}"
 
 if [[ -d "${SKILL_DIR}" ]]; then
   echo "ERROR: Skill already exists: ${SKILL_DIR}" >&2

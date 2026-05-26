@@ -1,0 +1,4 @@
+#!/usr/bin/env zsh
+
+# Skills directory (used by dot-skill-new and the nvim skills picker)
+export SKILLS_DIR="$HOME/dotfiles/personal/skills"

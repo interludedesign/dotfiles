@@ -30,7 +30,8 @@ alias gd="git diff"
 
 # LLM Aliases
 alias lmcp="copilot"
-alias lmc="claude"
+alias lmc='claude --add-dir "$SKILLS_DIR"'
+alias claude='claude --add-dir "$SKILLS_DIR"'
 
 # Colorize RI
 alias ri='ri -f ansi'

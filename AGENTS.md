@@ -50,7 +50,8 @@ All standalone scripts in `./bin/.local/bin/` must follow these standards:
 Agent skills are located at:
 
 - `./skills/` - Shared agnostic skills
-- `./work/code/skills/` - Work-specific skills
+- `./work/skills/` - Work-specific skills
+- `./personal/skills/` - Personal skills (also used on Omarchy)
 
 There is a naming convention for skills:
 

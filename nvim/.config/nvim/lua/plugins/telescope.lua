@@ -78,7 +78,11 @@ return {
     end
 
     M.pick_skill = function()
-      local skills_dir = vim.fn.expand("~/dotfiles/work/code/skills")
+      if not vim.env.SKILLS_DIR or vim.env.SKILLS_DIR == "" then
+        vim.notify("SKILLS_DIR is not set", vim.log.levels.WARN)
+        return
+      end
+      local skills_dir = vim.fn.expand(vim.env.SKILLS_DIR) .. "/.claude/skills"
       local handle = vim.uv.fs_scandir(skills_dir)
       if not handle then
         vim.notify("Skills directory not found: " .. skills_dir, vim.log.levels.WARN)
@@ -100,7 +104,7 @@ return {
         finder = require("telescope.finders").new_table({
           results = skills,
           entry_maker = function(skill)
-            local skill_path = vim.fn.expand("~/dotfiles/work/code/skills/") .. skill .. "/SKILL.md"
+            local skill_path = skills_dir .. "/" .. skill .. "/SKILL.md"
             return {
               value = skill,
               display = skill,
@@ -120,7 +124,7 @@ return {
             actions.close(prompt_bufnr)
             local entry = action_state.get_selected_entry()
             if not entry then return end
-            local skill_path = vim.fn.expand("~/dotfiles/work/code/skills/") .. entry.value .. "/SKILL.md"
+            local skill_path = skills_dir .. "/" .. entry.value .. "/SKILL.md"
             vim.cmd("edit " .. vim.fn.fnameescape(skill_path))
           end)
 
@@ -153,7 +157,7 @@ return {
               return
             end
 
-            local skill_path = vim.fn.expand("~/dotfiles/work/code/skills/") .. skill_name .. "/SKILL.md"
+            local skill_path = skills_dir .. "/" .. skill_name .. "/SKILL.md"
             vim.cmd("edit " .. vim.fn.fnameescape(skill_path))
             vim.notify("Created skill: " .. skill_name, vim.log.levels.INFO)
           end)
