@@ -36,9 +36,11 @@ return {
     end
 
     M.git_changed_files = function()
-      local git_root = vim.trim(vim.fn.system(
-        "git -C " .. vim.fn.shellescape(vim.fn.expand("%:p:h")) .. " rev-parse --show-toplevel 2>/dev/null"
-      ))
+      local git_root = vim.trim(
+        vim.fn.system(
+          "git -C " .. vim.fn.shellescape(vim.fn.expand("%:p:h")) .. " rev-parse --show-toplevel 2>/dev/null"
+        )
+      )
       if vim.v.shell_error ~= 0 or git_root == "" then
         vim.notify("Not in a git repository", vim.log.levels.WARN)
         return
@@ -52,29 +54,33 @@ return {
       end
 
       local files = get_changed("main") or get_changed("origin/main") or {}
-      files = vim.tbl_filter(function(f) return f ~= "" end, files)
+      files = vim.tbl_filter(function(f)
+        return f ~= ""
+      end, files)
 
       if #files == 0 then
         vim.notify("No files changed since main", vim.log.levels.INFO)
         return
       end
 
-      require("telescope.pickers").new({}, {
-        prompt_title = "Changed since main",
-        finder = require("telescope.finders").new_table({
-          results = files,
-          entry_maker = function(entry)
-            return {
-              value = entry,
-              display = entry,
-              ordinal = entry,
-              path = git_root .. "/" .. entry,
-            }
-          end,
-        }),
-        sorter = require("telescope.config").values.generic_sorter({}),
-        previewer = require("telescope.config").values.file_previewer({}),
-      }):find()
+      require("telescope.pickers")
+        .new({}, {
+          prompt_title = "Changed since main",
+          finder = require("telescope.finders").new_table({
+            results = files,
+            entry_maker = function(entry)
+              return {
+                value = entry,
+                display = entry,
+                ordinal = entry,
+                path = git_root .. "/" .. entry,
+              }
+            end,
+          }),
+          sorter = require("telescope.config").values.generic_sorter({}),
+          previewer = require("telescope.config").values.file_previewer({}),
+        })
+        :find()
     end
 
     M.pick_skill = function()
@@ -92,79 +98,85 @@ return {
       local skills = {}
       while true do
         local name, type = vim.uv.fs_scandir_next(handle)
-        if not name then break end
+        if not name then
+          break
+        end
         if type == "directory" then
           table.insert(skills, name)
         end
       end
       table.sort(skills)
 
-      require("telescope.pickers").new({}, {
-        prompt_title = "Skills (Enter to open, Ctrl-i to insert, Ctrl-n to create)",
-        finder = require("telescope.finders").new_table({
-          results = skills,
-          entry_maker = function(skill)
-            local skill_path = skills_dir .. "/" .. skill .. "/SKILL.md"
-            return {
-              value = skill,
-              display = skill,
-              ordinal = skill,
-              path = skill_path,
-            }
+      require("telescope.pickers")
+        .new({}, {
+          prompt_title = "Skills (Enter to open, Ctrl-i to insert, Ctrl-n to create)",
+          finder = require("telescope.finders").new_table({
+            results = skills,
+            entry_maker = function(skill)
+              local skill_path = skills_dir .. "/" .. skill .. "/SKILL.md"
+              return {
+                value = skill,
+                display = skill,
+                ordinal = skill,
+                path = skill_path,
+              }
+            end,
+          }),
+          sorter = require("telescope.config").values.generic_sorter({}),
+          previewer = require("telescope.config").values.file_previewer({}),
+          attach_mappings = function(prompt_bufnr, map)
+            local actions = require("telescope.actions")
+            local action_state = require("telescope.actions.state")
+
+            -- Enter: open the skill's SKILL.md for editing
+            actions.select_default:replace(function()
+              actions.close(prompt_bufnr)
+              local entry = action_state.get_selected_entry()
+              if not entry then
+                return
+              end
+              local skill_path = skills_dir .. "/" .. entry.value .. "/SKILL.md"
+              vim.cmd("edit " .. vim.fn.fnameescape(skill_path))
+            end)
+
+            -- Ctrl-i: insert skill name wrapped in backticks at cursor
+            map("i", "<C-i>", function()
+              actions.close(prompt_bufnr)
+              local skill = action_state.get_selected_entry().value
+              local pos = vim.api.nvim_win_get_cursor(0)
+              local row, col = pos[1] - 1, pos[2]
+              local text = "`" .. skill .. "`"
+              vim.api.nvim_buf_set_text(0, row, col, row, col, { text })
+              vim.api.nvim_win_set_cursor(0, { row + 1, col + #text })
+            end)
+
+            -- Ctrl-n: create a new skill using dot-skill-new and open its SKILL.md
+            map("i", "<C-n>", function()
+              local picker = action_state.get_current_picker(prompt_bufnr)
+              local query = picker:_get_prompt()
+              actions.close(prompt_bufnr)
+
+              if not query or vim.trim(query) == "" then
+                vim.notify("Please type a skill name first", vim.log.levels.WARN)
+                return
+              end
+
+              local skill_name = vim.trim(query)
+              local result = vim.fn.system("dot-skill-new " .. vim.fn.shellescape(skill_name))
+              if vim.v.shell_error ~= 0 then
+                vim.notify("dot-skill-new failed: " .. vim.trim(result), vim.log.levels.ERROR)
+                return
+              end
+
+              local skill_path = skills_dir .. "/" .. skill_name .. "/SKILL.md"
+              vim.cmd("edit " .. vim.fn.fnameescape(skill_path))
+              vim.notify("Created skill: " .. skill_name, vim.log.levels.INFO)
+            end)
+
+            return true
           end,
-        }),
-        sorter = require("telescope.config").values.generic_sorter({}),
-        previewer = require("telescope.config").values.file_previewer({}),
-        attach_mappings = function(prompt_bufnr, map)
-          local actions = require("telescope.actions")
-          local action_state = require("telescope.actions.state")
-
-          -- Enter: open the skill's SKILL.md for editing
-          actions.select_default:replace(function()
-            actions.close(prompt_bufnr)
-            local entry = action_state.get_selected_entry()
-            if not entry then return end
-            local skill_path = skills_dir .. "/" .. entry.value .. "/SKILL.md"
-            vim.cmd("edit " .. vim.fn.fnameescape(skill_path))
-          end)
-
-          -- Ctrl-i: insert skill name wrapped in backticks at cursor
-          map("i", "<C-i>", function()
-            actions.close(prompt_bufnr)
-            local skill = action_state.get_selected_entry().value
-            local pos = vim.api.nvim_win_get_cursor(0)
-            local row, col = pos[1] - 1, pos[2]
-            local text = "`" .. skill .. "`"
-            vim.api.nvim_buf_set_text(0, row, col, row, col, { text })
-            vim.api.nvim_win_set_cursor(0, { row + 1, col + #text })
-          end)
-
-          -- Ctrl-n: create a new skill using dot-skill-new and open its SKILL.md
-          map("i", "<C-n>", function()
-            local picker = action_state.get_current_picker(prompt_bufnr)
-            local query = picker:_get_prompt()
-            actions.close(prompt_bufnr)
-
-            if not query or vim.trim(query) == "" then
-              vim.notify("Please type a skill name first", vim.log.levels.WARN)
-              return
-            end
-
-            local skill_name = vim.trim(query)
-            local result = vim.fn.system("dot-skill-new " .. vim.fn.shellescape(skill_name))
-            if vim.v.shell_error ~= 0 then
-              vim.notify("dot-skill-new failed: " .. vim.trim(result), vim.log.levels.ERROR)
-              return
-            end
-
-            local skill_path = skills_dir .. "/" .. skill_name .. "/SKILL.md"
-            vim.cmd("edit " .. vim.fn.fnameescape(skill_path))
-            vim.notify("Created skill: " .. skill_name, vim.log.levels.INFO)
-          end)
-
-          return true
-        end,
-      }):find()
+        })
+        :find()
     end
 
     M.search_docs = function(live)
@@ -180,7 +192,7 @@ return {
         local actions = require("telescope.actions")
         local action_state = require("telescope.actions.state")
         local docs_util = require("utils.docs")
-        
+
         local caller_win = vim.api.nvim_get_current_win()
         local caller_buf = vim.api.nvim_get_current_buf()
 
@@ -202,7 +214,9 @@ return {
             map("i", "<C-i>", function()
               local entry = action_state.get_selected_entry()
               actions.close(prompt_bufnr)
-              if not entry then return end
+              if not entry then
+                return
+              end
 
               local filename = vim.fn.fnamemodify(entry.value, ":t:r")
               local link = "[[" .. filename .. "]]"
