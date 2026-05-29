@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+# Scan markdown files for action items and group them by status.
+
+set -euo pipefail
+
+if [[ "${1:-}" == "--help" ]]; then
+  cat <<'USAGE'
+Usage: dot-docs-actions [path]
+
+Recursively scans markdown files under [path] (default: current directory)
+for action lines of the form:
+
+  - [ ] Action - <Person> - <YYYY-MM-DD> - <YYYY-MM-DD> - <Description>
+
+where the first date is the start date and the second is the target due
+date. Lists every matching action under three headers - Overdue, Upcoming
+and Complete - each ordered by due date.
+
+  Overdue   incomplete actions whose due date is before today
+  Upcoming  incomplete actions whose due date is today or later
+  Complete  actions marked done ([x])
+USAGE
+  exit 0
+fi
+
+ROOT="${1:-.}"
+TODAY="$(date +%Y-%m-%d)"
+
+RED=$(tput setaf 1)
+YELLOW=$(tput setaf 3)
+GREEN=$(tput setaf 2)
+CYAN=$(tput setaf 6)
+BOLD=$(tput bold)
+RESET=$(tput sgr0)
+
+# Action line: "- [ ] Action - Person - START - DUE - Description"
+ACTION_RE='^- \[[ xX]\] Action - .+ - [0-9]{4}-[0-9]{2}-[0-9]{2} - [0-9]{4}-[0-9]{2}-[0-9]{2} - .+'
+PARSE_RE='^- \[([ xX])\] Action - (.+) - ([0-9]{4}-[0-9]{2}-[0-9]{2}) - ([0-9]{4}-[0-9]{2}-[0-9]{2}) - (.+)$'
+
+overdue=""
+upcoming=""
+complete=""
+
+# grep output is "file:content". Paths in ~/docs do not contain colons.
+while IFS= read -r entry; do
+  [[ -z "$entry" ]] && continue
+  file="${entry%%:*}"
+  content="${entry#*:}"
+
+  [[ "$content" =~ $PARSE_RE ]] || continue
+  check="${BASH_REMATCH[1]}"
+  person="${BASH_REMATCH[2]}"
+  due="${BASH_REMATCH[4]}"
+  desc="${BASH_REMATCH[5]}"
+
+  # Sort key (due date) is kept as the first tab-separated field so a plain
+  # `sort` orders entries chronologically.
+  row=$(printf '%s\t%s\t%s\t%s\t%s' "$due" "$person" "$desc" "$file" "$check")
+
+  if [[ "$check" == "x" || "$check" == "X" ]]; then
+    complete+="${row}"$'\n'
+  elif [[ "$due" < "$TODAY" ]]; then
+    overdue+="${row}"$'\n'
+  else
+    upcoming+="${row}"$'\n'
+  fi
+done < <(grep -rE "$ACTION_RE" --include='*.md' "$ROOT" 2>/dev/null || true)
+
+print_section() {
+  local title="$1" color="$2" rows="$3"
+  printf "%s%s%s\n" "${BOLD}${color}" "$title" "$RESET"
+  if [[ -z "$rows" ]]; then
+    printf "  (none)\n\n"
+    return
+  fi
+  # Sort by due date (field 1), then render each row.
+  printf '%s' "$rows" | sort -t$'\t' -k1,1 | while IFS=$'\t' read -r due person desc file _; do
+    [[ -z "$due" ]] && continue
+    printf "  %s%s%s  %s%s%s  %s  %s(%s)%s\n" \
+      "$color" "$due" "$RESET" \
+      "$CYAN" "$person" "$RESET" \
+      "$desc" \
+      "$YELLOW" "$file" "$RESET"
+  done
+  printf "\n"
+}
+
+print_section "Overdue" "$RED" "$overdue"
+print_section "Upcoming" "$YELLOW" "$upcoming"
+print_section "Complete" "$GREEN" "$complete"
