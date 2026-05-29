@@ -1,0 +1,9 @@
+{
+	"Link": {
+		"prefix": "link",
+		"description": "Markdown link: [text](url)",
+		"body": [
+			"[${1:text}](${2:url})"
+		]
+	}
+}
