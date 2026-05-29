@@ -1,6 +1,7 @@
 local command = vim.api.nvim_create_user_command
 local docs_util = require("utils.docs")
 local date_util = require("utils.date")
+local actions_util = require("utils.actions")
 local testing_util = require("utils.testing")
 local case_converters = require("utils.case_converters")
 
@@ -11,6 +12,7 @@ command("ExtractSection", function()
 end, { range = true })
 
 date_util.setup()
+actions_util.setup()
 
 command("Test", function()
   testing_util.dotnet_test_to_clipboard()

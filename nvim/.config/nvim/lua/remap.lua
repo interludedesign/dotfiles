@@ -75,6 +75,9 @@ vim.keymap.set('n', '<leader>mu', function() require('utils.markdown-checkboxes'
 -- Markdown extract section
 vim.keymap.set('v', '<leader>me', ':ExtractSection<CR>', { desc = 'Extract markdown section to new file' })
 
+-- Insert an action snippet (start = today, due = today + 10 days)
+vim.keymap.set('n', '<leader>ma', function() require('utils.actions').insert_action() end, { desc = 'Insert markdown action snippet' })
+
 -- Smart gx - opens URLs in browser, files in vim
 vim.keymap.set('n', 'gx', function() require('utils').SmartOpen() end, { noremap = true, desc = 'Smart open URLs or files' })
 
