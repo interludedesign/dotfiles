@@ -109,7 +109,7 @@ return {
 
       require("telescope.pickers")
         .new({}, {
-          prompt_title = "Skills (Enter to open, Ctrl-i to insert, Ctrl-n to create)",
+          prompt_title = "Skills (Enter to open, Ctrl-i to insert, Ctrl-s to create)",
           finder = require("telescope.finders").new_table({
             results = skills,
             entry_maker = function(skill)
@@ -150,8 +150,8 @@ return {
               vim.api.nvim_win_set_cursor(0, { row + 1, col + #text })
             end)
 
-            -- Ctrl-n: create a new skill using dot-skill-new and open its SKILL.md
-            map("i", "<C-n>", function()
+            -- Ctrl-s: create a new skill using dot-skill-new and open its SKILL.md
+            map("i", "<C-s>", function()
               local picker = action_state.get_current_picker(prompt_bufnr)
               local query = picker:_get_prompt()
               actions.close(prompt_bufnr)
