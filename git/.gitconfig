@@ -58,3 +58,13 @@
 	hunk-header-file-style = red
 	hunk-header-line-number-style = "#067a00"
 	hunk-header-style = file line-number syntax
+
+[credential]
+	helper = manager
+	azreposCredentialType = oauth
+
+[credential "https://dev.azure.com"]
+	useHttpPath = true
+
+[credential "https://tfs.prd.costargroup.com"]
+	provider = generic

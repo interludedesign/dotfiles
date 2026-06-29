@@ -4,3 +4,5 @@ solargraph.rb
 .rakeTasks
 .idea
 ai_tasks*
+
+**/.claude/settings.local.json
