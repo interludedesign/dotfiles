@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Record the Claude Code agent status for the tmux session this agent is
+# running in, so dot-tmux-session-bar can display it in the status bar.
+# Intended to be called from Claude Code hooks (UserPromptSubmit -> running,
+# Notification -> blocked, Stop -> done, SessionEnd -> clear).
+
+STATUS_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/tmux-agent-status"
+
+usage() {
+    echo "Usage: dot-claude-agent-status <running|blocked|done|clear>"
+    echo ""
+    echo "Writes the given status to $STATUS_DIR/<tmux-session-name>."
+    echo "No-op when not running inside tmux."
+}
+
+if [[ "${1:-}" == "--help" || -z "${1:-}" ]]; then
+    usage
+    [[ -z "${1:-}" ]] && exit 1
+    exit 0
+fi
+
+status="$1"
+
+# Hooks pass JSON on stdin; capture it so the caller never blocks
+payload=""
+[[ -t 0 ]] || payload="$(cat)"
+
+# The Notification event fires for permission prompts AND for the periodic
+# "Claude is waiting for your input" idle notice. Only the former means
+# blocked - ignore the idle notice so it doesn't overwrite a done status.
+if [[ "$status" == "blocked" ]]; then
+    message="$(jq -r '.message // ""' <<<"$payload" 2>/dev/null || echo "")"
+    if [[ "$message" == *"waiting for your input"* ]]; then
+        exit 0
+    fi
+fi
+
+# Only meaningful inside tmux
+[[ -z "${TMUX_PANE:-}" ]] && exit 0
+
+session="$(tmux display-message -pt "$TMUX_PANE" '#S' 2>/dev/null || true)"
+[[ -z "$session" ]] && exit 0
+
+mkdir -p "$STATUS_DIR"
+
+case "$status" in
+    running | blocked | done)
+        echo "$status" > "$STATUS_DIR/$session"
+        ;;
+    clear)
+        rm -f "$STATUS_DIR/$session"
+        ;;
+    *)
+        echo "ERROR: unknown status '$status'" >&2
+        exit 1
+        ;;
+esac

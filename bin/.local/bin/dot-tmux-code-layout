@@ -35,6 +35,7 @@ case "$ai_agent" in
 esac
 
 tmux split-window -h -p 33 -c "$current_dir"
+tmux select-pane -T "$ai_agent"
 tmux send-keys "$ai_cmd" C-m
 
 tmux select-pane -L

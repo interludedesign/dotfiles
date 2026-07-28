@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Render all tmux sessions as a styled list for the tmux status bar.
+# The current session is highlighted, and each session shows the Claude Code
+# agent status recorded by dot-claude-agent-status when one exists.
+#
+# Sessions are numbered in list-sessions order, matching the Ctrl+Shift
+# session-switch bindings in tmux.conf.
+
+STATUS_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/tmux-agent-status"
+
+usage() {
+    echo "Usage: dot-tmux-session-bar <current-session-name>"
+    echo ""
+    echo "Intended for use in tmux status-left:"
+    echo "  set -g status-left \"#(\$HOME/.local/bin/dot-tmux-session-bar '#S')\""
+    echo ""
+    echo "Agent status badges (read from $STATUS_DIR/<session>):"
+    echo "  working (yellow)   blocked (red)   done (green)"
+}
+
+if [[ "${1:-}" == "--help" ]]; then
+    usage
+    exit 0
+fi
+
+current="${1:-}"
+
+file_mtime() {
+    stat -f %m "$1" 2>/dev/null || stat -c %Y "$1" 2>/dev/null || echo 0
+}
+
+out=""
+i=1
+while IFS=' ' read -r created session; do
+    [[ -z "$session" ]] && continue
+
+    if [[ "$session" == "$current" ]]; then
+        base="fg=colour255,bg=colour237,bold"
+    else
+        base="fg=colour250,bg=default,none"
+    fi
+
+    label=""
+    status_file="$STATUS_DIR/$session"
+    # A status file older than the session itself is left over from a
+    # previous session with the same name (e.g. the agent was killed before
+    # its SessionEnd cleanup hook could run) - discard it
+    if [[ -f "$status_file" ]] && (( $(file_mtime "$status_file") < created )); then
+        rm -f "$status_file"
+    fi
+    if [[ -f "$status_file" ]]; then
+        case "$(<"$status_file")" in
+            running) label="#[fg=black,bg=yellow,bold] working " ;;
+            blocked) label="#[fg=black,bg=red,bold] blocked " ;;
+            done)    label="#[fg=black,bg=green,bold] done " ;;
+        esac
+    fi
+
+    seg="#[$base] $i:$session"
+    if [[ -n "$label" ]]; then
+        seg+=" $label#[$base]"
+    fi
+    seg+=" #[default]"
+
+    out+="$seg"
+    i=$((i + 1))
+done < <(tmux list-sessions -F '#{session_created} #{session_name}' 2>/dev/null | sort -n || true)
+
+printf '%s' "$out"
