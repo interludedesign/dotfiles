@@ -1,5 +1,7 @@
 vim.opt.clipboard = "unnamed,unnamedplus"
 
+vim.opt.autoread = true
+
 vim.opt.shell = os.getenv("SHELL") or "/bin/bash"
 
 vim.opt.number = true

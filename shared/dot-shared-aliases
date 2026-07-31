@@ -31,8 +31,8 @@ alias gwa="dot-git-worktree-add"
 
 # LLM Aliases
 alias lmcp="copilot"
-alias lmc='claude --add-dir "$SKILLS_DIR"'
-alias claude='claude --permission-mode auto --add-dir "$SKILLS_DIR"'
+alias lmc='claude'
+alias claude='claude --permission-mode auto'
 
 # Colorize RI
 alias ri='ri -f ansi'

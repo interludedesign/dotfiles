@@ -2,6 +2,10 @@ return {
   {
     "echasnovski/mini.nvim",
     config = function()
+      -- Icon provider for plugins that look for one (render-markdown's code-fence
+      -- language icons, telescope, etc.) - mini.nvim already vendors it.
+      require("mini.icons").setup()
+
       local statusline = require("mini.statusline")
 
       statusline.setup({

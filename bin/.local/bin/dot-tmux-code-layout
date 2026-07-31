@@ -4,18 +4,24 @@
 set -euo pipefail
 
 if [[ "${1:-}" == "--help" ]]; then
-    echo "Usage: dot-tmux-code-layout [copilot|opencode|claude]"
+    echo "Usage: dot-tmux-code-layout [copilot|opencode|claude] [extra args...]"
     echo "Creates a tmux layout: editor (left, large), AI assistant (right), shell (bottom-left, small)."
     echo ""
     echo "Arguments:"
     echo "  copilot    Use GitHub Copilot CLI (default)"
     echo "  opencode   Use opencode"
     echo "  claude     Use Claude"
+    echo ""
+    echo "Extra args are appended to the assistant command, e.g.:"
+    echo "  dot-tmux-code-layout claude --agent bug-fixer"
     exit 0
 fi
 
 current_dir="${PWD}"
 ai_agent="${1:-copilot}"
+if [[ $# -gt 0 ]]; then
+    shift
+fi
 
 case "$ai_agent" in
     copilot)
@@ -33,6 +39,10 @@ case "$ai_agent" in
         exit 1
         ;;
 esac
+
+if [[ $# -gt 0 ]]; then
+    ai_cmd+=" $*"
+fi
 
 tmux split-window -h -p 33 -c "$current_dir"
 tmux select-pane -T "$ai_agent"
